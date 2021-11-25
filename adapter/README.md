@@ -1,5 +1,5 @@
 
-### Chainlink Adapter - DATA DAO 
+# Chainlink Adapter - Filecoin Data DAO 
 
 Data Dao signs the node for providing data feeds to the web3 blockchains like polygon, bsc, eth. On filecoin network data deal has an unique *deal id*. This data adapter provides deal ids for other blockchain systems to check if the data deal exists on filecoin network.
 
