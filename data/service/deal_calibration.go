@@ -48,7 +48,7 @@ func GetDealsFromCalibration() error {
 	for i := startDealId; ; i++ {
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)
 		if err != nil {
-			logs.GetLogger().Error()
+			logs.GetLogger().Error(err)
 			continue
 		} else {
 			chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
@@ -77,7 +77,7 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	apiUrlDeal := utils.UrlJoin(network.ApiUrlPrefix, strconv.FormatInt(dealId, 10))
 	response := client.HttpGetNoToken(apiUrlDeal, nil)
 	if response == "" {
-		err := fmt.Errorf("no response from:%s", apiUrlDeal)
+		err := fmt.Errorf("deal_id:%d,no response from:%s", dealId, apiUrlDeal)
 		//logs.GetLogger().Error(err)
 		return nil, err
 	}
@@ -85,12 +85,13 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDealCalibrationResult := &models.ChainLinkDealCalibrationResult{}
 	err := json.Unmarshal([]byte(response), chainLinkDealCalibrationResult)
 	if err != nil {
+		err := fmt.Errorf("deal_id:%d,%s", dealId, err.Error())
 		//logs.GetLogger().Error(err)
 		return nil, err
 	}
 
 	if chainLinkDealCalibrationResult.Code == constants.CALIBRATION_DEAL_NOT_FOUND {
-		err := fmt.Errorf("code:%d,message:%s", chainLinkDealCalibrationResult.Code, chainLinkDealCalibrationResult.Message)
+		err := fmt.Errorf("deal_id:%d,code:%d,message:%s", dealId, chainLinkDealCalibrationResult.Code, chainLinkDealCalibrationResult.Message)
 		return nil, err
 	}
 	//logs.GetLogger().Info(apiUrlDeal, ",", chainLinkDeal.Code, ",", chainLinkDeal.Message, ",", chainLinkDeal.Message)
