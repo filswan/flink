@@ -1,5 +1,5 @@
-# Fi-Link
-FiLink A data provider transfers deals info to chainlink Oracle
+# FILink
+FILink A data provider transfers deals info to chainlink Oracle
 
 ## Problem
 As a user on other blockchain, we do not have a native way to know if a storage deal is active on Filecoin network.
