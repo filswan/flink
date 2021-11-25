@@ -52,7 +52,7 @@ func (b ChainLinkDeal) PrintFields() {
 }
 
 func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
-	sql := "insert into chainlink_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at_src,created_at,"
+	sql := "insert into chain_link_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at_src,created_at,"
 	sql = sql + "piece_size_format,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status) values"
 	valueStrings := []string{}
 
@@ -96,7 +96,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 }
 
 func GetMaxDealId(networkId int64) (int64, error) {
-	sql := "select max(deal_id) deal_id from chainlink_deal where network_id=?"
+	sql := "select max(deal_id) deal_id from chain_link_deal where network_id=?"
 	var chainLinkDeal ChainLinkDeal
 	err := database.GetDB().Raw(sql, networkId).Scan(&chainLinkDeal).Error
 	if err != nil {

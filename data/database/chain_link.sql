@@ -1,4 +1,4 @@
-drop table if exists chainlink_deal;
+drop table if exists chain_link_deal;
 drop table if exists network;
 
 create table network
@@ -13,7 +13,7 @@ create table network
 
 insert into network(name,api_url_prefix) values("calibration", "https://calibration-api.filscout.com/api/v1/storagedeal");
 
-create table chainlink_deal(
+create table chain_link_deal(
     deal_id                    bigint        not null,
     network_id                 bigint        not null,
     deal_cid                   varchar(1000) not null,
@@ -36,7 +36,7 @@ create table chainlink_deal(
     verified_provider          int           not null,
     provider_collateral_format varchar(60)   not null,
     status                     int           not null,
-    primary key pk_chainlink_deal (deal_id),
-    constraint fk_chainlink_deal_network_id foreign key (network_id) references network (id)
+    primary key pk_chain_link_deal (deal_id),
+    constraint fk_chain_link_deal_network_id foreign key (network_id) references network (id)
 )
 
