@@ -1,8 +1,8 @@
 package models
 
 import (
+	"filecoin-data-provider/database"
 	"fmt"
-	"go-chainlink-data/database"
 	"reflect"
 	"strings"
 
@@ -104,4 +104,16 @@ func GetMaxDealId(networkId int64) (int64, error) {
 		return 0, err
 	}
 	return chainLinkDeal.DealId, nil
+}
+
+func GetDealById(dealId int64) (*ChainLinkDeal, error) {
+	chainLinkDeal := ChainLinkDeal{}
+	err := database.GetDB().Where("deal_id=?", dealId).First(&chainLinkDeal).Error
+
+	if err != nil {
+		logs.GetLogger().Error(err)
+		return nil, err
+	}
+
+	return &chainLinkDeal, nil
 }

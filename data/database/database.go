@@ -1,7 +1,7 @@
 package database
 
 import (
-	"go-chainlink-data/config"
+	"filecoin-data-provider/config"
 	"strconv"
 
 	"github.com/filswan/go-swan-lib/logs"

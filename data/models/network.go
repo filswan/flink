@@ -1,7 +1,7 @@
 package models
 
 import (
-	"go-chainlink-data/database"
+	"filecoin-data-provider/database"
 
 	"github.com/filswan/go-swan-lib/logs"
 )

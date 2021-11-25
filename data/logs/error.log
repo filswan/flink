@@ -40,3 +40,6 @@ time="2021-11-25 14:04:08.546" level=error msg="parsing time \"2021-02-22 02:14:
 time="2021-11-25 14:04:08.853" level=error msg="parsing time \"2021-02-22 02:14:30\" as \"2006-01-02T15:04:05+0000\": cannot parse \" 02:14:30\" as \"T\"" func=GetDealFromCalibration file="deal.go:82"
 time="2021-11-25 14:26:09.563" level=error msg="sql: expected 220 arguments, got 210" func=AddChainLinkDeals file="chainlink_deal.go:90"
 time="2021-11-25 14:27:20.214" level=error msg="sql: expected 220 arguments, got 210" func=AddChainLinkDeals file="chainlink_deal.go:90"
+time="2021-11-25 16:04:42.059" level=error func=GetDealsFromCalibration file="deal.go:51"
+time="2021-11-25 16:04:42.366" level=error func=GetDealsFromCalibration file="deal.go:51"
+time="2021-11-25 16:04:42.981" level=error func=GetDealsFromCalibration file="deal.go:51"
