@@ -1,7 +1,7 @@
 package service
 
 import (
-	"filecoin-data-provider/models"
+	"filecoin-data-provider/data/models"
 	"runtime"
 	"time"
 )

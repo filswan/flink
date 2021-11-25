@@ -1,7 +1,7 @@
 package models
 
 import (
-	"filecoin-data-provider/database"
+	"filecoin-data-provider/data/database"
 	"fmt"
 	"reflect"
 	"strings"

@@ -2,8 +2,8 @@ package service
 
 import (
 	"encoding/json"
-	"filecoin-data-provider/common/constants"
-	"filecoin-data-provider/models"
+	"filecoin-data-provider/data/common/constants"
+	"filecoin-data-provider/data/models"
 	"fmt"
 	"strconv"
 	"time"

@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"filecoin-data-provider/common"
-	"filecoin-data-provider/service"
+	"filecoin-data-provider/data/common"
+	"filecoin-data-provider/data/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

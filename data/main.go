@@ -1,9 +1,9 @@
 package main
 
 import (
-	"filecoin-data-provider/config"
-	"filecoin-data-provider/database"
-	"filecoin-data-provider/routers"
+	"filecoin-data-provider/data/config"
+	"filecoin-data-provider/data/database"
+	"filecoin-data-provider/data/routers"
 	"strconv"
 	"time"
 

@@ -1,7 +1,7 @@
 package common
 
 import (
-	"filecoin-data-provider/constants"
+	"filecoin-data-provider/data/constants"
 )
 
 type BasicResponse struct {

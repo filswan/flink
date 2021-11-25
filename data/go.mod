@@ -1,4 +1,4 @@
-module filecoin-data-provider
+module filecoin-data-provider/data
 
 go 1.16
 

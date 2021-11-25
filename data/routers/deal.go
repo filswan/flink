@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"filecoin-data-provider/common"
-	"filecoin-data-provider/models"
+	"filecoin-data-provider/data/common"
+	"filecoin-data-provider/data/models"
 	"net/http"
 	"strconv"
 
