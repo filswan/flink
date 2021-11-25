@@ -4,7 +4,7 @@ release = true              # when work in release mode, set this to true, other
 [database]
 db_host = "127.0.0.1"        # ip of the host for database instance running on
 db_port = 3306               # port of the host for database instance running on
-db_schema_name = "chainlink"       # database schema name for swan
+db_schema_name = "filink"    # database schema name for swan
 db_username = "root"         # username to access the database
 db_password = ""             # password to access the database
 db_args = "charset=utf8mb4&parseTime=True&loc=Local" # other arguments to access database

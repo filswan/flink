@@ -1,3 +1,6 @@
+#--create database filink;
+use filink;
+
 drop table if exists chain_link_deal;
 drop table if exists network;
 
@@ -25,7 +28,7 @@ create table chain_link_deal(
     signature                  varchar(1000) not null,
     signature_type             varchar(60)   not null,
     created_at_src             varchar(60)   not null,
-    created_at                 bigint        not null, #--precision:second
+    created_at                 bigint        not null, #--precision:millisecond
     piece_size_format          varchar(60)   not null,
     start_height               bigint        not null,
     end_height                 bigint        not null,
