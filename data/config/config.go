@@ -2,9 +2,11 @@ package config
 
 import (
 	"log"
-	"strings"
+	"os"
+	"path/filepath"
 
 	"github.com/BurntSushi/toml"
+	"github.com/filswan/go-swan-lib/logs"
 )
 
 type Configuration struct {
@@ -25,10 +27,14 @@ type database struct {
 
 var config *Configuration
 
-func InitConfig(configFile string) {
-	if strings.Trim(configFile, " ") == "" {
-		configFile = "./config/config.toml"
+func InitConfig() {
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		logs.GetLogger().Fatal("Cannot get home directory.")
 	}
+
+	configFile := filepath.Join(homedir, ".swan/filink/data/config.toml")
+
 	metaData, err := toml.DecodeFile(configFile, &config)
 
 	if err != nil {
@@ -42,14 +48,7 @@ func InitConfig(configFile string) {
 
 func GetConfig() Configuration {
 	if config == nil {
-		InitConfig("")
-	}
-	return *config
-}
-
-func GetConfigFromMainParams(configFile string) Configuration {
-	if config == nil {
-		InitConfig(configFile)
+		InitConfig()
 	}
 	return *config
 }
