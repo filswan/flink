@@ -4,6 +4,7 @@ import (
 	"filecoin-data-provider/data/config"
 	"filecoin-data-provider/data/database"
 	"filecoin-data-provider/data/routers"
+	"filecoin-data-provider/data/service"
 	"strconv"
 	"time"
 
@@ -17,6 +18,8 @@ func main() {
 
 	db := database.Init()
 	defer database.CloseDB(db)
+
+	go service.GetDealsFromCalibrationLoop()
 
 	createGinServer()
 }

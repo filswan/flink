@@ -1,7 +1,7 @@
 package common
 
 import (
-	"filecoin-data-provider/data/constants"
+	"github.com/filswan/go-swan-lib/constants"
 )
 
 type BasicResponse struct {
@@ -19,14 +19,14 @@ type PageInfo struct {
 
 func CreateSuccessResponse(data interface{}) BasicResponse {
 	return BasicResponse{
-		Status: constants.HTTP_STATUS_SUCCESS,
+		Status: constants.SWAN_API_STATUS_SUCCESS,
 		Data:   data,
 	}
 }
 
 func CreateErrorResponse(errMsg string) BasicResponse {
 	return BasicResponse{
-		Status:  constants.HTTP_STATUS_FAIL,
+		Status:  constants.SWAN_API_STATUS_FAIL,
 		Message: errMsg,
 	}
 }
