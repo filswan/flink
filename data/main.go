@@ -1,10 +1,10 @@
 package main
 
 import (
-	"filecoin-data-provider/data/config"
-	"filecoin-data-provider/data/database"
-	"filecoin-data-provider/data/routers"
-	"filecoin-data-provider/data/service"
+	"filink/data/config"
+	"filink/data/database"
+	"filink/data/routers"
+	"filink/data/service"
 	"strconv"
 	"time"
 

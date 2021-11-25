@@ -1,4 +1,4 @@
-module filecoin-data-provider/data
+module filink/data
 
 go 1.16
 

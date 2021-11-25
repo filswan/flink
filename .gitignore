@@ -17,3 +17,8 @@ data/config/config.toml
 data/logs
 data/logs/*
 data/logs/*.*
+data/build/filink/data
+data/build
+data/build/*
+data/build/*.*
+
