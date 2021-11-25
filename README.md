@@ -1,5 +1,5 @@
 # filecoin-data-provider
-A data provider transfer deals info to chainlink Oracle
+A data provider transfers deals info to chainlink Oracle
 
 ## Problem
 As a user on other blockchain, we do not have a native way to know if a storage deal is active on Filecoin network.
@@ -35,17 +35,19 @@ The adapter is scaning the data from Flecoin blockchain and post the deal info t
 
 }
 
-##How to use
-
 ```
-###Data Flow
+### Chainlink Adapter - DATA DAO 
+
+Data Dao signs the node for providing data feeds to the web3 blockchains like polygoin, bsc, eth.
+Every data deal has a deal ID, it is an unique id on filecoin network used for tracking deal info.
+Filecoin data adatper provides deal ids for other blockchain system to check if the deal exists on filecoin network.
+
+## Sample Use Case
+### Polygon Chain Payment for Filecoin storage
 
 Data source -Filecoin -> data aggregator-Filswan -> data provider- Filswan -> Chainlink Adapter - DATA DAO -> MCP DAO unlock fund based on Chainlink Adapter
 
-### post to chainlink contract
-* Batch submit
-* Avoid duplicate uploads
-## Deal Matching
+### Deal Matching
 scheduler to update status to trigger DAO signature for unlock event
 * get deal_id by proposal_cid
 * get deal_id from Chainlink filecoin adapter
