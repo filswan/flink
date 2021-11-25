@@ -1,2 +1,2 @@
 # filecoin-data-provider
-A data provider transfer deal info to chainlink oracle
+A data provider transfer deals info to chainlink oracle
