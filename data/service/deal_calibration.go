@@ -15,11 +15,13 @@ import (
 
 func GetDealsFromCalibrationLoop() {
 	for {
+		logs.GetLogger().Info("start")
 		err := GetDealsFromCalibration()
 		if err != nil {
 			logs.GetLogger().Error()
 		}
 
+		logs.GetLogger().Info("sleep")
 		time.Sleep(time.Minute * 1)
 	}
 }
