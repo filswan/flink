@@ -28,7 +28,6 @@ func GetDealById(dealId int64) (*models.ChainLinkDealBase, error) {
 		StoragePricePerEpoch:     dealInternal.StoragePricePerEpoch,
 		Signature:                dealInternal.Signature,
 		SignatureType:            dealInternal.SignatureType,
-		CreatedAtSrc:             dealInternal.CreatedAtSrc,
 		CreatedAt:                dealInternal.CreatedAt,
 		PieceSizeFormat:          dealInternal.PieceSizeFormat,
 		StartHeight:              dealInternal.StartHeight,

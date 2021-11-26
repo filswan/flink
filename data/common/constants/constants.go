@@ -1,7 +1,7 @@
 package constants
 
 const (
-	NETWORK_CALIBRATION = "calibration"
+	NETWORK_CALIBRATION = "filecoin_calibration"
 	//BULK_INSERT_CHAINLINK_LIMIT    = 100
 	//BULK_INSERT_INTERVAL_MILLI_SEC = 5 * 60 * 1000
 	//DEAL_ID_INTERVAL_MAX           = 10

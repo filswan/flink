@@ -24,11 +24,10 @@ create table chain_link_deal(
     height                     bigint        , #--not null,
     piece_cid                  varchar(1000) , #--not null,
     verified_deal              boolean       , #--not null,
-    storage_price_per_epoch    varchar(200)  , #--not null,
+    storage_price_per_epoch    varchar(60)   , #--not null,
     signature                  varchar(1000) , #--not null,
     signature_type             varchar(60)   , #--not null,
-    created_at_src             varchar(60)   , #--not null,
-    created_at                 bigint        , #--not null, #--precision:millisecond
+    created_at                 bigint        , #--not null, #--precision:second
     piece_size_format          varchar(60)   , #--not null,
     start_height               bigint        , #--not null,
     end_height                 bigint        , #--not null,
@@ -39,7 +38,7 @@ create table chain_link_deal(
     verified_provider          int           , #--not null,
     provider_collateral_format varchar(60)   , #--not null,
     status                     int           , #--not null,
-    primary key pk_chain_link_deal (deal_id),
+    primary key pk_chain_link_deal (deal_id, network_id),
     constraint fk_chain_link_deal_network_id foreign key (network_id) references network (id)
 )
 

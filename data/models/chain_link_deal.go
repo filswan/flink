@@ -18,7 +18,6 @@ type ChainLinkDealBase struct {
 	StoragePricePerEpoch     string `json:"storage_price_per_epoch"`
 	Signature                string `json:"signature"`
 	SignatureType            string `json:"signature_type"`
-	CreatedAtSrc             string `json:"created_at_src"`
 	CreatedAt                int64  `json:"created_at"`
 	PieceSizeFormat          string `json:"piece_size_format"`
 	StartHeight              int64  `json:"start_height"`
@@ -55,13 +54,13 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 		return err
 	}
 
-	sql := "insert into chain_link_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at_src,created_at,"
+	sql := "insert into chain_link_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at,"
 	sql = sql + "piece_size_format,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status) values"
 	valueStrings := []string{}
 
 	valueArgs := []interface{}{}
 	for _, deal := range chainLinkDeals {
-		valueStrings = append(valueStrings, "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+		valueStrings = append(valueStrings, "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 		valueArgs = append(valueArgs, deal.DealId)
 		valueArgs = append(valueArgs, deal.NetworkId)
 		valueArgs = append(valueArgs, deal.DealCid)
@@ -72,7 +71,6 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 		valueArgs = append(valueArgs, deal.StoragePricePerEpoch)
 		valueArgs = append(valueArgs, deal.Signature)
 		valueArgs = append(valueArgs, deal.SignatureType)
-		valueArgs = append(valueArgs, deal.CreatedAtSrc)
 		valueArgs = append(valueArgs, deal.CreatedAt)
 		valueArgs = append(valueArgs, deal.PieceSizeFormat)
 		valueArgs = append(valueArgs, deal.StartHeight)
@@ -87,6 +85,13 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 	}
 
 	sql = fmt.Sprintf("%s %s", sql, strings.Join(valueStrings, ","))
+
+	onDuplicateKey := "network_id=values(network_id),deal_cid=values(deal_cid),message_cid=values(message_cid),height=values(height),piece_cid=values(piece_cid),"
+	onDuplicateKey = onDuplicateKey + "verified_deal=values(verified_deal),storage_price_per_epoch=values(storage_price_per_epoch),signature=values(signature),signature_type=values(signature_type),"
+	onDuplicateKey = onDuplicateKey + "created_at=values(created_at),piece_size_format=values(piece_size_format),start_height=values(start_height),end_height=values(end_height),"
+	onDuplicateKey = onDuplicateKey + "client=values(client),client_collateral_format=values(client_collateral_format),provider=values(provider),provider_tag=values(provider_tag),"
+	onDuplicateKey = onDuplicateKey + "verified_provider=values(verified_provider),provider_collateral_format=values(provider_collateral_format),status=values(status)"
+	sql = sql + " on duplicate key update " + onDuplicateKey
 
 	err := database.GetDB().Exec(sql, valueArgs...).Error
 

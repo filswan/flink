@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"filink/data/common/constants"
+	"filink/data/common/utils"
 	"filink/data/config"
 	"filink/data/models"
 	"fmt"
@@ -11,7 +12,7 @@ import (
 
 	"github.com/filswan/go-swan-lib/client"
 	"github.com/filswan/go-swan-lib/logs"
-	"github.com/filswan/go-swan-lib/utils"
+	libutils "github.com/filswan/go-swan-lib/utils"
 )
 
 func GetDealsFromCalibrationLoop() {
@@ -84,7 +85,7 @@ func GetDealsFromCalibration() error {
 }
 
 func GetDealFromCalibration(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
-	apiUrlDeal := utils.UrlJoin(network.ApiUrlPrefix, strconv.FormatInt(dealId, 10))
+	apiUrlDeal := libutils.UrlJoin(network.ApiUrlPrefix, strconv.FormatInt(dealId, 10))
 	response := client.HttpGetNoToken(apiUrlDeal, nil)
 	if response == "" {
 		err := fmt.Errorf("deal_id:%d,no response from:%s", dealId, apiUrlDeal)
@@ -117,26 +118,25 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.Height = deal.Height
 	chainLinkDeal.PieceCid = deal.PieceCid
 	chainLinkDeal.VerifiedDeal = deal.VerifiedDeal
-	chainLinkDeal.StoragePricePerEpoch = deal.StoragePricePerEpoch
+	chainLinkDeal.StoragePricePerEpoch = utils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch)
 	chainLinkDeal.Signature = deal.Signature
 	chainLinkDeal.SignatureType = deal.SignatureType
-	chainLinkDeal.CreatedAtSrc = deal.CreatedAtSrc
 	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
 	chainLinkDeal.StartHeight = deal.StartHeight
 	chainLinkDeal.EndHeight = deal.EndHeight
 	chainLinkDeal.Client = deal.Client
-	chainLinkDeal.ClientCollateralFormat = deal.ClientCollateralFormat
+	chainLinkDeal.ClientCollateralFormat = utils.GetPriceFormat("0 FIL")
 	chainLinkDeal.Provider = deal.Provider
 	chainLinkDeal.ProviderTag = deal.ProviderTag
 	chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
-	chainLinkDeal.ProviderCollateralFormat = deal.ProviderCollateralFormat
+	chainLinkDeal.ProviderCollateralFormat = utils.GetPriceFormat("0 FIL")
 	chainLinkDeal.Status = deal.Status
 
-	timeT, err := time.Parse("2006-01-02 15:04:05", chainLinkDeal.CreatedAtSrc)
+	timeT, err := time.Parse("2006-01-02 15:04:05", deal.CreatedAt)
 	if err != nil {
 		logs.GetLogger().Error(err)
 	} else {
-		chainLinkDeal.CreatedAt = timeT.UnixNano() / 1e6
+		chainLinkDeal.CreatedAt = timeT.UnixNano() / 1e9
 	}
 	logs.GetLogger().Info(chainLinkDeal)
 
