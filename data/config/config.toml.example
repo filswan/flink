@@ -13,4 +13,4 @@ db_max_idle_conn_num = 10    # maximum number of connections in the idle connect
 [chain_link]
 bulk_insert_chainlink_limit = 100
 bulk_insert_interval_milli_sec = 300000
-deal_id_interval_max = 10
+deal_id_interval_max = 5000
