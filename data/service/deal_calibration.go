@@ -8,6 +8,7 @@ import (
 	"filink/data/models"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/filswan/go-swan-lib/client"
@@ -131,6 +132,9 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
 	chainLinkDeal.ProviderCollateralFormat = utils.ConvertPrice2AttoFil(deal.ProviderCollateralFormat)
 	chainLinkDeal.Status = deal.Status
+
+	chainLinkDeal.ClientCollateralFormat = strings.TrimPrefix(chainLinkDeal.ClientCollateralFormat, "1")
+	chainLinkDeal.ProviderCollateralFormat = strings.TrimPrefix(chainLinkDeal.ProviderCollateralFormat, "1")
 
 	timeT, err := time.Parse("2006-01-02 15:04:05", deal.CreatedAt)
 	if err != nil {
