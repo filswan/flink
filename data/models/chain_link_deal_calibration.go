@@ -10,7 +10,7 @@ type ChainLinkDealCalibration struct {
 	StoragePricePerEpoch     string `json:"storagePricePerEpoch"`
 	Signature                string `json:"signature"`
 	SignatureType            string `json:"signatureType"`
-	CreatedAtSrc             string `json:"createdAt"`
+	CreatedAt                string `json:"createdAt"`
 	PieceSizeFormat          string `json:"pieceSizeFormat"`
 	StartHeight              int64  `json:"satrtHeight"`
 	EndHeight                int64  `json:"endHeight"`

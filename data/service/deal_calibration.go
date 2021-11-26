@@ -120,7 +120,6 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.StoragePricePerEpoch = deal.StoragePricePerEpoch
 	chainLinkDeal.Signature = deal.Signature
 	chainLinkDeal.SignatureType = deal.SignatureType
-	chainLinkDeal.CreatedAtSrc = deal.CreatedAtSrc
 	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
 	chainLinkDeal.StartHeight = deal.StartHeight
 	chainLinkDeal.EndHeight = deal.EndHeight
@@ -132,7 +131,7 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.ProviderCollateralFormat = deal.ProviderCollateralFormat
 	chainLinkDeal.Status = deal.Status
 
-	timeT, err := time.Parse("2006-01-02 15:04:05", chainLinkDeal.CreatedAtSrc)
+	timeT, err := time.Parse("2006-01-02 15:04:05", deal.CreatedAt)
 	if err != nil {
 		logs.GetLogger().Error(err)
 	} else {
