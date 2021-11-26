@@ -67,7 +67,7 @@ func GetDealsFromCalibration() error {
 			lastInsertAt = currentMilliSec
 		}
 
-		if i-lastDealId > 10000 {
+		if i-lastDealId > 1000 {
 			err := fmt.Errorf("no deal for the last 10000 deal id")
 			logs.GetLogger().Error(err)
 			return err
