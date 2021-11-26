@@ -32,6 +32,7 @@ type ChainLinkDeal struct {
 	VerifiedProvider         int    `json:"verified_provider"`
 	ProviderCollateralFormat string `json:"provider_collateral_format"`
 	Status                   int    `json:"status"`
+	NetworkName              string
 }
 
 func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {
