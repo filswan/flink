@@ -11,6 +11,6 @@ USER node
 
 RUN yarn --frozen-lockfile
 
-COPY --chown=node:node .. .
+COPY --chown=node:node . .
 
 CMD [ "node", "app.js" ]
