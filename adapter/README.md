@@ -9,7 +9,7 @@ Data Dao signs the node for providing data feeds to the web3 blockchains like po
 Clone this repo and change "ExternalAdapterProject" below to the name of your project
 
 ```bash
-git clone https://github.com/filswan/filecoin-data-provider 
+git clone https://github.com/filswan/filink
 ```
 
 Enter into the newly-created directory
