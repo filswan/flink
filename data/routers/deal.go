@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"filecoin-data-provider/data/common"
-	"filecoin-data-provider/data/models"
+	"filink/data/common"
+	"filink/data/service"
 	"net/http"
 	"strconv"
 
@@ -23,7 +23,7 @@ func GetDeal(c *gin.Context) {
 		return
 	}
 
-	deal, err := models.GetDealById(dealId)
+	deal, err := service.GetDealById(dealId)
 	if err != nil {
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))

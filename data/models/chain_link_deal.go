@@ -1,17 +1,15 @@
 package models
 
 import (
-	"filecoin-data-provider/data/database"
+	"filink/data/database"
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/filswan/go-swan-lib/logs"
 )
 
-type ChainLinkDeal struct {
+type ChainLinkDealBase struct {
 	DealId                   int64  `json:"deal_id"`
-	NetworkId                int64  `json:"network_id"`
 	DealCid                  string `json:"deal_cid"`
 	MessageCid               string `json:"message_cid"`
 	Height                   int64  `json:"height"`
@@ -32,6 +30,12 @@ type ChainLinkDeal struct {
 	VerifiedProvider         int    `json:"verified_provider"`
 	ProviderCollateralFormat string `json:"provider_collateral_format"`
 	Status                   int    `json:"status"`
+	NetworkName              string `json:"network_name"`
+}
+
+type ChainLinkDeal struct {
+	ChainLinkDealBase
+	NetworkId int64 `json:"network_id"`
 }
 
 func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {
@@ -44,14 +48,13 @@ func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {
 
 	return err
 }
-func (b ChainLinkDeal) PrintFields() {
-	val := reflect.ValueOf(b)
-	for i := 0; i < val.Type().NumField(); i++ {
-		fmt.Println(val.Type().Field(i).Tag.Get("json"))
-	}
-}
 
 func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
+	if len(chainLinkDeals) <= 0 {
+		err := fmt.Errorf("no deal in chainLinkDeals")
+		return err
+	}
+
 	sql := "insert into chain_link_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at_src,created_at,"
 	sql = sql + "piece_size_format,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status) values"
 	valueStrings := []string{}
@@ -88,6 +91,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 	err := database.GetDB().Exec(sql, valueArgs...).Error
 
 	if err != nil {
+		logs.GetLogger().Info(sql)
 		logs.GetLogger().Error(err)
 		return err
 	}

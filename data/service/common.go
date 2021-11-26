@@ -1,7 +1,7 @@
 package service
 
 import (
-	"filecoin-data-provider/data/models"
+	"filink/data/models"
 	"runtime"
 	"time"
 )

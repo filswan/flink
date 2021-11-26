@@ -2,8 +2,9 @@ package service
 
 import (
 	"encoding/json"
-	"filecoin-data-provider/data/common/constants"
-	"filecoin-data-provider/data/models"
+	"filink/data/common/constants"
+	"filink/data/config"
+	"filink/data/models"
 	"fmt"
 	"strconv"
 	"time"
@@ -15,11 +16,13 @@ import (
 
 func GetDealsFromCalibrationLoop() {
 	for {
+		logs.GetLogger().Info("start")
 		err := GetDealsFromCalibration()
 		if err != nil {
 			logs.GetLogger().Error()
 		}
 
+		logs.GetLogger().Info("sleep")
 		time.Sleep(time.Minute * 1)
 	}
 }
@@ -45,18 +48,26 @@ func GetDealsFromCalibration() error {
 	startDealId := maxDealId + 1
 	lastDealId := maxDealId
 	//logs.GetLogger().Info(network.ApiUrlPrefix)
+
+	bulkInsertChainLinkLimit := config.GetConfig().ChainLink.BulkInsertChainlinkLimit
+	bulkInsertIntervalMilliSec := config.GetConfig().ChainLink.BulkInsertIntervalMilliSec
+	dealIdIntervalMax := config.GetConfig().ChainLink.DealIdIntervalMax
+
 	for i := startDealId; ; i++ {
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)
 		if err != nil {
 			logs.GetLogger().Error(err)
-			continue
 		} else {
 			chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
 			lastDealId = chainLinkDeal.DealId
 		}
 
+		dealIdInterval := i - lastDealId
+		//logs.GetLogger().Info(dealIdInterval)
 		currentMilliSec := time.Now().UnixNano() / 1e6
-		if len(chainLinkDeals) >= constants.BULK_INSERT_CHAINLINK_LIMIT || (currentMilliSec-lastInsertAt >= constants.BULK_INSERT_INTERVAL_MILLI_SEC && len(chainLinkDeals) >= 1) {
+		if len(chainLinkDeals) >= bulkInsertChainLinkLimit ||
+			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) ||
+			(dealIdInterval > dealIdIntervalMax && len(chainLinkDeals) >= 1) {
 			err := models.AddChainLinkDeals(chainLinkDeals)
 			if err != nil {
 				logs.GetLogger().Error(err)
@@ -64,9 +75,8 @@ func GetDealsFromCalibration() error {
 			chainLinkDeals = []*models.ChainLinkDeal{}
 			lastInsertAt = currentMilliSec
 		}
-
-		if i-lastDealId > 10000 {
-			err := fmt.Errorf("no deal for the last 10000 deal id")
+		if dealIdInterval > dealIdIntervalMax {
+			err := fmt.Errorf("no deal for the last %d deal id", dealIdInterval)
 			logs.GetLogger().Error(err)
 			return err
 		}
@@ -98,28 +108,30 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 
 	deal := chainLinkDealCalibrationResult.Data
 	chainLinkDeal := models.ChainLinkDeal{
-		DealId:                   deal.DealId,
-		NetworkId:                network.Id,
-		DealCid:                  deal.DealCid,
-		MessageCid:               deal.MessageCid,
-		Height:                   deal.Height,
-		PieceCid:                 deal.PieceCid,
-		VerifiedDeal:             deal.VerifiedDeal,
-		StoragePricePerEpoch:     deal.StoragePricePerEpoch,
-		Signature:                deal.Signature,
-		SignatureType:            deal.SignatureType,
-		CreatedAtSrc:             deal.CreatedAtSrc,
-		PieceSizeFormat:          deal.PieceSizeFormat,
-		StartHeight:              deal.StartHeight,
-		EndHeight:                deal.EndHeight,
-		Client:                   deal.Client,
-		ClientCollateralFormat:   deal.ClientCollateralFormat,
-		Provider:                 deal.Provider,
-		ProviderTag:              deal.ProviderTag,
-		VerifiedProvider:         deal.VerifiedProvider,
-		ProviderCollateralFormat: deal.ProviderCollateralFormat,
-		Status:                   deal.Status,
+		NetworkId: network.Id,
 	}
+
+	chainLinkDeal.DealId = deal.DealId
+	chainLinkDeal.DealCid = deal.DealCid
+	chainLinkDeal.MessageCid = deal.MessageCid
+	chainLinkDeal.Height = deal.Height
+	chainLinkDeal.PieceCid = deal.PieceCid
+	chainLinkDeal.VerifiedDeal = deal.VerifiedDeal
+	chainLinkDeal.StoragePricePerEpoch = deal.StoragePricePerEpoch
+	chainLinkDeal.Signature = deal.Signature
+	chainLinkDeal.SignatureType = deal.SignatureType
+	chainLinkDeal.CreatedAtSrc = deal.CreatedAtSrc
+	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
+	chainLinkDeal.StartHeight = deal.StartHeight
+	chainLinkDeal.EndHeight = deal.EndHeight
+	chainLinkDeal.Client = deal.Client
+	chainLinkDeal.ClientCollateralFormat = deal.ClientCollateralFormat
+	chainLinkDeal.Provider = deal.Provider
+	chainLinkDeal.ProviderTag = deal.ProviderTag
+	chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
+	chainLinkDeal.ProviderCollateralFormat = deal.ProviderCollateralFormat
+	chainLinkDeal.Status = deal.Status
+
 	timeT, err := time.Parse("2006-01-02 15:04:05", chainLinkDeal.CreatedAtSrc)
 	if err != nil {
 		logs.GetLogger().Error(err)
