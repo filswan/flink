@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"filink/data/common/constants"
-	"filink/data/common/utils"
 	"filink/data/config"
 	"filink/data/models"
 	"fmt"
@@ -118,18 +117,18 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.Height = deal.Height
 	chainLinkDeal.PieceCid = deal.PieceCid
 	chainLinkDeal.VerifiedDeal = deal.VerifiedDeal
-	chainLinkDeal.StoragePricePerEpoch = utils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch)
+	chainLinkDeal.StoragePricePerEpoch = libutils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch)
 	chainLinkDeal.Signature = deal.Signature
 	chainLinkDeal.SignatureType = deal.SignatureType
 	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
 	chainLinkDeal.StartHeight = deal.StartHeight
 	chainLinkDeal.EndHeight = deal.EndHeight
 	chainLinkDeal.Client = deal.Client
-	chainLinkDeal.ClientCollateralFormat = utils.GetPriceFormat("0 FIL")
+	chainLinkDeal.ClientCollateralFormat = libutils.GetPriceFormat("0 FIL")
 	chainLinkDeal.Provider = deal.Provider
 	chainLinkDeal.ProviderTag = deal.ProviderTag
 	chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
-	chainLinkDeal.ProviderCollateralFormat = utils.GetPriceFormat("0 FIL")
+	chainLinkDeal.ProviderCollateralFormat = libutils.GetPriceFormat("0 FIL")
 	chainLinkDeal.Status = deal.Status
 
 	timeT, err := time.Parse("2006-01-02 15:04:05", deal.CreatedAt)
