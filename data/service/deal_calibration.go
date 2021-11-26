@@ -63,7 +63,7 @@ func GetDealsFromCalibration() error {
 		}
 
 		dealIdInterval := i - lastDealId
-		logs.GetLogger().Info(dealIdInterval)
+		//logs.GetLogger().Info(dealIdInterval)
 		currentMilliSec := time.Now().UnixNano() / 1e6
 		if len(chainLinkDeals) >= bulkInsertChainLinkLimit ||
 			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) ||
