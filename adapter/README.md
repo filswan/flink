@@ -28,19 +28,49 @@ See [Install Locally](#install-locally) for a quickstart
 
 ## Input Params
 
-- `base`, `from`, or `coin`: The symbol of the currency to query
-- `quote`, `to`, or `market`: The symbol of the currency to convert to
+- `deal`, or `dealId`: The dealId of filecoin transaction
 
 ## Output
+Only need to take care of result part
 
 ```json
 {
- "jobRunID": "278c97ffadb54a5bbb93cfec5f7b5503",
- "data": {
-  "USD": 164.02,
-  "result": 164.02
- },
- "statusCode": 200
+  jobRunID: 0,
+  data: {
+    code: 200,
+    message: '',
+    data: {
+      DealId: 58160,
+      dealCid: 'bafyreifo2pp5d4se44xu32p5ikm3qjzmfv7ihbmdsilz7j5wii7h7ne3gm',
+      messageCid: 'bafy2bzacebyuyuxr23e2n3njhtltcuc7sc73cuumzd2fww4mt4ivtzg2zn6um',
+      height: 455035,
+      pieceCid: 'baga6ea4seaql3pcfitmlane3nbrlcitb4ffzdkkswy4e2tn4tf67muicdcueiki',
+      verifiedDeal: false,
+      storagePricePerEpoch: '976562 AttoFIL',
+      signature: 'rWJeBFkmGZTAnIitvM6NiRpn8vqwlRAjr4PpMHmfL6Kb86qeXU99DtHWmjW8WyARAFn3mTUtB4+rlibfEUFlts4cAESxfHPiuOciVj0r0d8Y3te0axEZETGsJeLQPPkY',
+      signatureType: 'bls',
+      createdAt: '2021-11-24 07:57:30',
+      pieceSizeFormat: '2.00 MiB',
+      satrtHeight: 466508,
+      endHeight: 1980929,
+      client: 't3u7pumush376xbytsgs5wabkhtadjzfydxxda2vzyasg7cimkcphswrq66j4dubbhwpnojqd3jie6ermpwvvq',
+      clientCollateralFormat: '0 AttoFIL',
+      provider: 't024557',
+      providerTag: '',
+      providerIsVerified: 0,
+      providerCollateralFormat: '0 AttoFIL',
+      status: 0
+    },
+    result: {
+      dealCid: 'bafyreifo2pp5d4se44xu32p5ikm3qjzmfv7ihbmdsilz7j5wii7h7ne3gm',
+      price: '976562 AttoFIL'
+    }
+  },
+  result: {
+    dealCid: 'bafyreifo2pp5d4se44xu32p5ikm3qjzmfv7ihbmdsilz7j5wii7h7ne3gm',
+    price: '976562 AttoFIL'
+  },
+  statusCode: 200
 }
 ```
 
@@ -71,7 +101,7 @@ yarn start
 ## Call the external adapter/API server
 
 ```bash
-curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": { "from": "ETH", "to": "USD" } }'
+curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": { "deal":58160 } }'
 ```
 
 ## Docker
