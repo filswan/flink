@@ -1,13 +1,19 @@
 # FILink
 FILink is a data provider transfers deals info to chainlink Oracle
 
-## Problem
-As a user on other blockchain, we do not have a native way to know if a storage deal is active on Filecoin network.
+## Why we need to have Fil-Chainlink proof
+While a user is working on other blockchain like Ethereum, BSC,Polygon, they want to know the strage deal they send to filecoin network is online, however we do not have a native way to check if a storage deal is active on those blockchains.
+
 ## Solutions 
 By build a filecoin data adapter to chainlink oracle. It can give other blockchain the capability of validation if a data is onchain
 
-The adapter is scaning the data from Flecoin blockchain and post the deal info to polygon network, the deal info is by the following format:
+### Chainlink Adapter - DATA DAO 
 
+Data Dao signs the node for providing data feeds to the web3 blockchains like polygoin, bsc, eth.
+Every data deal has a deal ID, it is an unique id on filecoin network used for tracking deal info.
+Filecoin data adatper provides deal ids for other blockchain system to check if the deal exists on filecoin network.
+
+The adapter scans the data from Flecoin blockchain and post the deal info to polygon network, the deal info is by the following format:
 
 ```json
 {
@@ -36,16 +42,10 @@ The adapter is scaning the data from Flecoin blockchain and post the deal info t
 }
 
 ```
-### Chainlink Adapter - DATA DAO 
-
-Data Dao signs the node for providing data feeds to the web3 blockchains like polygoin, bsc, eth.
-Every data deal has a deal ID, it is an unique id on filecoin network used for tracking deal info.
-Filecoin data adatper provides deal ids for other blockchain system to check if the deal exists on filecoin network.
 
 ## Sample Use Case
 ### Polygon Chain Payment for Filecoin storage
-
-Data source -Filecoin -> data aggregator-Filswan -> data provider- Filswan -> Chainlink Adapter - DATA DAO -> MCP DAO unlock fund based on Chainlink Adapter
+![FilLInk](https://user-images.githubusercontent.com/8363795/143548611-364188c2-a6a5-4b08-b5f5-97f5f0dd9cd7.png)
 
 ### Deal Matching
 scheduler to update status to trigger DAO signature for unlock event
