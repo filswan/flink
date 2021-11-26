@@ -15,7 +15,7 @@ git clone https://github.com/filswan/filink
 Enter into the newly-created directory
 
 ```bash
-cd filecoin-data-provider/adapter
+cd filink/adapter
 ```
 
 You can remove the existing git history by running:
