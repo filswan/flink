@@ -27,7 +27,7 @@ create table chain_link_deal(
     storage_price_per_epoch    bigint        , #--not null,
     signature                  varchar(1000) , #--not null,
     signature_type             varchar(60)   , #--not null,
-    created_at                 bigint        , #--not null, #--precision:millisecond
+    created_at                 bigint        , #--not null, #--precision:second
     piece_size_format          varchar(60)   , #--not null,
     start_height               bigint        , #--not null,
     end_height                 bigint        , #--not null,
