@@ -44,7 +44,7 @@ The adapter scans the data from Flecoin blockchain and post the deal info to pol
 ```
 
 ## Sample Use Case
-### Polygon Chain Payment for Filecoin storage
+### Polygon NFT user Payment USDc for Filecoin storage
 ![FilLInk](https://user-images.githubusercontent.com/8363795/143548611-364188c2-a6a5-4b08-b5f5-97f5f0dd9cd7.png)
 
 ### Deal Matching
