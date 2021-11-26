@@ -39,7 +39,7 @@ create table chain_link_deal(
     verified_provider          int           , #--not null,
     provider_collateral_format varchar(60)   , #--not null,
     status                     int           , #--not null,
-    primary key pk_chain_link_deal (deal_id),
+    primary key pk_chain_link_deal (deal_id, network_id),
     constraint fk_chain_link_deal_network_id foreign key (network_id) references network (id)
 )
 
