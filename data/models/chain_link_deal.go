@@ -3,7 +3,6 @@ package models
 import (
 	"filink/data/database"
 	"fmt"
-	"reflect"
 	"strings"
 
 	"github.com/filswan/go-swan-lib/logs"
@@ -11,7 +10,6 @@ import (
 
 type ChainLinkDeal struct {
 	DealId                   int64  `json:"deal_id"`
-	NetworkId                *int64 `json:"network_id"`
 	DealCid                  string `json:"deal_cid"`
 	MessageCid               string `json:"message_cid"`
 	Height                   int64  `json:"height"`
@@ -35,7 +33,12 @@ type ChainLinkDeal struct {
 	NetworkName              string `json:"network_name"`
 }
 
-func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {
+type ChainLinkDealInternal struct {
+	ChainLinkDeal
+	NetworkId int64 `json:"network_id"`
+}
+
+func AddChainLinkDeal(chainLinkDeal *ChainLinkDealInternal) error {
 	err := database.GetDB().Create(chainLinkDeal).Error
 
 	if err != nil {
@@ -45,14 +48,8 @@ func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {
 
 	return err
 }
-func (b ChainLinkDeal) PrintFields() {
-	val := reflect.ValueOf(b)
-	for i := 0; i < val.Type().NumField(); i++ {
-		fmt.Println(val.Type().Field(i).Tag.Get("json"))
-	}
-}
 
-func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
+func AddChainLinkDeals(chainLinkDeals []*ChainLinkDealInternal) error {
 	if len(chainLinkDeals) <= 0 {
 		err := fmt.Errorf("no deal in chainLinkDeals")
 		return err
@@ -104,7 +101,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 
 func GetMaxDealId(networkId int64) (int64, error) {
 	sql := "select max(deal_id) deal_id from chain_link_deal where network_id=?"
-	var chainLinkDeal ChainLinkDeal
+	var chainLinkDeal ChainLinkDealInternal
 	err := database.GetDB().Raw(sql, networkId).Scan(&chainLinkDeal).Error
 	if err != nil {
 		logs.GetLogger().Error(err)
@@ -113,8 +110,8 @@ func GetMaxDealId(networkId int64) (int64, error) {
 	return chainLinkDeal.DealId, nil
 }
 
-func GetDealById(dealId int64) (*ChainLinkDeal, error) {
-	chainLinkDeal := ChainLinkDeal{}
+func GetDealById(dealId int64) (*ChainLinkDealInternal, error) {
+	chainLinkDeal := ChainLinkDealInternal{}
 	err := database.GetDB().Where("deal_id=?", dealId).First(&chainLinkDeal).Error
 
 	if err != nil {

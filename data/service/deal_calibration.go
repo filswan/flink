@@ -40,7 +40,7 @@ func GetDealsFromCalibration() error {
 		return err
 	}
 
-	chainLinkDeals := []*models.ChainLinkDeal{}
+	chainLinkDeals := []*models.ChainLinkDealInternal{}
 
 	logs.GetLogger().Info("max deal id last scanned:", maxDealId)
 
@@ -72,7 +72,7 @@ func GetDealsFromCalibration() error {
 			if err != nil {
 				logs.GetLogger().Error(err)
 			}
-			chainLinkDeals = []*models.ChainLinkDeal{}
+			chainLinkDeals = []*models.ChainLinkDealInternal{}
 			lastInsertAt = currentMilliSec
 		}
 		if dealIdInterval > dealIdIntervalMax {
@@ -83,7 +83,7 @@ func GetDealsFromCalibration() error {
 	}
 }
 
-func GetDealFromCalibration(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
+func GetDealFromCalibration(network models.Network, dealId int64) (*models.ChainLinkDealInternal, error) {
 	apiUrlDeal := utils.UrlJoin(network.ApiUrlPrefix, strconv.FormatInt(dealId, 10))
 	response := client.HttpGetNoToken(apiUrlDeal, nil)
 	if response == "" {
@@ -107,29 +107,31 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	//logs.GetLogger().Info(apiUrlDeal, ",", chainLinkDeal.Code, ",", chainLinkDeal.Message, ",", chainLinkDeal.Message)
 
 	deal := chainLinkDealCalibrationResult.Data
-	chainLinkDeal := models.ChainLinkDeal{
-		DealId:                   deal.DealId,
-		NetworkId:                &network.Id,
-		DealCid:                  deal.DealCid,
-		MessageCid:               deal.MessageCid,
-		Height:                   deal.Height,
-		PieceCid:                 deal.PieceCid,
-		VerifiedDeal:             deal.VerifiedDeal,
-		StoragePricePerEpoch:     deal.StoragePricePerEpoch,
-		Signature:                deal.Signature,
-		SignatureType:            deal.SignatureType,
-		CreatedAtSrc:             deal.CreatedAtSrc,
-		PieceSizeFormat:          deal.PieceSizeFormat,
-		StartHeight:              deal.StartHeight,
-		EndHeight:                deal.EndHeight,
-		Client:                   deal.Client,
-		ClientCollateralFormat:   deal.ClientCollateralFormat,
-		Provider:                 deal.Provider,
-		ProviderTag:              deal.ProviderTag,
-		VerifiedProvider:         deal.VerifiedProvider,
-		ProviderCollateralFormat: deal.ProviderCollateralFormat,
-		Status:                   deal.Status,
+	chainLinkDeal := models.ChainLinkDealInternal{
+		NetworkId: network.Id,
 	}
+
+	chainLinkDeal.DealId = deal.DealId
+	chainLinkDeal.DealCid = deal.DealCid
+	chainLinkDeal.MessageCid = deal.MessageCid
+	chainLinkDeal.Height = deal.Height
+	chainLinkDeal.PieceCid = deal.PieceCid
+	chainLinkDeal.VerifiedDeal = deal.VerifiedDeal
+	chainLinkDeal.StoragePricePerEpoch = deal.StoragePricePerEpoch
+	chainLinkDeal.Signature = deal.Signature
+	chainLinkDeal.SignatureType = deal.SignatureType
+	chainLinkDeal.CreatedAtSrc = deal.CreatedAtSrc
+	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
+	chainLinkDeal.StartHeight = deal.StartHeight
+	chainLinkDeal.EndHeight = deal.EndHeight
+	chainLinkDeal.Client = deal.Client
+	chainLinkDeal.ClientCollateralFormat = deal.ClientCollateralFormat
+	chainLinkDeal.Provider = deal.Provider
+	chainLinkDeal.ProviderTag = deal.ProviderTag
+	chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
+	chainLinkDeal.ProviderCollateralFormat = deal.ProviderCollateralFormat
+	chainLinkDeal.Status = deal.Status
+
 	timeT, err := time.Parse("2006-01-02 15:04:05", chainLinkDeal.CreatedAtSrc)
 	if err != nil {
 		logs.GetLogger().Error(err)

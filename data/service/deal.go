@@ -5,19 +5,43 @@ import (
 )
 
 func GetDealById(dealId int64) (*models.ChainLinkDeal, error) {
-	deal, err := models.GetDealById(dealId)
+	dealInternal, err := models.GetDealById(dealId)
 	if err != nil {
 		//logs.GetLogger().Error(err)
 		return nil, err
 	}
 
-	network, err := models.GetNetworkById(*deal.NetworkId)
+	network, err := models.GetNetworkById(dealInternal.NetworkId)
 	if err != nil {
 		//logs.GetLogger().Error(err)
 		return nil, err
 	}
-	deal.NetworkId = nil
-	deal.NetworkName = network.Name
+	dealInternal.NetworkName = network.Name
 
-	return deal, nil
+	deal := models.ChainLinkDeal{
+		DealId:                   dealInternal.DealId,
+		DealCid:                  dealInternal.DealCid,
+		MessageCid:               dealInternal.MessageCid,
+		Height:                   dealInternal.Height,
+		PieceCid:                 dealInternal.PieceCid,
+		VerifiedDeal:             dealInternal.VerifiedDeal,
+		StoragePricePerEpoch:     dealInternal.StoragePricePerEpoch,
+		Signature:                dealInternal.Signature,
+		SignatureType:            dealInternal.SignatureType,
+		CreatedAtSrc:             dealInternal.CreatedAtSrc,
+		CreatedAt:                dealInternal.CreatedAt,
+		PieceSizeFormat:          dealInternal.PieceSizeFormat,
+		StartHeight:              dealInternal.StartHeight,
+		EndHeight:                dealInternal.EndHeight,
+		Client:                   dealInternal.Client,
+		ClientCollateralFormat:   dealInternal.ClientCollateralFormat,
+		Provider:                 dealInternal.Provider,
+		ProviderTag:              dealInternal.ProviderTag,
+		VerifiedProvider:         dealInternal.VerifiedProvider,
+		ProviderCollateralFormat: dealInternal.ProviderCollateralFormat,
+		Status:                   dealInternal.Status,
+		NetworkName:              dealInternal.NetworkName,
+	}
+
+	return &deal, nil
 }
