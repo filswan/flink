@@ -118,7 +118,7 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.Height = deal.Height
 	chainLinkDeal.PieceCid = deal.PieceCid
 	chainLinkDeal.VerifiedDeal = deal.VerifiedDeal
-	chainLinkDeal.StoragePricePerEpoch = utils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch)
+	chainLinkDeal.StoragePricePerEpoch = libutils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch)
 	chainLinkDeal.Signature = deal.Signature
 	chainLinkDeal.SignatureType = deal.SignatureType
 	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
