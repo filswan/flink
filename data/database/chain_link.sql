@@ -14,7 +14,7 @@ create table network
   unique key un_network_api_url_prefix (api_url_prefix)
 ) engine=InnoDB;
 
-insert into network(name,api_url_prefix) values("calibration", "https://calibration-api.filscout.com/api/v1/storagedeal");
+insert into network(name,api_url_prefix) values("filecoin calibration", "https://calibration-api.filscout.com/api/v1/storagedeal");
 
 create table chain_link_deal(
     deal_id                    bigint        not null,
