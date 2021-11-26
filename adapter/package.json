@@ -1,11 +1,11 @@
 {
-  "name": "adapter",
+  "name": "EA-NodeJS-Template",
   "version": "0.1.0",
   "author": "",
   "description": "",
   "license": "MIT",
   "scripts": {
-    "test": "./node_modules/.bin/_mocha --timeout 0",
+    "test": "../node_modules/.bin/_mocha --timeout 0",
     "start": "node app.js"
   },
   "dependencies": {
