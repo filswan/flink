@@ -88,6 +88,13 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 
 	sql = fmt.Sprintf("%s %s", sql, strings.Join(valueStrings, ","))
 
+	onDuplicateKey := "network_id=values(network_id),deal_cid=values(deal_cid),message_cid=values(message_cid),height=values(height),piece_cid=values(piece_cid),"
+	onDuplicateKey = onDuplicateKey + "verified_deal=values(verified_deal),storage_price_per_epoch=values(storage_price_per_epoch),signature=values(signature),signature_type=values(signature_type),"
+	onDuplicateKey = onDuplicateKey + "created_at_src=values(created_at_src),created_at=values(created_at),piece_size_format=values(piece_size_format),start_height=values(start_height),end_height=values(end_height),"
+	onDuplicateKey = onDuplicateKey + "client=values(client),client_collateral_format=values(client_collateral_format),provider=values(provider),provider_tag=values(provider_tag),"
+	onDuplicateKey = onDuplicateKey + "verified_provider=values(verified_provider),provider_collateral_format=values(provider_collateral_format),status=values(status)"
+	sql = sql + " on duplicate key update " + onDuplicateKey
+
 	err := database.GetDB().Exec(sql, valueArgs...).Error
 
 	if err != nil {
