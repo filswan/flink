@@ -4,7 +4,7 @@ import (
 	"filink/data/models"
 )
 
-func GetDealById(dealId int64) (*models.ChainLinkDeal, error) {
+func GetDealById(dealId int64) (*models.ChainLinkDealBase, error) {
 	dealInternal, err := models.GetDealById(dealId)
 	if err != nil {
 		//logs.GetLogger().Error(err)
@@ -18,7 +18,7 @@ func GetDealById(dealId int64) (*models.ChainLinkDeal, error) {
 	}
 	dealInternal.NetworkName = network.Name
 
-	deal := models.ChainLinkDeal{
+	deal := models.ChainLinkDealBase{
 		DealId:                   dealInternal.DealId,
 		DealCid:                  dealInternal.DealCid,
 		MessageCid:               dealInternal.MessageCid,

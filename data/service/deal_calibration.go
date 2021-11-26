@@ -40,7 +40,7 @@ func GetDealsFromCalibration() error {
 		return err
 	}
 
-	chainLinkDeals := []*models.ChainLinkDealInternal{}
+	chainLinkDeals := []*models.ChainLinkDeal{}
 
 	logs.GetLogger().Info("max deal id last scanned:", maxDealId)
 
@@ -72,7 +72,7 @@ func GetDealsFromCalibration() error {
 			if err != nil {
 				logs.GetLogger().Error(err)
 			}
-			chainLinkDeals = []*models.ChainLinkDealInternal{}
+			chainLinkDeals = []*models.ChainLinkDeal{}
 			lastInsertAt = currentMilliSec
 		}
 		if dealIdInterval > dealIdIntervalMax {
@@ -83,7 +83,7 @@ func GetDealsFromCalibration() error {
 	}
 }
 
-func GetDealFromCalibration(network models.Network, dealId int64) (*models.ChainLinkDealInternal, error) {
+func GetDealFromCalibration(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
 	apiUrlDeal := utils.UrlJoin(network.ApiUrlPrefix, strconv.FormatInt(dealId, 10))
 	response := client.HttpGetNoToken(apiUrlDeal, nil)
 	if response == "" {
@@ -107,7 +107,7 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	//logs.GetLogger().Info(apiUrlDeal, ",", chainLinkDeal.Code, ",", chainLinkDeal.Message, ",", chainLinkDeal.Message)
 
 	deal := chainLinkDealCalibrationResult.Data
-	chainLinkDeal := models.ChainLinkDealInternal{
+	chainLinkDeal := models.ChainLinkDeal{
 		NetworkId: network.Id,
 	}
 

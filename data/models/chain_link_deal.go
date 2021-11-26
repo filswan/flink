@@ -8,7 +8,7 @@ import (
 	"github.com/filswan/go-swan-lib/logs"
 )
 
-type ChainLinkDeal struct {
+type ChainLinkDealBase struct {
 	DealId                   int64  `json:"deal_id"`
 	DealCid                  string `json:"deal_cid"`
 	MessageCid               string `json:"message_cid"`
@@ -33,12 +33,12 @@ type ChainLinkDeal struct {
 	NetworkName              string `json:"network_name"`
 }
 
-type ChainLinkDealInternal struct {
-	ChainLinkDeal
+type ChainLinkDeal struct {
+	ChainLinkDealBase
 	NetworkId int64 `json:"network_id"`
 }
 
-func AddChainLinkDeal(chainLinkDeal *ChainLinkDealInternal) error {
+func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {
 	err := database.GetDB().Create(chainLinkDeal).Error
 
 	if err != nil {
@@ -49,7 +49,7 @@ func AddChainLinkDeal(chainLinkDeal *ChainLinkDealInternal) error {
 	return err
 }
 
-func AddChainLinkDeals(chainLinkDeals []*ChainLinkDealInternal) error {
+func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 	if len(chainLinkDeals) <= 0 {
 		err := fmt.Errorf("no deal in chainLinkDeals")
 		return err
@@ -101,7 +101,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDealInternal) error {
 
 func GetMaxDealId(networkId int64) (int64, error) {
 	sql := "select max(deal_id) deal_id from chain_link_deal where network_id=?"
-	var chainLinkDeal ChainLinkDealInternal
+	var chainLinkDeal ChainLinkDeal
 	err := database.GetDB().Raw(sql, networkId).Scan(&chainLinkDeal).Error
 	if err != nil {
 		logs.GetLogger().Error(err)
@@ -110,8 +110,8 @@ func GetMaxDealId(networkId int64) (int64, error) {
 	return chainLinkDeal.DealId, nil
 }
 
-func GetDealById(dealId int64) (*ChainLinkDealInternal, error) {
-	chainLinkDeal := ChainLinkDealInternal{}
+func GetDealById(dealId int64) (*ChainLinkDeal, error) {
+	chainLinkDeal := ChainLinkDeal{}
 	err := database.GetDB().Where("deal_id=?", dealId).First(&chainLinkDeal).Error
 
 	if err != nil {
