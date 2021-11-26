@@ -45,7 +45,8 @@ The adapter scans the data from Flecoin blockchain and post the deal info to pol
 
 ## Sample Use Case
 ### Polygon NFT user Payment USDc for Filecoin storage
-![FilLInk](https://user-images.githubusercontent.com/8363795/143548611-364188c2-a6a5-4b08-b5f5-97f5f0dd9cd7.png)
+![FilLInk](https://user-images.githubusercontent.com/8363795/143550092-bc10f493-b6c5-48e0-ac46-5bbd49a11731.png)
+
 
 ### Deal Matching
 scheduler to update status to trigger DAO signature for unlock event
