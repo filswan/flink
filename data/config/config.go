@@ -10,9 +10,10 @@ import (
 )
 
 type Configuration struct {
-	Port     int      `toml:"port"`
-	Release  bool     `toml:"release"`
-	Database database `toml:"database"`
+	Port      int       `toml:"port"`
+	Release   bool      `toml:"release"`
+	Database  database  `toml:"database"`
+	ChainLink chainLink `toml:"chain_link"`
 }
 
 type database struct {
@@ -23,6 +24,12 @@ type database struct {
 	DbPassword       string `toml:"db_password"`
 	DbArgs           string `toml:"db_args"`
 	DbMaxIdleConnNum int    `toml:"db_max_idle_conn_num"`
+}
+
+type chainLink struct {
+	BulkInsertChainlinkLimit   int   `toml:"bulk_insert_chainlink_limit"`
+	BulkInsertIntervalMilliSec int64 `toml:"bulk_insert_interval_milli_sec"`
+	DealIdIntervalMax          int64 `toml:"deal_id_interval_max"`
 }
 
 var config *Configuration
@@ -58,6 +65,7 @@ func requiredFieldsAreGiven(metaData toml.MetaData) bool {
 		{"port"},
 		{"release"},
 		{"database"},
+		{"chain_link"},
 
 		{"database", "db_host"},
 		{"database", "db_port"},
@@ -66,6 +74,10 @@ func requiredFieldsAreGiven(metaData toml.MetaData) bool {
 		{"database", "db_password"},
 		{"database", "db_args"},
 		{"database", "db_max_idle_conn_num"},
+
+		{"chain_link", "bulk_insert_chainlink_limit"},
+		{"chain_link", "bulk_insert_interval_milli_sec"},
+		{"chain_link", "deal_id_interval_max"},
 	}
 
 	for _, v := range requiredFields {

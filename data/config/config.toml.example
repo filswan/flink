@@ -9,3 +9,8 @@ db_username = "root"         # username to access the database
 db_password = ""             # password to access the database
 db_args = "charset=utf8mb4&parseTime=True&loc=Local" # other arguments to access database
 db_max_idle_conn_num = 10    # maximum number of connections in the idle connection pool
+
+[chain_link]
+bulk_insert_chainlink_limit = 100
+bulk_insert_interval_milli_sec = 300000
+deal_id_interval_max = 10

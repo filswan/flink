@@ -52,6 +52,11 @@ func (b ChainLinkDeal) PrintFields() {
 }
 
 func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
+	if len(chainLinkDeals) <= 0 {
+		err := fmt.Errorf("no deal in chainLinkDeals")
+		return err
+	}
+
 	sql := "insert into chain_link_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at_src,created_at,"
 	sql = sql + "piece_size_format,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status) values"
 	valueStrings := []string{}

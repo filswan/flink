@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"filink/data/common/constants"
+	"filink/data/config"
 	"filink/data/models"
 	"fmt"
 	"strconv"
@@ -47,6 +48,11 @@ func GetDealsFromCalibration() error {
 	startDealId := maxDealId + 1
 	lastDealId := maxDealId
 	//logs.GetLogger().Info(network.ApiUrlPrefix)
+
+	bulkInsertChainLinkLimit := config.GetConfig().ChainLink.BulkInsertChainlinkLimit
+	bulkInsertIntervalMilliSec := config.GetConfig().ChainLink.BulkInsertIntervalMilliSec
+	dealIdIntervalMax := config.GetConfig().ChainLink.DealIdIntervalMax
+
 	for i := startDealId; ; i++ {
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)
 		if err != nil {
@@ -59,9 +65,9 @@ func GetDealsFromCalibration() error {
 		dealIdInterval := i - lastDealId
 		logs.GetLogger().Info(dealIdInterval)
 		currentMilliSec := time.Now().UnixNano() / 1e6
-		if len(chainLinkDeals) >= constants.BULK_INSERT_CHAINLINK_LIMIT ||
-			(currentMilliSec-lastInsertAt >= constants.BULK_INSERT_INTERVAL_MILLI_SEC && len(chainLinkDeals) >= 1) ||
-			(dealIdInterval > constants.DEAL_ID_INTERVAL_MAX && len(chainLinkDeals) >= 1) {
+		if len(chainLinkDeals) >= bulkInsertChainLinkLimit ||
+			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) ||
+			(dealIdInterval > dealIdIntervalMax && len(chainLinkDeals) >= 1) {
 			err := models.AddChainLinkDeals(chainLinkDeals)
 			if err != nil {
 				logs.GetLogger().Error(err)
@@ -69,7 +75,7 @@ func GetDealsFromCalibration() error {
 			chainLinkDeals = []*models.ChainLinkDeal{}
 			lastInsertAt = currentMilliSec
 		}
-		if dealIdInterval > constants.DEAL_ID_INTERVAL_MAX {
+		if dealIdInterval > dealIdIntervalMax {
 			err := fmt.Errorf("no deal for the last %d deal id", dealIdInterval)
 			logs.GetLogger().Error(err)
 			return err
