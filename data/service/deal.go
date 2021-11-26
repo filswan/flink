@@ -11,7 +11,7 @@ func GetDealById(dealId int64) (*models.ChainLinkDeal, error) {
 		return nil, err
 	}
 
-	network, err := models.GetNetworkById(deal.NetworkId)
+	network, err := models.GetNetworkById(*deal.NetworkId)
 	if err != nil {
 		//logs.GetLogger().Error(err)
 		return nil, err

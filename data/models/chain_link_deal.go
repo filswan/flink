@@ -11,7 +11,7 @@ import (
 
 type ChainLinkDeal struct {
 	DealId                   int64  `json:"deal_id"`
-	NetworkId                int64  `json:"network_id"`
+	NetworkId                *int64 `json:"network_id"`
 	DealCid                  string `json:"deal_cid"`
 	MessageCid               string `json:"message_cid"`
 	Height                   int64  `json:"height"`
@@ -32,7 +32,7 @@ type ChainLinkDeal struct {
 	VerifiedProvider         int    `json:"verified_provider"`
 	ProviderCollateralFormat string `json:"provider_collateral_format"`
 	Status                   int    `json:"status"`
-	NetworkName              string
+	NetworkName              string `json:"network_name"`
 }
 
 func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {

@@ -109,7 +109,7 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	deal := chainLinkDealCalibrationResult.Data
 	chainLinkDeal := models.ChainLinkDeal{
 		DealId:                   deal.DealId,
-		NetworkId:                network.Id,
+		NetworkId:                &network.Id,
 		DealCid:                  deal.DealCid,
 		MessageCid:               deal.MessageCid,
 		Height:                   deal.Height,
