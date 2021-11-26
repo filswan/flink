@@ -16,6 +16,7 @@ func GetDealById(dealId int64) (*models.ChainLinkDeal, error) {
 		//logs.GetLogger().Error(err)
 		return nil, err
 	}
+	deal.NetworkId = nil
 	deal.NetworkName = network.Name
 
 	return deal, nil
