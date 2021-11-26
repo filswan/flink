@@ -6,8 +6,6 @@ Data Dao signs the node for providing data feeds to the web3 blockchains like po
 
 ## Creating the adapter 
 
-Clone this repo and change "ExternalAdapterProject" below to the name of your project
-
 ```bash
 git clone https://github.com/filswan/filink
 ```
