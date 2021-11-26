@@ -37,6 +37,34 @@ type ChainLinkDeal struct {
 	NetworkId int64 `json:"network_id"`
 }
 
+func GetChainLinkDealBase(dealInternal ChainLinkDeal) ChainLinkDealBase {
+	deal := ChainLinkDealBase{
+		DealId:                   dealInternal.DealId,
+		DealCid:                  dealInternal.DealCid,
+		MessageCid:               dealInternal.MessageCid,
+		Height:                   dealInternal.Height,
+		PieceCid:                 dealInternal.PieceCid,
+		VerifiedDeal:             dealInternal.VerifiedDeal,
+		StoragePricePerEpoch:     dealInternal.StoragePricePerEpoch,
+		Signature:                dealInternal.Signature,
+		SignatureType:            dealInternal.SignatureType,
+		CreatedAt:                dealInternal.CreatedAt,
+		PieceSizeFormat:          dealInternal.PieceSizeFormat,
+		StartHeight:              dealInternal.StartHeight,
+		EndHeight:                dealInternal.EndHeight,
+		Client:                   dealInternal.Client,
+		ClientCollateralFormat:   dealInternal.ClientCollateralFormat,
+		Provider:                 dealInternal.Provider,
+		ProviderTag:              dealInternal.ProviderTag,
+		VerifiedProvider:         dealInternal.VerifiedProvider,
+		ProviderCollateralFormat: dealInternal.ProviderCollateralFormat,
+		Status:                   dealInternal.Status,
+		NetworkName:              dealInternal.NetworkName,
+	}
+
+	return deal
+}
+
 func AddChainLinkDeal(chainLinkDeal *ChainLinkDeal) error {
 	err := database.GetDB().Create(chainLinkDeal).Error
 
