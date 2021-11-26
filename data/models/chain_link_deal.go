@@ -60,7 +60,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 
 	valueArgs := []interface{}{}
 	for _, deal := range chainLinkDeals {
-		valueStrings = append(valueStrings, "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+		valueStrings = append(valueStrings, "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 		valueArgs = append(valueArgs, deal.DealId)
 		valueArgs = append(valueArgs, deal.NetworkId)
 		valueArgs = append(valueArgs, deal.DealCid)
