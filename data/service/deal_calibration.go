@@ -51,14 +51,17 @@ func GetDealsFromCalibration() error {
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)
 		if err != nil {
 			logs.GetLogger().Error(err)
-			continue
 		} else {
 			chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
 			lastDealId = chainLinkDeal.DealId
 		}
 
+		dealIdInterval := i - lastDealId
+		logs.GetLogger().Info(dealIdInterval)
 		currentMilliSec := time.Now().UnixNano() / 1e6
-		if len(chainLinkDeals) >= constants.BULK_INSERT_CHAINLINK_LIMIT || (currentMilliSec-lastInsertAt >= constants.BULK_INSERT_INTERVAL_MILLI_SEC && len(chainLinkDeals) >= 1) {
+		if len(chainLinkDeals) >= constants.BULK_INSERT_CHAINLINK_LIMIT ||
+			(currentMilliSec-lastInsertAt >= constants.BULK_INSERT_INTERVAL_MILLI_SEC && len(chainLinkDeals) >= 1) ||
+			(dealIdInterval > constants.DEAL_ID_INTERVAL_MAX && len(chainLinkDeals) >= 1) {
 			err := models.AddChainLinkDeals(chainLinkDeals)
 			if err != nil {
 				logs.GetLogger().Error(err)
@@ -66,8 +69,7 @@ func GetDealsFromCalibration() error {
 			chainLinkDeals = []*models.ChainLinkDeal{}
 			lastInsertAt = currentMilliSec
 		}
-
-		if i-lastDealId > 1000 {
+		if dealIdInterval > constants.DEAL_ID_INTERVAL_MAX {
 			err := fmt.Errorf("no deal for the last 10000 deal id")
 			logs.GetLogger().Error(err)
 			return err

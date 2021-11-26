@@ -88,6 +88,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 	err := database.GetDB().Exec(sql, valueArgs...).Error
 
 	if err != nil {
+		logs.GetLogger().Info(sql)
 		logs.GetLogger().Error(err)
 		return err
 	}
