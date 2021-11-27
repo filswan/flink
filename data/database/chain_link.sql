@@ -45,7 +45,7 @@ create table chain_link_deal(
     constraint fk_chain_link_deal_network_id foreign key (network_id) references network (id)
 )
 
-
+/*
 insert into chain_link_deal(
     deal_id                    ,
     network_id                 ,
@@ -93,3 +93,5 @@ insert into chain_link_deal(
     status                     ,
     storage_price              
 from chain_link_deal_1 order by deal_id;
+*/
+

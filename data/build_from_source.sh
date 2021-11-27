@@ -13,7 +13,7 @@ else
     echo "${CONF_FILE_PATH} created"
 fi
 
-BINARY_NAME=filink_data
+BINARY_NAME=filink-data
 make
 chmod +x ./build/${BINARY_NAME}
 ./build/${BINARY_NAME}                         # Run swan provider

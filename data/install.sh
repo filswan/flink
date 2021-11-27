@@ -1,5 +1,5 @@
 #!/bin/bash
-BINARY_NAME=filink_data-0.2.0-unix
+BINARY_NAME=filink-data-0.2.0-unix
 TAG_NAME=v0.2.0
 
 wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/${BINARY_NAME}
