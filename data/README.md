@@ -58,22 +58,22 @@ nohup ./build/filink-data >> filink-data.log &        #After installation from O
 ```
 
 ## Config
-- **port：** Default `8886`, web api port for extension in future
-- **release** When work in release mode, set this to true, otherwise to false
+- **port**: Default `8886`, web api port for extension in future
+- **release**: When work in release mode, set this to true, otherwise to false
 ### [main]
-- **db_host** Ip of the host for database instance running on
-- **db_port** Port of the host for database instance running on
-- **db_schema_name** Database schema name for swan
-- **db_username** Username to access the database
-- **db_password** Password to access the database
-- **db_args** Other arguments to access database
-- **db_max_idle_conn_num** Maximum number of connections in the idle connection pool
+- **db_host**: Ip of the host for database instance running on
+- **db_port**: Port of the host for database instance running on
+- **db_schema_name**: Database schema name for swan
+- **db_username**: Username to access the database
+- **db_password**: Password to access the database
+- **db_args**: Other arguments to access database
+- **db_max_idle_conn_num**: Maximum number of connections in the idle connection pool
 
 ### [bid]
 [chain_link]
-- **bulk_insert_chainlink_limit** When got more than this number of deals, than bulk insert them to db
-- **bulk_insert_interval_milli_sec** When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
-- **deal_id_interval_max** When scanned deals from network, if there is no deals for last 5000 deal ids, than bulk insert deals in buffer to db and sleep
+- **bulk_insert_chainlink_limit**: When got more than this number of deals, than bulk insert them to db
+- **bulk_insert_interval_milli_sec**: When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
+- **deal_id_interval_max**: When scanned deals from network, if there is no deals for last 5000 deal ids, than bulk insert deals in buffer to db and sleep
 
 ## License
 
