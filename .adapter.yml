@@ -1,0 +1,10 @@
+name: fillink-test
+description: An test adapter for fillink.
+node_identifier: example
+platforms:
+  - AWS Lambda
+data_sources:
+  - name: fillink-test
+    url: https://filswan.com
+parameters:
+  - deal_id
