@@ -1,4 +1,10 @@
 #!/bin/bash
+BINARY_NAME=filink_data-0.2.0-unix
+TAG_NAME=v0.2.0
+
+wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/${BINARY_NAME}
+wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/aria2.conf
+wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/aria2c.service
 
 CONF_FILE_DIR=${HOME}/.swan/filink/data
 mkdir -p ${CONF_FILE_DIR}
@@ -13,8 +19,6 @@ else
     echo "${CONF_FILE_PATH} created"
 fi
 
-BINARY_NAME=filink_data
-make
 chmod +x ./build/${BINARY_NAME}
 ./build/${BINARY_NAME}                         # Run swan provider
 
