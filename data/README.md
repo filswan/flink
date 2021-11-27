@@ -27,7 +27,7 @@ Filink data provides the following functions:
 - mysql database
 
 ## Installation
-### Option:one: **Prebuilt package**:
+### Option:one: **Prebuilt package**
 
 ### Option:two: Source Code
 :bell:**go 1.16+** is required
@@ -54,7 +54,6 @@ After installation, flink-data maybe quit due to lack of configuration. Under th
 - You can add `&` at the end of the command to let the program run in background.
 - Such as:
 ```shell
-nohup ./filink-data-0.2.0-unix >> swan-provider.log &   #After installation from Option 1
 nohup ./build/filink-data >> filink-data.log &        #After installation from Option 2
 ```
 
