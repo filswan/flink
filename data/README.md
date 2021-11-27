@@ -35,7 +35,7 @@ Filink data provides the following functions:
 git clone https://github.com/filswan/filink.git
 cd filink
 git checkout <release_branch>
-# create tables using code `./data/database/chain_link.sql`
+# create tables using scripts `./data/database/chain_link.sql` manually
 ./build_from_source.sh
 ```
 
@@ -63,7 +63,7 @@ nohup ./build/filink-data >> filink-data.log &        #After installation from O
 ### [main]
 - **db_host**: Ip of the host for database instance running on
 - **db_port**: Port of the host for database instance running on
-- **db_schema_name**: Database schema name for swan
+- **db_schema_name**: Database schema name for filink data
 - **db_username**: Username to access the database
 - **db_password**: Password to access the database
 - **db_args**: Other arguments to access database
@@ -72,7 +72,7 @@ nohup ./build/filink-data >> filink-data.log &        #After installation from O
 ### [chain_link]
 - **bulk_insert_chainlink_limit**: When got more than this number of deals, than bulk insert them to db
 - **bulk_insert_interval_milli_sec**: When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
-- **deal_id_interval_max**: When scanned deals from network, if there is no deals for last 5000 deal ids, than bulk insert deals in buffer to db and sleep
+- **deal_id_interval_max**: When scanning deals from network, if there is no deals for last 5000 deal ids, then bulk insert deals in buffer to db and sleep
 
 ## License
 
