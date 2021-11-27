@@ -1,6 +1,6 @@
 name: fillink-test
 description: An test adapter for fillink.
-node_identifier: example
+node_identifier: filink-1
 platforms:
   - AWS Lambda
 data_sources:
