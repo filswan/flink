@@ -4,7 +4,7 @@ release = true              # when work in release mode, set this to true, other
 [database]
 db_host = "127.0.0.1"        # ip of the host for database instance running on
 db_port = 3306               # port of the host for database instance running on
-db_schema_name = "filink"    # database schema name for swan
+db_schema_name = "filink"    # database schema name for filink data
 db_username = "root"         # username to access the database
 db_password = ""             # password to access the database
 db_args = "charset=utf8mb4&parseTime=True&loc=Local" # other arguments to access database
@@ -13,4 +13,4 @@ db_max_idle_conn_num = 10    # maximum number of connections in the idle connect
 [chain_link]
 bulk_insert_chainlink_limit = 100           # when got more than this number of deals, than bulk insert them to db
 bulk_insert_interval_milli_sec = 300000     # when deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
-deal_id_interval_max = 5000                 # when scanned deals from network, if there is no deals for last 5000 deal ids, than bulk insert deals in buffer to db and sleep
+deal_id_interval_max = 5000                 # when scanning deals from network, if there is no deals for last 5000 deal ids, than bulk insert deals in buffer to db and sleep

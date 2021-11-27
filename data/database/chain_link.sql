@@ -1,4 +1,4 @@
-#--create database filink;
+create database filink;
 use filink;
 
 drop table if exists chain_link_deal;
