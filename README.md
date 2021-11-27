@@ -17,30 +17,33 @@ The adapter scans the data from Flecoin blockchain and post the deal info to pol
 
 ```json
 {
-
-    "DealId": 58160,
-    "dealCid": "bafyreifo2pp5d4se44xu32p5ikm3qjzmfv7ihbmdsilz7j5wii7h7ne3gm",
-    "messageCid": "bafy2bzacebyuyuxr23e2n3njhtltcuc7sc73cuumzd2fww4mt4ivtzg2zn6um",
-    "height": 455035,
-    "pieceCid": "baga6ea4seaql3pcfitmlane3nbrlcitb4ffzdkkswy4e2tn4tf67muicdcueiki",
-    "verifiedDeal": false,
-    "storagePricePerEpoch": "976562 AttoFIL",
-    "signature": "rWJeBFkmGZTAnIitvM6NiRpn8vqwlRAjr4PpMHmfL6Kb86qeXU99DtHWmjW8WyARAFn3mTUtB4+rlibfEUFlts4cAESxfHPiuOciVj0r0d8Y3te0axEZETGsJeLQPPkY",
-    "signatureType": "bls",
-    "createdAt": "2021-11-24 07:57:30",
-    "pieceSizeFormat": "2.00 MiB",
-    "satrtHeight": 466508,
-    "endHeight": 1980929,
-    "client": "t3u7pumush376xbytsgs5wabkhtadjzfydxxda2vzyasg7cimkcphswrq66j4dubbhwpnojqd3jie6ermpwvvq",
-    "clientCollateralFormat": "0 AttoFIL",
-    "provider": "t024557",
-    "providerTag": "",
-    "providerIsVerified": 0,
-    "providerCollateralFormat": "0 AttoFIL",
-    "status": 0
-
+  "status": "success",
+  "data": {
+    "deal": {
+      "deal_id": 4107,
+      "deal_cid": "bafyreialcn7arcqxx5panzuodnbu6kn4wxipenopjiikoqlrc4w7ed2hfq",
+      "message_cid": "bafy2bzaceaxzikfc6a5ax4vzh52oieercs6nhuowd424chhp7mfdcalvaihpu",
+      "height": 102337,
+      "piece_cid": "baga6ea4seaqooaumpt2kab7ltyyvftfgzyce5zzox3ou6n6qf34bkv42rj7rkly",
+      "verified_deal": false,
+      "storage_price_per_epoch": "50000000",
+      "signature": "BIE8UTJHBRq6qkBPOtz/IhydTl//+oZP2gMMiGIPck4ZkUPQ/41QLwmTNuNqnUB62j85njIlnRxWLMXv8HJgtQE=",
+      "signature_type": "secp256k1",
+      "created_at": 1616875110,
+      "piece_size_format": "512.00 bytes",
+      "start_height": 108199,
+      "end_height": 632348,
+      "client": "t1e3mn5c6v7d3wjxiuycozkfbnqvzwysjmimltm5a",
+      "client_collateral_format": "000000000000000000",
+      "provider": "t05661",
+      "provider_tag": "",
+      "verified_provider": 0,
+      "provider_collateral_format": "000000000000000000",
+      "status": 0,
+      "network_name": "filecoin_calibration"
+    }
+  }
 }
-
 ```
 
 ## Sample Use Case
