@@ -15,7 +15,7 @@ type ChainLinkDealBase struct {
 	Height                   int64  `json:"height"`
 	PieceCid                 string `json:"piece_cid"`
 	VerifiedDeal             bool   `json:"verified_deal"`
-	StoragePricePerEpoch     string `json:"storage_price_per_epoch"`
+	StoragePricePerEpoch     int64  `json:"storage_price_per_epoch"`
 	Signature                string `json:"signature"`
 	SignatureType            string `json:"signature_type"`
 	CreatedAt                int64  `json:"created_at"`
@@ -30,6 +30,7 @@ type ChainLinkDealBase struct {
 	ProviderCollateralFormat string `json:"provider_collateral_format"`
 	Status                   int    `json:"status"`
 	NetworkName              string `json:"network_name"`
+	StoragePrice             int64  `json:"storage_price"`
 }
 
 type ChainLinkDeal struct {
@@ -60,6 +61,7 @@ func GetChainLinkDealBase(dealInternal ChainLinkDeal) ChainLinkDealBase {
 		ProviderCollateralFormat: dealInternal.ProviderCollateralFormat,
 		Status:                   dealInternal.Status,
 		NetworkName:              dealInternal.NetworkName,
+		StoragePrice:             dealInternal.StoragePrice,
 	}
 
 	return deal
@@ -83,12 +85,12 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 	}
 
 	sql := "insert into chain_link_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at,"
-	sql = sql + "piece_size_format,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status) values"
+	sql = sql + "piece_size_format,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status,storage_price) values"
 	valueStrings := []string{}
 
 	valueArgs := []interface{}{}
 	for _, deal := range chainLinkDeals {
-		valueStrings = append(valueStrings, "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
+		valueStrings = append(valueStrings, "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")
 		valueArgs = append(valueArgs, deal.DealId)
 		valueArgs = append(valueArgs, deal.NetworkId)
 		valueArgs = append(valueArgs, deal.DealCid)
@@ -110,6 +112,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 		valueArgs = append(valueArgs, deal.VerifiedProvider)
 		valueArgs = append(valueArgs, deal.ProviderCollateralFormat)
 		valueArgs = append(valueArgs, deal.Status)
+		valueArgs = append(valueArgs, deal.StoragePrice)
 	}
 
 	sql = fmt.Sprintf("%s %s", sql, strings.Join(valueStrings, ","))
@@ -118,7 +121,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 	onDuplicateKey = onDuplicateKey + "verified_deal=values(verified_deal),storage_price_per_epoch=values(storage_price_per_epoch),signature=values(signature),signature_type=values(signature_type),"
 	onDuplicateKey = onDuplicateKey + "created_at=values(created_at),piece_size_format=values(piece_size_format),start_height=values(start_height),end_height=values(end_height),"
 	onDuplicateKey = onDuplicateKey + "client=values(client),client_collateral_format=values(client_collateral_format),provider=values(provider),provider_tag=values(provider_tag),"
-	onDuplicateKey = onDuplicateKey + "verified_provider=values(verified_provider),provider_collateral_format=values(provider_collateral_format),status=values(status)"
+	onDuplicateKey = onDuplicateKey + "verified_provider=values(verified_provider),provider_collateral_format=values(provider_collateral_format),status=values(status),storage_price=values(storage_price)"
 	sql = sql + " on duplicate key update " + onDuplicateKey
 
 	err := database.GetDB().Exec(sql, valueArgs...).Error

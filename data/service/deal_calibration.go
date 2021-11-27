@@ -12,6 +12,7 @@ import (
 	"github.com/filswan/go-swan-lib/client"
 	"github.com/filswan/go-swan-lib/logs"
 	libutils "github.com/filswan/go-swan-lib/utils"
+	"github.com/shopspring/decimal"
 )
 
 func GetDealsFromCalibrationLoop() {
@@ -117,7 +118,15 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.Height = deal.Height
 	chainLinkDeal.PieceCid = deal.PieceCid
 	chainLinkDeal.VerifiedDeal = deal.VerifiedDeal
-	chainLinkDeal.StoragePricePerEpoch = libutils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch)
+
+	storagePricePerEpoch, err := decimal.NewFromString(libutils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch))
+	if err != nil {
+		logs.GetLogger().Error(err)
+		chainLinkDeal.StoragePricePerEpoch = -1
+	} else {
+		chainLinkDeal.StoragePricePerEpoch = storagePricePerEpoch.BigInt().Int64()
+	}
+
 	chainLinkDeal.Signature = deal.Signature
 	chainLinkDeal.SignatureType = deal.SignatureType
 	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
@@ -130,6 +139,9 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
 	chainLinkDeal.ProviderCollateralFormat = libutils.GetPriceFormat("0 FIL")
 	chainLinkDeal.Status = deal.Status
+
+	duration := chainLinkDeal.EndHeight - chainLinkDeal.StartHeight
+	chainLinkDeal.StoragePrice = chainLinkDeal.StoragePricePerEpoch * duration
 
 	timeT, err := time.Parse("2006-01-02 15:04:05", deal.CreatedAt)
 	if err != nil {
