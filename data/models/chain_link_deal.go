@@ -1,7 +1,7 @@
 package models
 
 import (
-	"filink/data/database"
+	"filink-data/database"
 	"fmt"
 	"strings"
 

@@ -6,7 +6,7 @@ wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/$
 wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/aria2.conf
 wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/aria2c.service
 
-CONF_FILE_DIR=${HOME}/.swan/filink/data
+CONF_FILE_DIR=${HOME}/.swan/filink-data
 mkdir -p ${CONF_FILE_DIR}
 
 CONF_FILE_PATH=${CONF_FILE_DIR}/config.toml

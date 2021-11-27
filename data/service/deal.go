@@ -1,7 +1,7 @@
 package service
 
 import (
-	"filink/data/models"
+	"filink-data/models"
 )
 
 func GetDealById(dealId int64) (*models.ChainLinkDealBase, error) {

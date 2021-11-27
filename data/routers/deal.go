@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"filink/data/common"
-	"filink/data/service"
+	"filink-data/common"
+	"filink-data/service"
 	"net/http"
 	"strconv"
 

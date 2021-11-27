@@ -1,7 +1,7 @@
 package service
 
 import (
-	"filink/data/models"
+	"filink-data/models"
 	"runtime"
 	"time"
 )
