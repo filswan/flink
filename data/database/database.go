@@ -1,7 +1,7 @@
 package database
 
 import (
-	"filink/data/config"
+	"filink-data/config"
 	"strconv"
 
 	"github.com/filswan/go-swan-lib/logs"
