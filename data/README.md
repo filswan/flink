@@ -41,7 +41,7 @@ git checkout <release_branch>
 
 ### :bangbang: Important
 After installation, flink-data maybe quit due to lack of configuration. Under this situation, you need
-- :one: Edit config file **~/.swan/filink-data/config.toml** to solve this.
+- :one: Edit config file **~/.swan/filink/data/config.toml** to solve this.
 - :two: Execute **filink-data** using one of the following commands
 ```shell
 ./build/filink-data        #After installation from Option 2
