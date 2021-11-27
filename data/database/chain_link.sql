@@ -11,6 +11,7 @@ create table network
   api_url_prefix    varchar(128) not null,
   description       varchar(2000),
   primary key pk_network (id),
+  unique key un_network_name (name),
   unique key un_network_api_url_prefix (api_url_prefix)
 ) engine=InnoDB;
 
