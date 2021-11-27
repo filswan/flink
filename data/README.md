@@ -1,1 +1,82 @@
+# Filink Data
+[![Made by FilSwan](https://img.shields.io/badge/made%20by-FilSwan-green.svg)](https://www.filswan.com/)
+[![Chat on Slack](https://img.shields.io/badge/slack-filswan.slack.com-green.svg)](https://filswan.slack.com)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
+
+- Join us on our [public Slack channel](https://filswan.slack.com) for news, discussions, and status updates. 
+- [Check out our medium](https://filswan.medium.com) for the latest posts and announcements.
+
+## Table of Contents
+
+- [Features](#Features)
+- [Prerequisite](#Prerequisite)
+- [Installation](#Installation)
+- [Config](#Config)
+- [License](#license)
+
+## Features
+
+Filink data provides the following functions:
+
+* Get deal metadata from calibration 
+* Convert units for some fields
+* Store them into local database
+* Provides web api to query deal metadata in our own format
+
+## Prerequisite
+- mysql database
+
+## Installation
+### Option:one: **Prebuilt package**:
+
+### Option:two: Source Code
+:bell:**go 1.16+** is required
+```shell
+git clone https://github.com/filswan/filink.git
+cd filink
+git checkout <release_branch>
+# create tables using code `./data/database/chain_link.sql`
+./build_from_source.sh
+```
+
+### :bangbang: Important
+After installation, flink-data maybe quit due to lack of configuration. Under this situation, you need
+- :one: Edit config file **~/.swan/filink/data/config.toml** to solve this.
+- :two: Execute **filink-data** using one of the following commands
+```shell
+./build/filink-data        #After installation from Option 2
+```
+
+### Note
+- Logs are in directory ./logs
+- You can add `nohup` before `./filink-data` to ignore the HUP (hangup) signal and therefore avoid stop when you log out.
+- You can add `>> filink-data.log` in the command to let all the logs output to `filink-data.log`.
+- You can add `&` at the end of the command to let the program run in background.
+- Such as:
+```shell
+nohup ./filink-data-0.2.0-unix >> swan-provider.log &   #After installation from Option 1
+nohup ./build/filink-data >> filink-data.log &        #After installation from Option 2
+```
+
+## Config
+- **port：** Default `8886`, web api port for extension in future
+- **release** When work in release mode, set this to true, otherwise to false
+### [main]
+- **db_host** Ip of the host for database instance running on
+- **db_port** Port of the host for database instance running on
+- **db_schema_name** Database schema name for swan
+- **db_username** Username to access the database
+- **db_password** Password to access the database
+- **db_args** Other arguments to access database
+- **db_max_idle_conn_num** Maximum number of connections in the idle connection pool
+
+### [bid]
+[chain_link]
+- **bulk_insert_chainlink_limit** When got more than this number of deals, than bulk insert them to db
+- **bulk_insert_interval_milli_sec** When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
+- **deal_id_interval_max** When scanned deals from network, if there is no deals for last 5000 deal ids, than bulk insert deals in buffer to db and sleep
+
+## License
+
+[Apache](https://github.com/filswan/go-swan-provider/blob/main/LICENSE)
 
