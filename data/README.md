@@ -27,20 +27,13 @@ Filink data provides the following functions:
 - mysql database
 
 ## Installation
-### Option:one: **Prebuilt package**: See [release assets](https://github.com/filswan/go-swan-provider/releases)
-```shell
-mkdir filink-data
-cd filink-data
-wget https://github.com/filswan/go-swan-provider/releases/download/v0.2.0/install.sh
-chmod +x ./install.sh
-./install.sh
-```
+### Option:one: **Prebuilt package**:
 
 ### Option:two: Source Code
 :bell:**go 1.16+** is required
 ```shell
-git clone https://github.com/filswan/go-swan-provider.git
-cd go-swan-provider
+git clone https://github.com/filswan/filink.git
+cd filink
 git checkout <release_branch>
 # create tables using code `./data/database/chain_link.sql`
 ./build_from_source.sh
@@ -49,24 +42,21 @@ git checkout <release_branch>
 ### :bangbang: Important
 After installation, flink-data maybe quit due to lack of configuration. Under this situation, you need
 - :one: Edit config file **~/.swan/filink/data/config.toml** to solve this.
-- :two: Execute **swan-provider** using one of the following commands
+- :two: Execute **filink-data** using one of the following commands
 ```shell
-./swan-provider-0.2.0-unix   #After installation from Option 1
-./build/swan-provider        #After installation from Option 2
+./build/filink-data        #After installation from Option 2
 ```
-
 
 ### Note
 - Logs are in directory ./logs
-- You can add `nohup` before `./swan-provider` to ignore the HUP (hangup) signal and therefore avoid stop when you log out.
-- You can add `>> swan-provider.log` in the command to let all the logs output to `swan-provider.log`.
+- You can add `nohup` before `./filink-data` to ignore the HUP (hangup) signal and therefore avoid stop when you log out.
+- You can add `>> filink-data.log` in the command to let all the logs output to `filink-data.log`.
 - You can add `&` at the end of the command to let the program run in background.
 - Such as:
 ```shell
-nohup ./swan-provider-0.2.0-unix >> swan-provider.log &   #After installation from Option 1
-nohup ./build/swan-provider >> swan-provider.log &        #After installation from Option 2
+nohup ./filink-data-0.2.0-unix >> swan-provider.log &   #After installation from Option 1
+nohup ./build/filink-data >> filink-data.log &        #After installation from Option 2
 ```
-
 
 ## Config
 - **port：** Default `8886`, web api port for extension in future
@@ -89,6 +79,4 @@ nohup ./build/swan-provider >> swan-provider.log &        #After installation fr
 ## License
 
 [Apache](https://github.com/filswan/go-swan-provider/blob/main/LICENSE)
-
-
 
