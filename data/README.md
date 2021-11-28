@@ -72,7 +72,6 @@ nohup ./build/filink-data >> filink-data.log &        #After installation from O
 ### [chain_link]
 - **bulk_insert_chainlink_limit**: When got more than this number of deals, than bulk insert them to db
 - **bulk_insert_interval_milli_sec**: When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
-- **deal_id_interval_max**: When scanning deals from network, if there is no deals for last 5000 deal ids, then bulk insert deals in buffer to db and sleep
 
 ## License
 
