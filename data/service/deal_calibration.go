@@ -49,12 +49,12 @@ func GetDealsFromCalibration() error {
 	startDealId := maxDealId + 1
 	lastDealId := maxDealId
 	lastDealHeight := int64(0)
-	lastDeal, err := models.GetDealById(maxDealId)
-	if err != nil {
-		logs.GetLogger().Error()
-		return err
-	}
-	if lastDeal != nil {
+	if maxDealId != 0 {
+		lastDeal, err := models.GetDealById(maxDealId)
+		if err != nil {
+			logs.GetLogger().Error()
+			return err
+		}
 		lastDealHeight = lastDeal.Height
 	}
 	//logs.GetLogger().Info(network.ApiUrlPrefix)
