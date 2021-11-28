@@ -82,7 +82,7 @@ func GetDealsFromCalibration() error {
 		}
 
 		if dealIdInterval > dealIdMaxInterval {
-			logs.GetLogger().Info()
+			logs.GetLogger().Info("last deal id scanned:", i, ",scanned from:", maxDealId)
 			return nil
 		}
 	}
