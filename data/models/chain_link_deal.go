@@ -157,3 +157,19 @@ func GetDealById(dealId int64) (*ChainLinkDeal, error) {
 
 	return &chainLinkDeal, nil
 }
+
+func GetLastDeal(networkId int64) (*ChainLinkDeal, error) {
+	maxDealId, err := GetMaxDealId(networkId)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		return nil, err
+	}
+
+	lastDeal, err := GetDealById(maxDealId)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		return nil, err
+	}
+
+	return lastDeal, nil
+}

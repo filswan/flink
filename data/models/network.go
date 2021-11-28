@@ -10,6 +10,7 @@ type Network struct {
 	Id           int64  `json:"id"`
 	Name         string `json:"name"`
 	ApiUrlPrefix string `json:"api_url_prefix"`
+	ApiUrlHeight string `json:"api_url_height"`
 	Description  string `json:"description"`
 }
 

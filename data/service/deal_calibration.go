@@ -48,11 +48,19 @@ func GetDealsFromCalibration() error {
 	lastInsertAt := time.Now().UnixNano() / 1e6
 	startDealId := maxDealId + 1
 	lastDealId := maxDealId
+	lastDealHeight := int64(0)
+	if maxDealId != 0 {
+		lastDeal, err := models.GetDealById(maxDealId)
+		if err != nil {
+			logs.GetLogger().Error()
+			return err
+		}
+		lastDealHeight = lastDeal.Height
+	}
 	//logs.GetLogger().Info(network.ApiUrlPrefix)
 
 	bulkInsertChainLinkLimit := config.GetConfig().ChainLink.BulkInsertChainlinkLimit
 	bulkInsertIntervalMilliSec := config.GetConfig().ChainLink.BulkInsertIntervalMilliSec
-	dealIdIntervalMax := config.GetConfig().ChainLink.DealIdIntervalMax
 
 	for i := startDealId; ; i++ {
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)
@@ -61,6 +69,7 @@ func GetDealsFromCalibration() error {
 		} else {
 			chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
 			lastDealId = chainLinkDeal.DealId
+			lastDealHeight = chainLinkDeal.Height
 		}
 
 		dealIdInterval := i - lastDealId
@@ -68,7 +77,7 @@ func GetDealsFromCalibration() error {
 		currentMilliSec := time.Now().UnixNano() / 1e6
 		if len(chainLinkDeals) >= bulkInsertChainLinkLimit ||
 			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) ||
-			(dealIdInterval > dealIdIntervalMax && len(chainLinkDeals) >= 1) {
+			(dealIdInterval > constants.DEAL_ID_INTERVAL_MAX && len(chainLinkDeals) >= 1) {
 			err := models.AddChainLinkDeals(chainLinkDeals)
 			if err != nil {
 				logs.GetLogger().Error(err)
@@ -76,12 +85,53 @@ func GetDealsFromCalibration() error {
 			chainLinkDeals = []*models.ChainLinkDeal{}
 			lastInsertAt = currentMilliSec
 		}
-		if dealIdInterval > dealIdIntervalMax {
-			err := fmt.Errorf("no deal for the last %d deal id", dealIdInterval)
-			logs.GetLogger().Error(err)
-			return err
+
+		if dealIdInterval > constants.DEAL_ID_INTERVAL_MAX {
+			currentHeight, err := GetHeightFromCalibration(*network)
+			if err != nil {
+				logs.GetLogger().Error(err)
+			} else {
+				if currentHeight-lastDealHeight < 10 {
+					return nil
+				}
+			}
 		}
 	}
+}
+
+type CalibrationHeightResult struct {
+	Code    int               `json:"code"`
+	Message string            `json:"message"`
+	Data    CalibrationHeight `json:"data"`
+}
+
+type CalibrationHeight struct {
+	TipSetHeight int64 `json:"tipSetHeight"`
+	CountDown    int   `json:"countDown"`
+}
+
+func GetHeightFromCalibration(network models.Network) (int64, error) {
+	response := client.HttpGetNoToken(network.ApiUrlHeight, nil)
+	if response == "" {
+		err := fmt.Errorf("no response from:%s", network.ApiUrlHeight)
+		//logs.GetLogger().Error(err)
+		return -1, err
+	}
+
+	calibrationHeightResult := &CalibrationHeightResult{}
+	err := json.Unmarshal([]byte(response), calibrationHeightResult)
+	if err != nil {
+		err := fmt.Errorf("%s from:%s", err.Error(), network.ApiUrlHeight)
+		//logs.GetLogger().Error(err)
+		return -1, err
+	}
+
+	if calibrationHeightResult.Code != 200 {
+		err := fmt.Errorf("code:%d,message:%s", calibrationHeightResult.Code, calibrationHeightResult.Message)
+		return -1, err
+	}
+
+	return calibrationHeightResult.Data.TipSetHeight, nil
 }
 
 func GetDealFromCalibration(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
