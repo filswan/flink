@@ -22,7 +22,7 @@ const createRequest = (input, callback) => {
   const jobRunID = validator.validated.id
   const deal = validator.validated.data.deal
   console.log(validator.validated.data);
-  const url = `https://calibration-api.filscout.com/api/v1/storagedeal/${deal}`
+  const url = `http://35.168.51.2:8886/deal/${deal}`
 
   // This is where you would add method and headers
   // you can add method like GET or POST and add it to the config
