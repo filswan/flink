@@ -32,8 +32,8 @@ Flink data provides the following functions:
 ### Option:two: Source Code
 :bell:**go 1.16+** is required
 ```shell
-git clone https://github.com/filswan/flink-data.git
-cd flink-data
+git clone https://github.com/filswan/flink.git
+cd flink
 git checkout <release_branch>
 # create tables using scripts `./data/database/chain_link.sql` manually
 ./build_from_source.sh
