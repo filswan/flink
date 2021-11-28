@@ -63,7 +63,7 @@ nohup ./build/flink-data >> flink-data.log &        #After installation from Opt
 ### [main]
 - **db_host**: Ip of the host for database instance running on
 - **db_port**: Port of the host for database instance running on
-- **db_schema_name**: Database schema name for flink-data data
+- **db_schema_name**: Database schema name for flink data
 - **db_username**: Username to access the database
 - **db_password**: Password to access the database
 - **db_args**: Other arguments to access database
