@@ -1,4 +1,4 @@
-module filink-data
+module flink-data
 
 go 1.16
 

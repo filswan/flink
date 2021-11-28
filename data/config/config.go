@@ -40,7 +40,7 @@ func InitConfig() {
 		logs.GetLogger().Fatal("Cannot get home directory.")
 	}
 
-	configFile := filepath.Join(homedir, ".swan/filink/data/config.toml")
+	configFile := filepath.Join(homedir, ".swan/flink/data/config.toml")
 
 	metaData, err := toml.DecodeFile(configFile, &config)
 

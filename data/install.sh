@@ -1,12 +1,12 @@
 #!/bin/bash
-BINARY_NAME=filink-data-0.2.0-unix
+BINARY_NAME=flink-data-0.2.0-unix
 TAG_NAME=v0.2.0
 
 wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/${BINARY_NAME}
 wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/aria2.conf
 wget https://github.com/filswan/go-swan-provider/releases/download/${TAG_NAME}/aria2c.service
 
-CONF_FILE_DIR=${HOME}/.swan/filink-data
+CONF_FILE_DIR=${HOME}/.swan/flink-data
 mkdir -p ${CONF_FILE_DIR}
 
 CONF_FILE_PATH=${CONF_FILE_DIR}/config.toml

@@ -6,7 +6,7 @@ GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 GOBIN=$(shell pwd)/build
 
-PROJECT_NAME=filink-data
+PROJECT_NAME=flink-data
 BINARY_NAME=$(PROJECT_NAME)
 BINARY_UNIX=$(BINARY_NAME)_unix
 

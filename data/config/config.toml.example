@@ -4,7 +4,7 @@ release = true              # When work in release mode, set this to true, other
 [database]
 db_host = "127.0.0.1"        # Ip of the host for database instance running on
 db_port = 3306               # Port of the host for database instance running on
-db_schema_name = "filink"    # Database schema name for filink data
+db_schema_name = "filink"    # Database schema name for flink data
 db_username = "root"         # Username to access the database
 db_password = ""             # Password to access the database
 db_args = "charset=utf8mb4&parseTime=True&loc=Local" # other arguments to access database

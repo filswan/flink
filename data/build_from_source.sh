@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONF_FILE_DIR=${HOME}/.swan/filink/data
+CONF_FILE_DIR=${HOME}/.swan/flink/data
 mkdir -p ${CONF_FILE_DIR}
 
 CONF_FILE_PATH=${CONF_FILE_DIR}/config.toml
@@ -13,7 +13,7 @@ else
     echo "${CONF_FILE_PATH} created"
 fi
 
-BINARY_NAME=filink-data
+BINARY_NAME=flink-data
 make
 chmod +x ./build/${BINARY_NAME}
 ./build/${BINARY_NAME}                         # Run swan provider
