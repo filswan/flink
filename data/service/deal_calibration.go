@@ -48,19 +48,11 @@ func GetDealsFromCalibration() error {
 	lastInsertAt := time.Now().UnixNano() / 1e6
 	startDealId := maxDealId + 1
 	lastDealId := maxDealId
-	lastDealHeight := int64(0)
-	if maxDealId != 0 {
-		lastDeal, err := models.GetDealById(maxDealId)
-		if err != nil {
-			logs.GetLogger().Error()
-			return err
-		}
-		lastDealHeight = lastDeal.Height
-	}
 	//logs.GetLogger().Info(network.ApiUrlPrefix)
 
 	bulkInsertChainLinkLimit := config.GetConfig().ChainLink.BulkInsertChainlinkLimit
 	bulkInsertIntervalMilliSec := config.GetConfig().ChainLink.BulkInsertIntervalMilliSec
+	dealIdMaxInterval := config.GetConfig().ChainLink.DealIdMaxInterval
 
 	for i := startDealId; ; i++ {
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)
@@ -69,7 +61,6 @@ func GetDealsFromCalibration() error {
 		} else {
 			chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
 			lastDealId = chainLinkDeal.DealId
-			lastDealHeight = chainLinkDeal.Height
 		}
 
 		dealIdInterval := i - lastDealId
@@ -77,7 +68,8 @@ func GetDealsFromCalibration() error {
 		currentMilliSec := time.Now().UnixNano() / 1e6
 		if len(chainLinkDeals) >= bulkInsertChainLinkLimit ||
 			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) ||
-			(dealIdInterval > constants.DEAL_ID_INTERVAL_MAX && len(chainLinkDeals) >= 1) {
+			(dealIdInterval > dealIdMaxInterval && len(chainLinkDeals) >= 1) {
+			logs.GetLogger().Info("insert into db, deals count:", len(chainLinkDeals), ",deal id interval:", dealIdInterval, ",last insert at:", lastInsertAt, ",current milliseconds:", currentMilliSec)
 			err := models.AddChainLinkDeals(chainLinkDeals)
 			if err != nil {
 				logs.GetLogger().Error(err)
@@ -86,17 +78,9 @@ func GetDealsFromCalibration() error {
 			lastInsertAt = currentMilliSec
 		}
 
-		if dealIdInterval > constants.DEAL_ID_INTERVAL_MAX {
-			currentHeight, err := GetHeightFromCalibration(*network)
-			logs.GetLogger().Info("current height:", currentHeight, ", last deal height:", lastDealHeight)
-			if err != nil {
-				logs.GetLogger().Error(err)
-				return nil
-			} else {
-				if currentHeight-lastDealHeight < constants.DEAL_HEIGHT_INTERVAL_MAX {
-					return nil
-				}
-			}
+		if dealIdInterval > dealIdMaxInterval {
+			logs.GetLogger().Info()
+			return nil
 		}
 	}
 }
