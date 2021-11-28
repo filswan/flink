@@ -1,4 +1,4 @@
-# FILink
+# FLink
 FILink is a data provider transfers deals info to chainlink Oracle
 
 ## Why we need to have Fil-Chainlink proof
