@@ -88,6 +88,7 @@ func GetDealsFromCalibration() error {
 
 		if dealIdInterval > constants.DEAL_ID_INTERVAL_MAX {
 			currentHeight, err := GetHeightFromCalibration(*network)
+			logs.GetLogger().Info("current height:", currentHeight, ", last deal height:", lastDealHeight)
 			if err != nil {
 				logs.GetLogger().Error(err)
 				return nil
