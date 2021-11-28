@@ -54,6 +54,7 @@ func GetDealsFromCalibration() error {
 	bulkInsertIntervalMilliSec := config.GetConfig().ChainLink.BulkInsertIntervalMilliSec
 	dealIdMaxInterval := config.GetConfig().ChainLink.DealIdIntervalMax
 
+	logs.GetLogger().Info("scanned from:", startDealId)
 	for i := startDealId; ; i++ {
 		foundDeal := false
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)
@@ -81,8 +82,8 @@ func GetDealsFromCalibration() error {
 			lastInsertAt = currentMilliSec
 		}
 
-		if dealIdInterval > dealIdMaxInterval {
-			logs.GetLogger().Info("last deal id scanned:", i, ",scanned from:", maxDealId)
+		if dealIdInterval >= dealIdMaxInterval {
+			logs.GetLogger().Info("last deal id scanned:", i, ",scanned from:", startDealId)
 			return nil
 		}
 	}
