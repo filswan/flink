@@ -52,7 +52,7 @@ func GetDealsFromCalibration() error {
 
 	bulkInsertChainLinkLimit := config.GetConfig().ChainLink.BulkInsertChainlinkLimit
 	bulkInsertIntervalMilliSec := config.GetConfig().ChainLink.BulkInsertIntervalMilliSec
-	dealIdMaxInterval := config.GetConfig().ChainLink.DealIdMaxInterval
+	dealIdMaxInterval := config.GetConfig().ChainLink.DealIdIntervalMax
 
 	for i := startDealId; ; i++ {
 		chainLinkDeal, err := GetDealFromCalibration(*network, i)

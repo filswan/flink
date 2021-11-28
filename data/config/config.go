@@ -29,7 +29,7 @@ type database struct {
 type chainLink struct {
 	BulkInsertChainlinkLimit   int   `toml:"bulk_insert_chainlink_limit"`
 	BulkInsertIntervalMilliSec int64 `toml:"bulk_insert_interval_milli_sec"`
-	DealIdMaxInterval          int64 `toml:"deal_id_max_interval"`
+	DealIdIntervalMax          int64 `toml:"deal_id_interval_max"`
 }
 
 var config *Configuration
@@ -77,7 +77,7 @@ func requiredFieldsAreGiven(metaData toml.MetaData) bool {
 
 		{"chain_link", "bulk_insert_chainlink_limit"},
 		{"chain_link", "bulk_insert_interval_milli_sec"},
-		{"chain_link", "deal_id_max_interval"},
+		{"chain_link", "deal_id_interval_max"},
 	}
 
 	for _, v := range requiredFields {
