@@ -1,4 +1,4 @@
-# Filink Data
+# Flink Data
 [![Made by FilSwan](https://img.shields.io/badge/made%20by-FilSwan-green.svg)](https://www.filswan.com/)
 [![Chat on Slack](https://img.shields.io/badge/slack-filswan.slack.com-green.svg)](https://filswan.slack.com)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
@@ -16,7 +16,7 @@
 
 ## Features
 
-Filink data provides the following functions:
+Flink data provides the following functions:
 
 * Get deal metadata from calibration 
 * Convert units for some fields
@@ -32,8 +32,8 @@ Filink data provides the following functions:
 ### Option:two: Source Code
 :bell:**go 1.16+** is required
 ```shell
-git clone https://github.com/filswan/filink.git
-cd filink
+git clone https://github.com/filswan/flink-data.git
+cd flink-data
 git checkout <release_branch>
 # create tables using scripts `./data/database/chain_link.sql` manually
 ./build_from_source.sh
@@ -41,20 +41,20 @@ git checkout <release_branch>
 
 ### :bangbang: Important
 After installation, flink-data maybe quit due to lack of configuration. Under this situation, you need
-- :one: Edit config file `~/.swan/filink/data/config.toml` to solve this.
-- :two: Execute `filink-data` using one of the following commands
+- :one: Edit config file `~/.swan/flink-data/data/config.toml` to solve this.
+- :two: Execute `flink-data` using one of the following commands
 ```shell
-./build/filink-data        #After installation from Option 2
+./build/flink-data        #After installation from Option 2
 ```
 
 ### Note
 - Logs are in directory ./logs
-- You can add `nohup` before `./filink-data` to ignore the HUP (hangup) signal and therefore avoid stop when you log out.
-- You can add `>> filink-data.log` in the command to let all the logs output to `filink-data.log`.
+- You can add `nohup` before `./flink-data` to ignore the HUP (hangup) signal and therefore avoid stop when you log out.
+- You can add `>> flink-data.log` in the command to let all the logs output to `flink-data.log`.
 - You can add `&` at the end of the command to let the program run in background.
 - Such as:
 ```shell
-nohup ./build/filink-data >> filink-data.log &        #After installation from Option 2
+nohup ./build/flink-data >> flink-data.log &        #After installation from Option 2
 ```
 
 ## Config
@@ -63,7 +63,7 @@ nohup ./build/filink-data >> filink-data.log &        #After installation from O
 ### [main]
 - **db_host**: Ip of the host for database instance running on
 - **db_port**: Port of the host for database instance running on
-- **db_schema_name**: Database schema name for filink data
+- **db_schema_name**: Database schema name for flink-data data
 - **db_username**: Username to access the database
 - **db_password**: Password to access the database
 - **db_args**: Other arguments to access database
@@ -72,6 +72,7 @@ nohup ./build/filink-data >> filink-data.log &        #After installation from O
 ### [chain_link]
 - **bulk_insert_chainlink_limit**: When got more than this number of deals, than bulk insert them to db
 - **bulk_insert_interval_milli_sec**: When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
+- **deal_id_interval_max**: Max interval between neighbour interval id
 
 ## License
 

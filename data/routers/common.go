@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"filink-data/common"
-	"filink-data/service"
+	"flink-data/common"
+	"flink-data/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

@@ -2,9 +2,9 @@ package service
 
 import (
 	"encoding/json"
-	"filink-data/common/constants"
-	"filink-data/config"
-	"filink-data/models"
+	"flink-data/common/constants"
+	"flink-data/config"
+	"flink-data/models"
 	"fmt"
 	"strconv"
 	"time"

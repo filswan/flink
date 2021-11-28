@@ -1,7 +1,7 @@
 package models
 
 import (
-	"filink-data/database"
+	"flink-data/database"
 
 	"github.com/filswan/go-swan-lib/logs"
 )

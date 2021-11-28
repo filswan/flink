@@ -1,10 +1,10 @@
 package main
 
 import (
-	"filink-data/config"
-	"filink-data/database"
-	"filink-data/routers"
-	"filink-data/service"
+	"flink-data/config"
+	"flink-data/database"
+	"flink-data/routers"
+	"flink-data/service"
 	"strconv"
 	"time"
 
