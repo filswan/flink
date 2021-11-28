@@ -91,7 +91,7 @@ func GetDealsFromCalibration() error {
 			if err != nil {
 				logs.GetLogger().Error(err)
 			} else {
-				if currentHeight-lastDealHeight < 10 {
+				if currentHeight-lastDealHeight < constants.DEAL_HEIGHT_INTERVAL_MAX {
 					return nil
 				}
 			}
