@@ -19,7 +19,8 @@ func main() {
 	db := database.Init()
 	defer database.CloseDB(db)
 
-	go service.GetDealsFromCalibrationLoop()
+	//go service.GetDealsFromCalibrationLoop()
+	go service.GetDealsFromMainnet()
 
 	createGinServer()
 }

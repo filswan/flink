@@ -18,6 +18,9 @@ create table network
 
 insert into network(name,api_url_prefix,api_url_height) values("filecoin_calibration", "https://calibration-api.filscout.com/api/v1/storagedeal", "https://calibration-api.filscout.com/api/v1/network/overview/height");
 
+insert into network(name,api_url_prefix,api_url_height) values("filecoin_mainnet", "https://api2.filscout.com/api/v1/storagedeal/", "https://api2.filscout.com/api/v2/network/latest");
+
+
 create table chain_link_deal(
     id                         bigint        not null auto_increment,
     deal_id                    bigint        not null,
