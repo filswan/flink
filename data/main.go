@@ -6,7 +6,6 @@ import (
 	"flink-data/database"
 	"flink-data/routers"
 	"flink-data/service"
-	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -35,8 +34,7 @@ func main() {
 		go service.GetDealsFromMainnet()
 		createGinServer()
 	default:
-		err := fmt.Errorf("sub command should be: calibration|mainnet")
-		logs.GetLogger().Error(err)
+		logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
 	}
 }
 
