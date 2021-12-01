@@ -41,6 +41,7 @@ func InitConfig() {
 	}
 
 	configFile := filepath.Join(homedir, ".swan/flink/data/config.toml")
+	//configFile := filepath.Join(homedir, "Documents/NebulaAI/Go-Tutorial/flink/data/config/config.toml")
 
 	metaData, err := toml.DecodeFile(configFile, &config)
 

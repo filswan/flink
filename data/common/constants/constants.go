@@ -2,6 +2,7 @@ package constants
 
 const (
 	NETWORK_CALIBRATION = "filecoin_calibration"
+	NETWORK_MAINNET     = "filecoin_mainnet"
 	//BULK_INSERT_CHAINLINK_LIMIT    = 100
 	//BULK_INSERT_INTERVAL_MILLI_SEC = 5 * 60 * 1000
 	DEAL_ID_INTERVAL_MAX     = 100
@@ -9,4 +10,9 @@ const (
 
 	CALIBRATION_DEAL_NOT_FOUND = 404
 	CALIBRATION_DEAL_FOUND     = 200
+	MAINNET_DEAL_NOT_FOUND     = 404
+	MAINNET_DEAL_FOUND         = 200
+
+	PARAM_CALIBRATION = "calibration"
+	PARAM_MAINNET     = "mainnet"
 )
