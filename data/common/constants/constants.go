@@ -13,5 +13,6 @@ const (
 	MAINNET_DEAL_NOT_FOUND     = 404
 	MAINNET_DEAL_FOUND         = 200
 
-	MAINNET_START_DEAL_DEFAULT = 10000
+	PARAM_CALIBRATION = "calibration"
+	PARAM_MAINNET     = "mainnet"
 )

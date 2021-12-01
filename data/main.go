@@ -1,10 +1,13 @@
 package main
 
 import (
+	"flink-data/common/constants"
 	"flink-data/config"
 	"flink-data/database"
 	"flink-data/routers"
 	"flink-data/service"
+	"fmt"
+	"os"
 	"strconv"
 	"time"
 
@@ -14,13 +17,25 @@ import (
 )
 
 func main() {
-	//test.Test()
+	if len(os.Args) < 2 {
+		logs.GetLogger().Fatal("Flink network must be specified (calibration/mainnet) ")
+	}
 
 	db := database.Init()
 	defer database.CloseDB(db)
 
-	//go service.GetDealsFromCalibrationLoop()
-	go service.GetDealsFromMainnet()
+	subCmd := os.Args[1]
+	switch subCmd {
+	case constants.PARAM_CALIBRATION:
+		logs.GetLogger().Info("starting for calibration network")
+		go service.GetDealsFromCalibrationLoop()
+	case constants.PARAM_MAINNET:
+		logs.GetLogger().Info("starting for mainnet network")
+		go service.GetDealsFromMainnet()
+	default:
+		err := fmt.Errorf("sub command should be: calibration|mainnet")
+		logs.GetLogger().Error(err)
+	}
 
 	createGinServer()
 }

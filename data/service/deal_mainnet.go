@@ -46,12 +46,9 @@ func GetDealsFromMainnet() error {
 	logs.GetLogger().Info("max deal id last scanned:", maxDealId)
 
 	lastInsertAt := time.Now().UnixNano() / 1e6
-	startDealId := int64(constants.MAINNET_START_DEAL_DEFAULT)
-	lastDealId := startDealId - 1
-	if maxDealId > 0 {
-		startDealId = maxDealId + 1
-		lastDealId = maxDealId
-	}
+
+	startDealId := maxDealId + 1
+	lastDealId := maxDealId
 
 	//logs.GetLogger().Info(network.ApiUrlPrefix)
 
