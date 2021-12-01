@@ -29,15 +29,15 @@ func main() {
 	case constants.PARAM_CALIBRATION:
 		logs.GetLogger().Info("starting for calibration network")
 		go service.GetDealsFromCalibrationLoop()
+		createGinServer()
 	case constants.PARAM_MAINNET:
 		logs.GetLogger().Info("starting for mainnet network")
 		go service.GetDealsFromMainnet()
+		createGinServer()
 	default:
 		err := fmt.Errorf("sub command should be: calibration|mainnet")
 		logs.GetLogger().Error(err)
 	}
-
-	createGinServer()
 }
 
 func createGinServer() {
