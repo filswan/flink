@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/filswan/go-swan-lib/client"
+	"github.com/filswan/go-swan-lib/client/web"
 	"github.com/filswan/go-swan-lib/logs"
 	libutils "github.com/filswan/go-swan-lib/utils"
 	"github.com/shopspring/decimal"
@@ -102,41 +102,16 @@ type MainnetHeight struct {
 	CountDown    int   `json:"countDown"`
 }
 
-func GetHeightFromMainnet(network models.Network) (int64, error) {
-	response := client.HttpGetNoToken(network.ApiUrlHeight, nil)
-	if response == "" {
-		err := fmt.Errorf("no response from:%s", network.ApiUrlHeight)
-		//logs.GetLogger().Error(err)
-		return -1, err
-	}
-
-	mainnetHeightResult := &MainnetHeightResult{}
-	err := json.Unmarshal([]byte(response), mainnetHeightResult)
-	if err != nil {
-		err := fmt.Errorf("%s from:%s", err.Error(), network.ApiUrlHeight)
-		//logs.GetLogger().Error(err)
-		return -1, err
-	}
-
-	if mainnetHeightResult.Code != 200 {
-		err := fmt.Errorf("code:%d,message:%s", mainnetHeightResult.Code, mainnetHeightResult.Message)
-		return -1, err
-	}
-
-	return mainnetHeightResult.Data.TipSetHeight, nil
-}
-
 func GetDealFromMainnet(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
 	apiUrlDeal := libutils.UrlJoin(network.ApiUrlPrefix, strconv.FormatInt(dealId, 10))
-	response := client.HttpGetNoToken(apiUrlDeal, nil)
-	if response == "" {
-		err := fmt.Errorf("deal_id:%d,no response from:%s", dealId, apiUrlDeal)
-		//logs.GetLogger().Error(err)
+	response, err := web.HttpGetNoToken(apiUrlDeal, nil)
+	if err != nil {
+		logs.GetLogger().Error(err)
 		return nil, err
 	}
 
 	chainLinkDealMainnetResult := &models.ChainLinkDealMainnetResult{}
-	err := json.Unmarshal([]byte(response), chainLinkDealMainnetResult)
+	err = json.Unmarshal(response, chainLinkDealMainnetResult)
 	if err != nil {
 		err := fmt.Errorf("deal_id:%d,%s", dealId, err.Error())
 		//logs.GetLogger().Error(err)
