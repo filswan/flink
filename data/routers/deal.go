@@ -3,6 +3,7 @@ package routers
 import (
 	"flink-data/common"
 	"flink-data/service"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,6 +13,7 @@ import (
 
 func Deal(router *gin.RouterGroup) {
 	router.GET(":deal_id", GetDeal)
+	router.GET("latest", GetLatestDeal)
 }
 
 func GetDeal(c *gin.Context) {
@@ -23,7 +25,22 @@ func GetDeal(c *gin.Context) {
 		return
 	}
 
-	deal, err := service.GetDealById(dealId)
+	networkIdStr := c.Query("network_id")
+	if networkIdStr == "" {
+		err := fmt.Errorf("network id must be provided")
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	networkId, err := strconv.Atoi(networkIdStr)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	deal, err := service.GetDealById(dealId, networkId)
 	if err != nil {
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
@@ -38,4 +55,34 @@ func GetDeal(c *gin.Context) {
 }
 
 func AddMiner(c *gin.Context) {
+}
+
+func GetLatestDeal(c *gin.Context) {
+	networkIdStr := c.Query("network_id")
+	if networkIdStr == "" {
+		err := fmt.Errorf("network id must be provided")
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	networkId, err := strconv.ParseInt(networkIdStr, 10, 64)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	deal, err := service.GetLatestDealByNetwork(networkId)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	mapObject := map[string]interface{}{
+		"deal": *deal,
+	}
+
+	c.JSON(http.StatusOK, common.CreateSuccessResponse(mapObject))
 }
