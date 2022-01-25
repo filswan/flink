@@ -158,6 +158,18 @@ func GetDealById(dealId int64) (*ChainLinkDeal, error) {
 	return &chainLinkDeal, nil
 }
 
+func GetDealByIdAndNetwork(dealId int64, networkId int) (*ChainLinkDeal, error) {
+	chainLinkDeal := ChainLinkDeal{}
+	err := database.GetDB().Where("deal_id=? and network_id=?", dealId, networkId).First(&chainLinkDeal).Error
+
+	if err != nil {
+		logs.GetLogger().Error(err)
+		return nil, err
+	}
+
+	return &chainLinkDeal, nil
+}
+
 func GetLastDeal(networkId int64) (*ChainLinkDeal, error) {
 	maxDealId, err := GetMaxDealId(networkId)
 	if err != nil {

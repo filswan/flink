@@ -1,0 +1,37 @@
+package routers
+
+import (
+	"flink-data/common"
+	"flink-data/common/constants"
+	"flink-data/models"
+	"fmt"
+	"net/http"
+
+	"github.com/filswan/go-swan-lib/logs"
+	"github.com/gin-gonic/gin"
+)
+
+func Network(router *gin.RouterGroup) {
+	router.GET(":network", GetNetwork)
+}
+
+func GetNetwork(c *gin.Context) {
+	networkName := c.Param("network")
+
+	if networkName == constants.NETWORK_CALIBRATION || networkName == constants.NETWORK_MAINNET {
+		network, err := models.GetNetworkByName(networkName)
+		if err != nil {
+			logs.GetLogger().Error(err)
+			c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+			return
+		}
+		network.ApiUrlHeight = ""
+		network.ApiUrlPrefix = ""
+		c.JSON(http.StatusOK, common.CreateSuccessResponse(network))
+	} else {
+		err := fmt.Errorf("invalid network name:%s", networkName)
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+}

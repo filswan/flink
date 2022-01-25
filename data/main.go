@@ -56,6 +56,7 @@ func createGinServer() {
 
 	routers.Common(ginEngine.Group("/common"))
 	routers.Deal(ginEngine.Group("/deal"))
+	routers.Network(ginEngine.Group("/network"))
 	err := ginEngine.Run(":" + strconv.Itoa(config.GetConfig().Port))
 	if err != nil {
 		logs.GetLogger().Fatal(err)
