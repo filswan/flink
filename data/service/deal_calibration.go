@@ -89,6 +89,37 @@ func GetDealsFromCalibration() error {
 	}
 }
 
+func GetDealOnDemandFromCalibration(dealId int64) (*models.ChainLinkDeal, error) {
+	network, err := models.GetNetworkByName(constants.NETWORK_CALIBRATION)
+	if err != nil {
+		logs.GetLogger().Error()
+		return nil, err
+	}
+
+	chainLinkDeals := []*models.ChainLinkDeal{}
+
+	logs.GetLogger().Info("on demand requesting for:", dealId)
+
+	foundDeal := false
+	chainLinkDeal, err := GetDealFromCalibration(*network, dealId)
+	if err != nil {
+		logs.GetLogger().Error(err)
+	} else {
+		chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
+		foundDeal = true
+	}
+
+	if foundDeal && len(chainLinkDeals) >= 1 {
+		logs.GetLogger().Info("inserting on demain into db, deals count:", len(chainLinkDeals), " ,dealid:", dealId, ",current milliseconds:")
+		err := models.AddChainLinkDeals(chainLinkDeals)
+		if err != nil {
+			logs.GetLogger().Error(err)
+		}
+		logs.GetLogger().Info("inserted successfully on demain into db, deals count:", len(chainLinkDeals), " ,dealid:", dealId, ",current milliseconds:")
+	}
+	return chainLinkDeal, nil
+}
+
 type CalibrationHeightResult struct {
 	Code    int               `json:"code"`
 	Message string            `json:"message"`
