@@ -6,6 +6,7 @@ import (
 	"flink-data/database"
 	"flink-data/routers"
 	"flink-data/service"
+	"os"
 	"strconv"
 	"time"
 
@@ -15,15 +16,15 @@ import (
 )
 
 func main() {
-	/*
-		if len(os.Args) < 2 {
-			logs.GetLogger().Fatal("Flink network must be specified (calibration/mainnet) ")
-		}*/
+
+	if len(os.Args) < 2 {
+		logs.GetLogger().Fatal("Flink network must be specified (calibration/mainnet) ")
+	}
 
 	db := database.Init()
 	defer database.CloseDB(db)
 
-	subCmd := constants.PARAM_CALIBRATION // os.Args[1]
+	subCmd := os.Args[1]
 	switch subCmd {
 	case constants.PARAM_CALIBRATION:
 		logs.GetLogger().Info("starting for calibration network")

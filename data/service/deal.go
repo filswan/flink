@@ -3,6 +3,7 @@ package service
 import (
 	"flink-data/common/constants"
 	"flink-data/models"
+	"fmt"
 
 	"github.com/filswan/go-swan-lib/logs"
 )
@@ -39,11 +40,16 @@ func GetDealById(dealId int64, networkId int) (*models.ChainLinkDealBase, error)
 		}
 	}
 
-	dealInternal.NetworkName = network.Name
+	if dealInternal != nil {
+		dealInternal.NetworkName = network.Name
+		deal := models.GetChainLinkDealBase(*dealInternal)
+		return &deal, nil
+	} else {
+		err := fmt.Errorf("deal not found for %d in %s", dealId, network.Name)
+		logs.GetLogger().Error(err)
+		return nil, err
+	}
 
-	deal := models.GetChainLinkDealBase(*dealInternal)
-
-	return &deal, nil
 }
 
 func GetLatestDealByNetwork(networkId int64) (*models.ChainLinkDealBase, error) {
