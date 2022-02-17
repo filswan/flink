@@ -2,6 +2,7 @@ package routers
 
 import (
 	"flink-data/common"
+	"flink-data/models"
 	"flink-data/service"
 	"fmt"
 	"net/http"
@@ -13,7 +14,7 @@ import (
 
 func Deal(router *gin.RouterGroup) {
 	router.POST("", GetDeal)
-	router.GET("latest", GetLatestDeal)
+	router.POST("latest", GetLatestDeal)
 }
 
 func GetDeal(c *gin.Context) {
@@ -67,22 +68,37 @@ func AddMiner(c *gin.Context) {
 }
 
 func GetLatestDeal(c *gin.Context) {
-	networkIdStr := c.Query("network_id")
-	if networkIdStr == "" {
-		err := fmt.Errorf("network id must be provided")
-		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
-		return
-	}
-
-	networkId, err := strconv.ParseInt(networkIdStr, 10, 64)
+	var dealNetworkRequest DealNetworkRequest
+	err := c.BindJSON(&dealNetworkRequest)
 	if err != nil {
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 		return
 	}
 
-	deal, err := service.GetLatestDealByNetwork(networkId)
+	networkName := dealNetworkRequest.NetworkName
+	if networkName == "" {
+		err := fmt.Errorf("network id must be provided")
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	network, err := models.GetNetworkByName(networkName)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	if network == nil {
+		err := fmt.Errorf("network is not valid")
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	deal, err := service.GetLatestDealByNetwork(network.Id)
 	if err != nil {
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
