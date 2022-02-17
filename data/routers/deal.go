@@ -12,36 +12,45 @@ import (
 )
 
 func Deal(router *gin.RouterGroup) {
-	router.GET(":deal_id", GetDeal)
+	router.POST("", GetDeal)
 	router.GET("latest", GetLatestDeal)
 }
 
 func GetDeal(c *gin.Context) {
-	dealIdStr := c.Param("deal_id")
-	dealId, err := strconv.ParseInt(dealIdStr, 10, 64)
+	var dealNetworkRequest DealNetworkRequest
+	err := c.BindJSON(&dealNetworkRequest)
 	if err != nil {
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 		return
 	}
 
-	networkIdStr := c.Query("network_id")
-	if networkIdStr == "" {
+	dealIdStr := dealNetworkRequest.DealId
+	dealId, err := strconv.ParseInt(dealIdStr, 10, 64)
+	if err != nil {
+		err := fmt.Errorf("deal id must be numeric")
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		return
+	}
+
+	networkName := dealNetworkRequest.NetworkName
+	if networkName == "" {
 		err := fmt.Errorf("network id must be provided")
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 		return
 	}
 
-	networkId, err := strconv.Atoi(networkIdStr)
+	deal, err := service.GetDealById(dealId, networkName)
 	if err != nil {
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 		return
 	}
 
-	deal, err := service.GetDealById(dealId, networkId)
-	if err != nil {
+	if deal == nil {
+		err := fmt.Errorf("deal not found")
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 		return
@@ -85,4 +94,9 @@ func GetLatestDeal(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, common.CreateSuccessResponse(mapObject))
+}
+
+type DealNetworkRequest struct {
+	NetworkName string `json:"network_name"`
+	DealId      string `json:"deal_id"`
 }
