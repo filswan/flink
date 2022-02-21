@@ -8,3 +8,4 @@ data_sources:
     url: https://filswan.com
 parameters:
   - deal_id
+  - network_name

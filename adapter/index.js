@@ -13,6 +13,7 @@ const customError = (data) => {
 // should be required.
 const customParams = {
   deal: ['deal'],
+  network: ['network'],
   // quote: ['quote', 'data', 'dealCid']
 }
 
@@ -21,8 +22,9 @@ const createRequest = (input, callback) => {
   const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id
   const deal = validator.validated.data.deal
+  const network = validator.validated.data.network
   console.log(validator.validated.data);
-  const url = `http://35.168.51.2:8886/deal/${deal}`
+
 
   // This is where you would add method and headers
   // you can add method like GET or POST and add it to the config
@@ -30,7 +32,9 @@ const createRequest = (input, callback) => {
   // method = 'get'
   // headers = 'headers.....'
   const config = {
-    url
+    url: 'http://35.168.51.2:8886/deal/',
+    method: 'POST',
+    data: {network_name: `${network}` , deal_id: `${deal}` }
   }
 
   // The Requester allows API calls be retry in case of timeout
