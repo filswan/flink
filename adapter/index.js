@@ -1,5 +1,4 @@
 const { Requester, Validator } = require('@chainlink/external-adapter')
-const bodyParser = require('body-parser')
 
 // Define custom error scenarios for the API.
 // Return true for the adapter to retry.
