@@ -54,7 +54,9 @@ After installation, flink-data maybe quit due to lack of configuration. Under th
 - You can add `&` at the end of the command to let the program run in background.
 - Such as:
 ```shell
-nohup ./build/flink-data >> flink-data.log &        #After installation from Option 2
+nohup ./build/flink-data calibration >> flink-data.log &        #After installation from Option 2 (For calibration)
+Or
+nohup ./build/flink-data mainnet >> flink-data.log &        #After installation from Option 2 (For mainnet)
 ```
 
 ## Config
