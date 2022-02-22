@@ -34,6 +34,24 @@ func main() {
 		logs.GetLogger().Info("starting for mainnet network")
 		go service.GetDealsFromMainnet()
 		createGinServer()
+	case constants.OPTIONAL_PARAM:
+		if len(os.Args) < 4 {
+			logs.GetLogger().Fatal("required parameters: -c <pathToConfig> calibration|mainnet")
+		}
+		config.SetConfigPath(os.Args[2])
+		sub_Cmd := os.Args[3]
+		switch sub_Cmd {
+		case constants.PARAM_CALIBRATION:
+			logs.GetLogger().Info("starting for calibration network")
+			go service.GetDealsFromCalibrationLoop()
+			createGinServer()
+		case constants.PARAM_MAINNET:
+			logs.GetLogger().Info("starting for mainnet network")
+			go service.GetDealsFromMainnet()
+			createGinServer()
+		default:
+			logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
+		}
 	default:
 		logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
 	}
