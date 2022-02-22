@@ -15,4 +15,6 @@ const (
 
 	PARAM_CALIBRATION = "calibration"
 	PARAM_MAINNET     = "mainnet"
+
+	OPTIONAL_PARAM = "-c"
 )

@@ -33,6 +33,7 @@ type chainLink struct {
 }
 
 var config *Configuration
+var config_path *string
 
 func InitConfig() {
 	homedir, err := os.UserHomeDir()
@@ -41,6 +42,11 @@ func InitConfig() {
 	}
 
 	configFile := filepath.Join(homedir, ".swan/flink/data/config.toml")
+
+	if config_path != nil {
+		configFile = *config_path
+	}
+
 	//configFile := filepath.Join(homedir, "Documents/NebulaAI/Go-Tutorial/flink/data/config/config.toml")
 
 	metaData, err := toml.DecodeFile(configFile, &config)
@@ -59,6 +65,17 @@ func GetConfig() Configuration {
 		InitConfig()
 	}
 	return *config
+}
+
+func SetConfigPath(pathToConfig string) {
+	if pathToConfig != "" {
+		_, err := os.Stat(pathToConfig)
+		if err != nil {
+			log.Fatal("config file does not exist")
+		} else {
+			config_path = &pathToConfig
+		}
+	}
 }
 
 func requiredFieldsAreGiven(metaData toml.MetaData) bool {
