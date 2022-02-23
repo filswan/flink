@@ -7,6 +7,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/filswan/go-swan-lib/logs"
+	libutils "github.com/filswan/go-swan-lib/utils"
 )
 
 type Configuration struct {
@@ -33,21 +34,26 @@ type chainLink struct {
 }
 
 var config *Configuration
-var config_path *string
 
-func InitConfig() {
-	homedir, err := os.UserHomeDir()
-	if err != nil {
-		logs.GetLogger().Fatal("Cannot get home directory.")
+func InitConfig(configFilepath *string) {
+	configFile := ""
+
+	if configFilepath != nil && len(*configFilepath) > 0 {
+		configFile = *configFilepath
+	} else {
+		homedir, err := os.UserHomeDir()
+		if err != nil {
+			logs.GetLogger().Fatal("Cannot get home directory.")
+		}
+
+		configFile = filepath.Join(homedir, ".swan/flink/data/config.toml")
 	}
 
-	configFile := filepath.Join(homedir, ".swan/flink/data/config.toml")
+	logs.GetLogger().Info("your config file is ", configFile)
 
-	if config_path != nil {
-		configFile = *config_path
+	if !libutils.IsFileExistsFullPath(configFile) {
+		logs.GetLogger().Fatal(configFile, " not exists")
 	}
-
-	//configFile := filepath.Join(homedir, "Documents/NebulaAI/Go-Tutorial/flink/data/config/config.toml")
 
 	metaData, err := toml.DecodeFile(configFile, &config)
 
@@ -62,20 +68,9 @@ func InitConfig() {
 
 func GetConfig() Configuration {
 	if config == nil {
-		InitConfig()
+		InitConfig(nil)
 	}
 	return *config
-}
-
-func SetConfigPath(pathToConfig string) {
-	if pathToConfig != "" {
-		_, err := os.Stat(pathToConfig)
-		if err != nil {
-			log.Fatal("config file " + pathToConfig + " does not exist")
-		} else {
-			config_path = &pathToConfig
-		}
-	}
 }
 
 func requiredFieldsAreGiven(metaData toml.MetaData) bool {

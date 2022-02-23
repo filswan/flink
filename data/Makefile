@@ -31,7 +31,7 @@ build: ## Build the binary file
 	@go mod tidy
 	@go build -o $(GOBIN)/$(BINARY_NAME)  main.go
 	@echo "Done building."
-	@echo "Go to build folder and run \"$(GOBIN)/$(BINARY_NAME)\" to launch swan client."
+	@echo "Go to build folder and run \"$(GOBIN)/$(BINARY_NAME)\" to launch flink data."
 .PHONY: build
 
 build_linux:
