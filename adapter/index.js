@@ -1,5 +1,5 @@
 const { Requester, Validator } = require('@chainlink/external-adapter')
-const config = require('./config.json')
+const configfile = require('./config.json')
 
 // Define custom error scenarios for the API.
 // Return true for the adapter to retry.
@@ -24,7 +24,7 @@ const createRequest = (input, callback) => {
   const jobRunID = validator.validated.id
   const deal = validator.validated.data.deal
   const network = validator.validated.data.network
-  const url = config.url
+  const url = configfile.url
   console.log(validator.validated.data);
 
 
