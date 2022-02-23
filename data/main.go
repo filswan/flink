@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"flink-data/common/constants"
 	"flink-data/config"
 	"flink-data/database"
@@ -16,7 +17,6 @@ import (
 )
 
 func main() {
-
 	if len(os.Args) < 2 {
 		logs.GetLogger().Fatal("Flink network must be specified (calibration/mainnet) ")
 	}
@@ -25,22 +25,10 @@ func main() {
 	defer database.CloseDB(db)
 
 	subCmd := os.Args[1]
-	switch subCmd {
-	case constants.PARAM_CALIBRATION:
-		logs.GetLogger().Info("starting for calibration network")
-		go service.GetDealsFromCalibrationLoop()
-		createGinServer()
-	case constants.PARAM_MAINNET:
-		logs.GetLogger().Info("starting for mainnet network")
-		go service.GetDealsFromMainnetLoop()
-		createGinServer()
-	case constants.OPTIONAL_PARAM:
-		if len(os.Args) < 4 {
-			logs.GetLogger().Fatal("required parameters: -c <pathToConfig> calibration|mainnet")
-		}
-		config.SetConfigPath(os.Args[2])
-		sub_Cmd := os.Args[3]
-		switch sub_Cmd {
+	configflag := flag.String("c", "", "set config file")
+	flag.Parse()
+	if *configflag == "" {
+		switch subCmd {
 		case constants.PARAM_CALIBRATION:
 			logs.GetLogger().Info("starting for calibration network")
 			go service.GetDealsFromCalibrationLoop()
@@ -52,8 +40,24 @@ func main() {
 		default:
 			logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
 		}
-	default:
-		logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
+	} else {
+		if len(flag.Args()) < 1 {
+			logs.GetLogger().Fatal("required parameters: -c=<pathToConfig> calibration|mainnet")
+		}
+		config.SetConfigPath(*configflag)
+		network_param := flag.Args()[0]
+		switch network_param {
+		case constants.PARAM_CALIBRATION:
+			logs.GetLogger().Info("starting for calibration network")
+			go service.GetDealsFromCalibrationLoop()
+			createGinServer()
+		case constants.PARAM_MAINNET:
+			logs.GetLogger().Info("starting for mainnet network")
+			go service.GetDealsFromMainnetLoop()
+			createGinServer()
+		default:
+			logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
+		}
 	}
 }
 
