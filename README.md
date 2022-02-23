@@ -61,4 +61,11 @@ scheduler to update status to trigger DAO signature for unlock event
         * match deal_cid (proposal_cid)
     * else waiting for next check cycle
 
+## Sponsors
+This project is sponspor by Filecoin Foundation & Chainlink:
+
+[RFP : chainlink and filecoin data bounties](https://github.com/filecoin-project/devgrants/pull/290
+)
+
+<img src="filecoin.png" width="200"> <img src="chainlink.png" width="200">
 

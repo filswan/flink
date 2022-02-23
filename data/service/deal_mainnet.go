@@ -18,9 +18,13 @@ import (
 func GetDealsFromMainnetLoop() {
 	for {
 		logs.GetLogger().Info("start")
-		err := GetDealsFromMainnet()
-		if err != nil {
-			logs.GetLogger().Error()
+
+		if ContinueScanningMainnet() {
+			maxDealIdChainLink := GetCurrentMaxDealFromChainLinkMainnet()
+			err := GetDealsFromMainnet(maxDealIdChainLink)
+			if err != nil {
+				logs.GetLogger().Error()
+			}
 		}
 
 		logs.GetLogger().Info("sleep")
@@ -28,7 +32,7 @@ func GetDealsFromMainnetLoop() {
 	}
 }
 
-func GetDealsFromMainnet() error {
+func GetDealsFromMainnet(chainlinkMax int64) error {
 	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
 	if err != nil {
 		logs.GetLogger().Error()
@@ -57,7 +61,7 @@ func GetDealsFromMainnet() error {
 	dealIdMaxInterval := config.GetConfig().ChainLink.DealIdIntervalMax
 
 	logs.GetLogger().Info("scanned from:", startDealId)
-	for i := startDealId; ; i++ {
+	for i := startDealId; i <= chainlinkMax; i++ {
 		foundDeal := false
 		chainLinkDeal, err := GetDealFromMainnet(*network, i)
 		if err != nil {
@@ -71,7 +75,7 @@ func GetDealsFromMainnet() error {
 		dealIdInterval := i - lastDealId
 		//logs.GetLogger().Info(dealIdInterval)
 		currentMilliSec := time.Now().UnixNano() / 1e6
-		if len(chainLinkDeals) >= bulkInsertChainLinkLimit ||
+		if len(chainLinkDeals) >= bulkInsertChainLinkLimit || i == chainlinkMax ||
 			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) ||
 			(dealIdInterval > dealIdMaxInterval && len(chainLinkDeals) >= 1) ||
 			(!foundDeal && len(chainLinkDeals) >= 1) {
@@ -89,6 +93,7 @@ func GetDealsFromMainnet() error {
 			return nil
 		}
 	}
+	return nil
 }
 
 func GetDealsOnDemandFromMainnet(dealId int64) (*models.ChainLinkDeal, error) {
@@ -200,4 +205,34 @@ func GetDealFromMainnet(network models.Network, dealId int64) (*models.ChainLink
 	logs.GetLogger().Info(chainLinkDeal)
 
 	return &chainLinkDeal, nil
+}
+
+func GetCurrentMaxDealFromChainLinkMainnet() int64 {
+	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+	if err != nil {
+		logs.GetLogger().Error()
+		return -1
+	}
+
+	maxDealId, err := GetCurrentMaxDealFromChainLink(*network)
+	if err != nil {
+		logs.GetLogger().Error()
+		return -1
+	}
+	return maxDealId
+}
+
+func ContinueScanningMainnet() bool {
+	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+	if err != nil {
+		logs.GetLogger().Error()
+		return false
+	}
+	lastDeal, err := models.GetLastDeal(network.Id)
+	if err != nil {
+		logs.GetLogger().Error()
+		return false
+	}
+	maxDeal := GetCurrentMaxDealFromChainLinkMainnet()
+	return (lastDeal.DealId < maxDeal)
 }

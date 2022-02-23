@@ -28,3 +28,9 @@ type ChainLinkDealCalibrationResult struct {
 	Message string                   `json:"message"`
 	Data    ChainLinkDealCalibration `json:"data"`
 }
+
+type ChainLinkDealCalibrationArrayResult struct {
+	Code    int                    `json:"code"`
+	Message string                 `json:"message"`
+	Data    []ChainLinkDealMainnet `json:"data"`
+}

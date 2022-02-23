@@ -1,11 +1,13 @@
 package main
 
 import (
+	"flag"
 	"flink-data/common/constants"
 	"flink-data/config"
 	"flink-data/database"
 	"flink-data/routers"
 	"flink-data/service"
+	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -16,27 +18,50 @@ import (
 )
 
 func main() {
-
 	if len(os.Args) < 2 {
-		logs.GetLogger().Fatal("Flink network must be specified (calibration/mainnet) ")
+		logs.GetLogger().Fatal("Flink network must be specified")
 	}
+
+	subCmd := os.Args[1]
+	if subCmd != constants.PARAM_CALIBRATION && subCmd != constants.PARAM_MAINNET {
+		logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
+	}
+
+	logs.GetLogger().Info("starting for ", subCmd, " network")
+	setConfigFilepath(subCmd)
 
 	db := database.Init()
 	defer database.CloseDB(db)
 
-	subCmd := os.Args[1]
-	switch subCmd {
-	case constants.PARAM_CALIBRATION:
-		logs.GetLogger().Info("starting for calibration network")
+	if subCmd == constants.PARAM_CALIBRATION {
 		go service.GetDealsFromCalibrationLoop()
-		createGinServer()
-	case constants.PARAM_MAINNET:
-		logs.GetLogger().Info("starting for mainnet network")
-		go service.GetDealsFromMainnet()
-		createGinServer()
-	default:
-		logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
+	} else {
+		go service.GetDealsFromMainnetLoop()
 	}
+
+	createGinServer()
+}
+
+func setConfigFilepath(subCmdName string) error {
+	cmd := flag.NewFlagSet(subCmdName, flag.ExitOnError)
+
+	configFilepath := cmd.String("c", "", "config file path")
+
+	err := cmd.Parse(os.Args[2:])
+	if err != nil {
+		logs.GetLogger().Error(err)
+		return err
+	}
+
+	if !cmd.Parsed() {
+		err := fmt.Errorf("sub command parse failed")
+		logs.GetLogger().Error(err)
+		return err
+	}
+
+	config.InitConfig(configFilepath)
+
+	return nil
 }
 
 func createGinServer() {

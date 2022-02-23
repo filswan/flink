@@ -1,4 +1,5 @@
 const { Requester, Validator } = require('@chainlink/external-adapter')
+const configfile = require('./config.json')
 
 // Define custom error scenarios for the API.
 // Return true for the adapter to retry.
@@ -23,6 +24,8 @@ const createRequest = (input, callback) => {
   const jobRunID = validator.validated.id
   const deal = validator.validated.data.deal
   const network = validator.validated.data.network
+  const url = configfile.url
+
   console.log(validator.validated.data);
 
 
@@ -32,7 +35,7 @@ const createRequest = (input, callback) => {
   // method = 'get'
   // headers = 'headers.....'
   const config = {
-    url: 'http://35.168.51.2:8886/deal/',
+    url: `${url}`,
     method: 'POST',
     data: {network_name: `${network}` , deal_id: `${deal}` }
   }

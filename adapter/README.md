@@ -100,7 +100,7 @@ yarn start
 ## Call the external adapter/API server
 
 ```bash
-curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": { "deal":58160 } }'
+curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": { "deal":"58160", "network":"filecoin_mainnet"} }'
 ```
 
 ## Docker

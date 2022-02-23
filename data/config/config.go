@@ -7,6 +7,7 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/filswan/go-swan-lib/logs"
+	libutils "github.com/filswan/go-swan-lib/utils"
 )
 
 type Configuration struct {
@@ -34,14 +35,25 @@ type chainLink struct {
 
 var config *Configuration
 
-func InitConfig() {
-	homedir, err := os.UserHomeDir()
-	if err != nil {
-		logs.GetLogger().Fatal("Cannot get home directory.")
+func InitConfig(configFilepath *string) {
+	configFile := ""
+
+	if configFilepath != nil && len(*configFilepath) > 0 {
+		configFile = *configFilepath
+	} else {
+		homedir, err := os.UserHomeDir()
+		if err != nil {
+			logs.GetLogger().Fatal("Cannot get home directory.")
+		}
+
+		configFile = filepath.Join(homedir, ".swan/flink/data/config.toml")
 	}
 
-	configFile := filepath.Join(homedir, ".swan/flink/data/config.toml")
-	//configFile := filepath.Join(homedir, "Documents/NebulaAI/Go-Tutorial/flink/data/config/config.toml")
+	logs.GetLogger().Info("your config file is ", configFile)
+
+	if !libutils.IsFileExistsFullPath(configFile) {
+		logs.GetLogger().Fatal(configFile, " not exists")
+	}
 
 	metaData, err := toml.DecodeFile(configFile, &config)
 
@@ -56,7 +68,7 @@ func InitConfig() {
 
 func GetConfig() Configuration {
 	if config == nil {
-		InitConfig()
+		InitConfig(nil)
 	}
 	return *config
 }
