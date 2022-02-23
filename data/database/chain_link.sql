@@ -48,7 +48,11 @@ create table chain_link_deal(
     primary key pk_chain_link_deal(id),
     unique key un_chain_link_deal_network_id_deal_id (deal_id, network_id),
     constraint fk_chain_link_deal_network_id foreign key (network_id) references network (id)
-)
+);
+
+alter table filink.network add api_url_storage varchar(200);
+update filink.network set api_url_storage ='https://calibration-api.filscout.com/api/v1/storagedeal' where name = 'filecoin_calibration';
+update filink.network set api_url_storage ='https://api2.filscout.com/api/v2/deal' where name = 'filecoin_mainnet';
 
 /*
 insert into chain_link_deal(
