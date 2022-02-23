@@ -52,11 +52,15 @@ After installation, flink-data maybe quit due to lack of configuration. Under th
 - You can add `nohup` before `./flink-data` to ignore the HUP (hangup) signal and therefore avoid stop when you log out.
 - You can add `>> flink-data.log` in the command to let all the logs output to `flink-data.log`.
 - You can add `&` at the end of the command to let the program run in background.
+- You can only pass either calibration or mainnet as parameter
 - Such as:
 ```shell
-nohup ./build/flink-data calibration >> flink-data.log &        #After installation from Option 2 (For calibration)
-Or
-nohup ./build/flink-data mainnet >> flink-data.log &        #After installation from Option 2 (For mainnet)
+nohup ./build/flink-data calibration|mainnet >> flink-data.log &        #After installation from Option 2 (For calibration)       
+```
+- You can provide customized configuration file with -c flag
+- Such as:
+```shell
+nohup ./build/flink-data calibration|mainnet -c [path_to_config] >> flink-data.log &        #After installation from Option 2 (For calibration)       
 ```
 
 ## Config
