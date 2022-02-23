@@ -71,7 +71,7 @@ func SetConfigPath(pathToConfig string) {
 	if pathToConfig != "" {
 		_, err := os.Stat(pathToConfig)
 		if err != nil {
-			log.Fatal("config file does not exist")
+			log.Fatal("config file " + pathToConfig + " does not exist")
 		} else {
 			config_path = &pathToConfig
 		}
