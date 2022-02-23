@@ -98,6 +98,11 @@ yarn test
 
 Natively run the application (defaults to port 8080):
 
+To change the default port
+```bash
+export EA_PORT=<port>
+```
+
 ### Run
 
 ```bash
