@@ -80,6 +80,13 @@ Install dependencies:
 ```bash
 yarn
 ```
+Update hostname and port pointing to flink back-end in file adapter/config.json:
+```bash
+{
+    "url" : "http://<host>:<port>/deal/"
+}
+
+```
 
 ### Test
 
