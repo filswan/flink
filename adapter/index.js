@@ -25,6 +25,7 @@ const createRequest = (input, callback) => {
   const deal = validator.validated.data.deal
   const network = validator.validated.data.network
   const url = configfile.url
+
   console.log(validator.validated.data);
 
 
