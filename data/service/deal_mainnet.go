@@ -18,9 +18,12 @@ import (
 func GetDealsFromMainnetLoop() {
 	for {
 		logs.GetLogger().Info("start")
-		err := GetDealsFromMainnet()
-		if err != nil {
-			logs.GetLogger().Error()
+
+		if ContinueScanningMainnet() {
+			err := GetDealsFromMainnet()
+			if err != nil {
+				logs.GetLogger().Error()
+			}
 		}
 
 		logs.GetLogger().Info("sleep")
@@ -200,4 +203,34 @@ func GetDealFromMainnet(network models.Network, dealId int64) (*models.ChainLink
 	logs.GetLogger().Info(chainLinkDeal)
 
 	return &chainLinkDeal, nil
+}
+
+func GetCurrentMaxDealFromChainLinkMainnet() int64 {
+	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+	if err != nil {
+		logs.GetLogger().Error()
+		return -1
+	}
+
+	maxDealId, err := GetCurrentMaxDealFromChainLink(*network)
+	if err != nil {
+		logs.GetLogger().Error()
+		return -1
+	}
+	return maxDealId
+}
+
+func ContinueScanningMainnet() bool {
+	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+	if err != nil {
+		logs.GetLogger().Error()
+		return false
+	}
+	lastDeal, err := models.GetLastDeal(network.Id)
+	if err != nil {
+		logs.GetLogger().Error()
+		return false
+	}
+	maxDeal := GetCurrentMaxDealFromChainLinkMainnet()
+	return (lastDeal.DealId < maxDeal)
 }

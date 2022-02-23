@@ -18,9 +18,12 @@ import (
 func GetDealsFromCalibrationLoop() {
 	for {
 		logs.GetLogger().Info("start")
-		err := GetDealsFromCalibration()
-		if err != nil {
-			logs.GetLogger().Error()
+
+		if ContinueScanningCalibration() {
+			err := GetDealsFromCalibration()
+			if err != nil {
+				logs.GetLogger().Error()
+			}
 		}
 
 		logs.GetLogger().Info("sleep")
@@ -198,4 +201,35 @@ func GetDealFromCalibration(network models.Network, dealId int64) (*models.Chain
 	logs.GetLogger().Info(chainLinkDeal)
 
 	return &chainLinkDeal, nil
+}
+
+func GetCurrentMaxDealFromChainLinkCalibration() int64 {
+	network, err := models.GetNetworkByName(constants.NETWORK_CALIBRATION)
+	if err != nil {
+		logs.GetLogger().Error()
+		return -1
+	}
+
+	maxDealId, err := GetCurrentMaxDealFromChainLink(*network)
+	if err != nil {
+		logs.GetLogger().Error()
+		return -1
+	}
+	return maxDealId
+}
+
+func ContinueScanningCalibration() bool {
+	network, err := models.GetNetworkByName(constants.NETWORK_CALIBRATION)
+	if err != nil {
+		logs.GetLogger().Error()
+		return false
+	}
+	lastDeal, err := models.GetLastDeal(network.Id)
+	if err != nil {
+		logs.GetLogger().Error()
+		return false
+	}
+	maxDeal := GetCurrentMaxDealFromChainLinkCalibration()
+	logs.GetLogger().Info("max deal-id on chain:", maxDeal, " and latest deal-id in Flink:", lastDeal.DealId, " ... No scanning if max deal = latest deal")
+	return (lastDeal.DealId < maxDeal)
 }

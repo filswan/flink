@@ -32,7 +32,7 @@ func main() {
 		createGinServer()
 	case constants.PARAM_MAINNET:
 		logs.GetLogger().Info("starting for mainnet network")
-		go service.GetDealsFromMainnet()
+		go service.GetDealsFromMainnetLoop()
 		createGinServer()
 	case constants.OPTIONAL_PARAM:
 		if len(os.Args) < 4 {
@@ -47,7 +47,7 @@ func main() {
 			createGinServer()
 		case constants.PARAM_MAINNET:
 			logs.GetLogger().Info("starting for mainnet network")
-			go service.GetDealsFromMainnet()
+			go service.GetDealsFromMainnetLoop()
 			createGinServer()
 		default:
 			logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
