@@ -80,6 +80,13 @@ Install dependencies:
 ```bash
 yarn
 ```
+Update hostname and port pointing to flink back-end in file adapter/config.json:
+```bash
+{
+    "url" : "http://<host>:<port>/deal/"
+}
+
+```
 
 ### Test
 
@@ -90,6 +97,11 @@ yarn test
 ```
 
 Natively run the application (defaults to port 8080):
+
+To change the default port
+```bash
+export EA_PORT=<port>
+```
 
 ### Run
 
