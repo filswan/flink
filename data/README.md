@@ -85,9 +85,7 @@ nohup ./build/flink-data calibration|mainnet -c [path_to_config] >> flink-data.l
 curl -X GET -H "content-type:application/json" "http://localhost:8886/network/filecoin_calibration"
 ```
 ```shell
-curl -X POST -H "content-type:application/json" "http://localhost:8886/deal"
-curl -X POST -H "content-type:application/json" "http://localhost:8886/deal" --data '{ "deal_id":"58160", "network_name":"filecoin_mainnet"}'
-
+curl -X POST -H "content-type:application/json" "http://localhost:8886/deal" --data '{ "deal_id":"87000", "network_name":"filecoin_calibration"}'
 ```
 
 ## License
