@@ -10,6 +10,7 @@ import (
 
 	"github.com/filswan/go-swan-lib/logs"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func Deal(router *gin.RouterGroup) {
@@ -18,22 +19,21 @@ func Deal(router *gin.RouterGroup) {
 }
 
 func GetDeal(c *gin.Context) {
-	var dealNetworkRequest_v2 DealNetworkRequest
 	var dealNetworkRequest_v1 DealNetworkRequest_v1
 	var dealNetworkRequest = new(DealNetworkRequest)
-	err := c.BindJSON(&dealNetworkRequest_v1)
+	err := c.ShouldBindBodyWith(&dealNetworkRequest_v1, binding.JSON)
 	if err != nil {
-		err := c.BindJSON(&dealNetworkRequest_v2)
+		err := c.ShouldBindBodyWith(&dealNetworkRequest, binding.JSON)
 		if err != nil {
 			logs.GetLogger().Error(err)
 			c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 			return
 		} else {
-			dealNetworkRequest.DealId = dealNetworkRequest_v2.DealId
+			dealNetworkRequest.DealId = dealNetworkRequest.DealId
 			dealNetworkRequest.NetworkName = dealNetworkRequest_v1.NetworkName
 		}
 	} else {
-		dealNetworkRequest.DealId = string(dealNetworkRequest_v1.DealId)
+		dealNetworkRequest.DealId = strconv.Itoa(dealNetworkRequest_v1.DealId)
 		dealNetworkRequest.NetworkName = dealNetworkRequest_v1.NetworkName
 	}
 
