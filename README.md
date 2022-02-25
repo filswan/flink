@@ -1,19 +1,57 @@
 # FLink
-FILink is a data provider transfers deals info to chainlink Oracle
 
-## Why we need to have Fil-Chainlink proof
-While a user is working on other blockchain like Ethereum, BSC,Polygon, they want to know the strage deal they send to filecoin network is online, however we do not have a native way to check if a storage deal is active on those blockchains.
+Flink is Filecoin a data provider DAO aiming at provider Chainlink Oracle service for Filecoin Network. The
+implementation is aiming at provider deal information on multi-chain for users who stored data in a deal on Filecoin
+network.
 
-## Solutions 
-By build a filecoin data adapter to chainlink oracle. It can give other blockchain the capability of validation if a data is onchain
+Our v1 release provides the Filecoin deal data info available on Polygon network.
 
-### Chainlink Adapter - DATA DAO 
+## Filecoin - Chainlink Data Provider
 
-Data Dao signs the node for providing data feeds to the web3 blockchains like polygoin, bsc, eth.
-Every data deal has a deal ID, it is an unique id on filecoin network used for tracking deal info.
-Filecoin data adatper provides deal ids for other blockchain system to check if the deal exists on filecoin network.
+While a user from blockchains like Ethereum,BSC,Polygon want to store large amount of data offchain, filecoin is the
+best option. On Filecoin network,users can store data in and retrieve data from the Filecoin network via deals.However
+how to create a proof cross chain is not resolved. It is a gas bettween other blockchain storage needs and Fileocin
+storage solution.
 
-The adapter scans the data from Flecoin blockchain and post the deal info to polygon network, the deal info is by the following format:
+[External adapter](https://docs.chain.link/docs/external-adapters) allow access to high-quality data and enable extreme
+flexibility to connect smart contracts to premium web APIs. With chainlink external adapter, user can check thedeal
+information running by node operator.
+
+### Sample Use Case
+
+#### Polygon NFTs USDC payment for Filecoin storage
+
+If a user want to save his NFT long term on Filecoin network, he needs the following steps
+
+* Lock a payment on polygon network
+* Token swap to Filecoin agent
+* Filecoin agent send NFT in deals to filecoin storage providers
+* Deal ID onchain
+* Chainlink oracle broadcasting the proof to Polygon network
+* Storage DAO notaries signed the data based on deal infor provided by the chainlink oracle
+* NFT payment uncloked to the Filecoin agent
+
+![FilLInk](https://user-images.githubusercontent.com/8363795/143550092-bc10f493-b6c5-48e0-ac46-5bbd49a11731.png)
+
+## Design Structure
+
+Flink requires two components to work as a data provider:
+
+* Data aggregator
+* Chainlink external adapter
+* Data DAO notary
+
+Blockchain data scanner By building a filecoin data adapter to chainlink oracle. It can give other blockchain the
+capability of validation if a data is onchain.The payment is triggered once the proof that it has been stored on the
+Filecoin network is relayed from Chainlink oracles.
+
+### Data aggregator
+
+When FIlecoin agent send the data to a storage provider, the data storage process starts. Only when the storage provider
+accept the deal and push a deal acceptance information on chain, it means the deal is setup and a deal id will be on
+filecoin network. The data aggregator will scan the filecoin deal information from different data source and send the
+information as an API interface. check the [data](data) directory for the scan related code. A typical deal info is in this
+format:
 
 ```json
 {
@@ -26,7 +64,7 @@ The adapter scans the data from Flecoin blockchain and post the deal info to pol
       "height": 102337,
       "piece_cid": "baga6ea4seaqooaumpt2kab7ltyyvftfgzyce5zzox3ou6n6qf34bkv42rj7rkly",
       "verified_deal": false,
-      "storage_price":26207450000000,
+      "storage_price": 26207450000000,
       "storage_price_per_epoch": 50000000,
       "signature": "BIE8UTJHBRq6qkBPOtz/IhydTl//+oZP2gMMiGIPck4ZkUPQ/41QLwmTNuNqnUB62j85njIlnRxWLMXv8HJgtQE=",
       "signature_type": "secp256k1",
@@ -47,13 +85,17 @@ The adapter scans the data from Flecoin blockchain and post the deal info to pol
 }
 ```
 
-## Sample Use Case
-### Polygon NFTs USDC payment for Filecoin storage
-![FilLInk](https://user-images.githubusercontent.com/8363795/143550092-bc10f493-b6c5-48e0-ac46-5bbd49a11731.png)
+### Chainlink External Adapter - DATA DAO
 
+After the data aggregator get the deal information, a External adapter is needed for offering API access for data DAO
+notaries in next step.
 
-### Deal Matching
-scheduler to update status to trigger DAO signature for unlock event
+For detailed information about how to build and deployed External Adapter, please check the code in [adapter](adapter)
+
+### Data DAO notary
+
+Data DAO notary sign the multisig wallet for unlock the fund to filecoin strorage agent.
+
 * get deal_id by proposal_cid
 * get deal_id from Chainlink filecoin adapter
     * if matches trigger DAO signature
@@ -61,11 +103,13 @@ scheduler to update status to trigger DAO signature for unlock event
         * match deal_cid (proposal_cid)
     * else waiting for next check cycle
 
+
 ## Sponsors
-This project is sponspor by Filecoin Foundation & Chainlink:
+
+This project is sponsored by Filecoin Foundation & Chainlink:
 
 [RFP : chainlink and filecoin data bounties](https://github.com/filecoin-project/devgrants/pull/290
 )
 
-<img src="filecoin.png" width="200"> <img src="chainlink.png" width="200">
+<img src="filecoin.png" width="200">  <img src="chainlink.png" width="200">
 
