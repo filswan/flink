@@ -1,7 +1,7 @@
 # FLink
-Flink is a data provider DAO aiming at provider Chainlink Oracle service for Filecoin Network. The
-implementation offered deal information on multi chains for users who want to store there data on Filecoin
-network.
+
+Flink is a data provider DAO aiming at provider Chainlink Oracle service for Filecoin Network. The implementation
+offered deal information on multi chains for users who want to store there data on Filecoin network.
 
 Our v1 release provides the Filecoin data info available on Polygon network.
 
@@ -9,18 +9,18 @@ Our v1 release provides the Filecoin data info available on Polygon network.
 
 While a user from blockchains like Ethereum,BSC,Polygon want to store large amount of data offchain, filecoin is the
 best option. On Filecoin network,users can store data in and retrieve data from the Filecoin network via deals.However
-how to create a proof cross chain is not resolved. It is a gas bettween other blockchain storage needs and Fileocin
+how to create a proof cross chain is not resolved. It is a gap between other blockchain storage needs and Fileocin
 storage solution.
 
 [External adapter](https://docs.chain.link/docs/external-adapters) allow access to high-quality data and enable extreme
-flexibility to connect smart contracts to premium web APIs. With chainlink external adapter, user can check thedeal
-information running by node operator.
+flexibility to connect smart contracts to premium web APIs. With chainlink external adapter, user can check their deal
+information on oracle node operator.
 
 ### Sample Use Case
 
 #### Polygon NFTs USDC payment for Filecoin storage
 
-If a user want to save his NFT long term on Filecoin network, he needs the following steps
+If a user wants to save his NFT long term (e.g. 540 days) on Filecoin network, he needs the following steps
 
 * Lock a payment on polygon network
 * Token swap to Filecoin agent
@@ -49,8 +49,8 @@ Filecoin network is relayed from Chainlink oracles.
 When FIlecoin agent send the data to a storage provider, the data storage process starts. Only when the storage provider
 accept the deal and push a deal acceptance information on chain, it means the deal is setup and a deal id will be on
 filecoin network. The data aggregator will scan the filecoin deal information from different data source and send the
-information as an API interface. check the [data](data) directory for the scan related code. A typical deal info is in this
-format:
+information as an API interface. check the [data](data) directory for the scan related code. A typical deal info is in
+this format:
 
 ```json
 {
@@ -95,8 +95,8 @@ For detailed information about how to build and deployed External Adapter, pleas
 
 Data DAO notary is in charged of sign the multisig wallet for unlock the fund to filecoin strorage agent.
 
-The DAO contract allowed the community add or remove notaries from the DAO.
-The DAO Notary client follow these steps before sign the unclock transactions:
+The DAO contract allowed the community add or remove notaries from the DAO. The DAO Notary client follow these steps
+before sign the unclock transactions:
 
 * get deal_id by proposal_cid
 * get deal_id from Chainlink filecoin adapter
@@ -104,9 +104,11 @@ The DAO Notary client follow these steps before sign the unclock transactions:
         * match client_address
         * match deal_cid (proposal_cid)
     * else waiting for next check cycle
+
 ## Roadmap
-  * March 14th,2022:  The mainnet lanunch with Polygon network
-  * June 6th, 2022:   Notary DAO setup
+
+* March 14th,2022:  The mainnet lanunch with Polygon network
+* June 6th, 2022:   Notary DAO setup
 
 ## Sponsors
 
