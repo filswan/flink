@@ -15,4 +15,15 @@ app.post('/', (req, res) => {
   })
 })
 
+app.get('/', (req, res) => {
+  const deal = req.query.deal
+  const network = req.query.network
+  console.log('GET Data: deal=', deal, ' and network=', network)
+  const req_body = { id:0, data: {deal: deal, network: network}}
+  createRequest(req_body, (status, result) => {
+    console.log('Result: ', result)
+    res.status(status).json(result)
+  })
+})
+
 app.listen(port, () => console.log(`Listening on port ${port}!`))

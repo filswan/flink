@@ -21,4 +21,5 @@ data/build/flink-data
 data/build
 data/build/*
 data/build/*.*
-
+# ignore IDEA
+/.idea/

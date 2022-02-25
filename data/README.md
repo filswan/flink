@@ -80,6 +80,14 @@ nohup ./build/flink-data calibration|mainnet -c [path_to_config] >> flink-data.l
 - **bulk_insert_interval_milli_sec**: When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
 - **deal_id_interval_max**: Max interval between neighbour interval id
 
+## Verification 
+```shell
+curl -X GET -H "content-type:application/json" "http://localhost:8886/network/filecoin_calibration"
+```
+```shell
+curl -X POST -H "content-type:application/json" "http://localhost:8886/deal" --data '{ "deal_id":"87000", "network_name":"filecoin_calibration"}'
+```
+
 ## License
 
 [Apache](https://github.com/filswan/go-swan-provider/blob/main/LICENSE)
