@@ -1,10 +1,9 @@
 # FLink
-
-Flink is Filecoin a data provider DAO aiming at provider Chainlink Oracle service for Filecoin Network. The
-implementation is aiming at provider deal information on multi-chain for users who stored data in a deal on Filecoin
+Flink is a data provider DAO aiming at provider Chainlink Oracle service for Filecoin Network. The
+implementation offered deal information on multi chains for users who want to store there data on Filecoin
 network.
 
-Our v1 release provides the Filecoin deal data info available on Polygon network.
+Our v1 release provides the Filecoin data info available on Polygon network.
 
 ## Filecoin - Chainlink Data Provider
 
@@ -92,9 +91,12 @@ notaries in next step.
 
 For detailed information about how to build and deployed External Adapter, please check the code in [adapter](adapter)
 
-### Data DAO notary
+### Data DAO Notary
 
-Data DAO notary sign the multisig wallet for unlock the fund to filecoin strorage agent.
+Data DAO notary is in charged of sign the multisig wallet for unlock the fund to filecoin strorage agent.
+
+The DAO contract allowed the community add or remove notaries from the DAO.
+The DAO Notary client follow these steps before sign the unclock transactions:
 
 * get deal_id by proposal_cid
 * get deal_id from Chainlink filecoin adapter
@@ -102,7 +104,9 @@ Data DAO notary sign the multisig wallet for unlock the fund to filecoin strorag
         * match client_address
         * match deal_cid (proposal_cid)
     * else waiting for next check cycle
-
+## Roadmap
+  * March 14th,2022:  The mainnet lanunch with Polygon network
+  * June 6th, 2022:   Notary DAO setup
 
 ## Sponsors
 
