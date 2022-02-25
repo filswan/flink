@@ -20,7 +20,6 @@ const customParams = {
 
 const createRequest = (input, callback) => {
   // The Validator helps you validate the Chainlink request data
-  console.log(input)
   const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id
   const deal = validator.validated.data.deal
