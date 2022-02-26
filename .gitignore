@@ -22,4 +22,5 @@ data/build
 data/build/*
 data/build/*.*
 # ignore IDEA
+**/.DS_Store
 /.idea/
