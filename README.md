@@ -1,6 +1,6 @@
 # FLink
 
-Flink is a data provider DAO aiming at provider Chainlink Oracle service for Filecoin Network. The implementation
+Flink is a data provider DAO aiming at offer Chainlink Oracle service for Filecoin Network. The implementation
 offered deal information on multi chains for users who want to store there data on Filecoin network.
 
 Our v1 release provides the Filecoin data info available on Polygon network.
@@ -40,9 +40,7 @@ Flink requires two components to work as a data provider:
 * Chainlink external adapter
 * Data DAO notary
 
-Blockchain data scanner By building a filecoin data adapter to chainlink oracle. It can give other blockchain the
-capability of validation if a data is onchain.The payment is triggered once the proof that it has been stored on the
-Filecoin network is relayed from Chainlink oracles.
+Several blockchain scanner aggeragate the data to a unified data provider, the chainlink esternal adapter with the oracle smartcontracs broadcasting the proof to target blockchain networks. Data notaries will sign the transaction based the oracle data onchain informtion.The payment is triggered once the proof that it has been stored on the Filecoin network is relayed from Chainlink oracles.
 
 ### Data aggregator
 
