@@ -5,7 +5,7 @@ offered deal information on multi chains for users who want to store there data 
 
 Our v1 release provides the Filecoin data info available on Polygon network.
 
-## Filecoin - Chainlink Data Provider
+## What is Filecoin - Chainlink Data Provider
 
 While a user from blockchains like Ethereum,BSC,Polygon want to store large amount of data offchain, filecoin is the
 best option. On Filecoin network,users can store data in and retrieve data from the Filecoin network via deals.However
