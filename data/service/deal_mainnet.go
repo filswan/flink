@@ -107,6 +107,11 @@ type FilscanDeal struct {
 	BlockTime            int64  `json:"block_time"`
 	ServiceStartTime     int64  `json:"service_start_time"`
 	ServiceEndTime       int64  `json:"service_end_time"`
+	Tag                  struct {
+		TagCn   string `json:"tag_cn"`
+		TagEn   string `json:"tag_en"`
+		IsValid int    `json:"is_valid"`
+	} `json:"tag"`
 }
 
 type JsonRpcResult struct {
@@ -233,7 +238,7 @@ func ConvertDeal2ChainLinkDeal(network models.Network, filscanDeal *FilscanDeal)
 	//chainLinkDeal.ProviderTag = deal.ProviderTag
 	//chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
 	chainLinkDeal.ProviderCollateralFormat = libutils.GetPriceFormat("0 FIL")
-	//chainLinkDeal.Status = deal.Status
+	chainLinkDeal.Status = filscanDeal.Tag.IsValid
 
 	duration := chainLinkDeal.EndHeight - chainLinkDeal.StartHeight
 	chainLinkDeal.StoragePrice = chainLinkDeal.StoragePricePerEpoch * duration
