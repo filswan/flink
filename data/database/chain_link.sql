@@ -1,5 +1,5 @@
-create database filink;
-use filink;
+create database flink;
+use flink;
 
 drop table if exists chain_link_deal;
 drop table if exists network;
@@ -12,10 +12,10 @@ create table network
   description       varchar(2000),
   primary key pk_network (id),
   unique key un_network_name (name),
-  unique key un_network_api_url_prefix (api_url_prefix)
+  unique key un_network_api_url (api_url)
 ) engine=InnoDB;
 
-insert into network(name,api_url) values("filecoin_calibration", "https://api.filscan.io:8700/rpc/v1");
+insert into network(name,api_url) values("filecoin_mainnet", "https://api.filscan.io:8700/rpc/v1");
 
 
 create table chain_link_deal(
@@ -46,58 +46,4 @@ create table chain_link_deal(
     unique key un_chain_link_deal_network_id_deal_id (deal_id, network_id),
     constraint fk_chain_link_deal_network_id foreign key (network_id) references network (id)
 );
-
-alter table filink.network add api_url_storage varchar(200);
-update filink.network set api_url_storage ='https://calibration-api.filscout.com/api/v1/storagedeal' where name = 'filecoin_calibration';
-update filink.network set api_url_storage ='https://api2.filscout.com/api/v2/deal' where name = 'filecoin_mainnet';
-
-/*
-insert into chain_link_deal(
-    deal_id                    ,
-    network_id                 ,
-    deal_cid                   ,
-    message_cid                ,
-    height                     ,
-    piece_cid                  ,
-    verified_deal              ,
-    storage_price_per_epoch    ,
-    signature                  ,
-    signature_type             ,
-    created_at                 ,
-    piece_size_format          ,
-    start_height               ,
-    end_height                 ,
-    client                     ,
-    client_collateral_format   ,
-    provider                   ,
-    provider_tag               ,
-    verified_provider          ,
-    provider_collateral_format ,
-    status                     ,
-    storage_price              
-) select
-    deal_id                    ,
-    network_id                 ,
-    deal_cid                   ,
-    message_cid                ,
-    height                     ,
-    piece_cid                  ,
-    verified_deal              ,
-    storage_price_per_epoch    ,
-    signature                  ,
-    signature_type             ,
-    created_at                 ,
-    piece_size_format          ,
-    start_height               ,
-    end_height                 ,
-    client                     ,
-    client_collateral_format   ,
-    provider                   ,
-    provider_tag               ,
-    verified_provider          ,
-    provider_collateral_format ,
-    status                     ,
-    storage_price              
-from chain_link_deal_1 order by deal_id;
-*/
 

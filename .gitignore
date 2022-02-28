@@ -24,3 +24,4 @@ data/build/*.*
 # ignore IDEA
 **/.DS_Store
 /.idea/
+data/__debug_bin

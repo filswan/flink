@@ -4,7 +4,7 @@ release = true              # When work in release mode, set this to true, other
 [database]
 db_host = "127.0.0.1"        # Ip of the host for database instance running on
 db_port = 3306               # Port of the host for database instance running on
-db_schema_name = "filink"    # Database schema name for flink data
+db_schema_name = "flink"     # Database schema name for flink data
 db_username = "root"         # Username to access the database
 db_password = ""             # Password to access the database
 db_args = "charset=utf8mb4&parseTime=True&loc=Local" # other arguments to access database
@@ -13,4 +13,3 @@ db_max_idle_conn_num = 10    # Maximum number of connections in the idle connect
 [chain_link]
 bulk_insert_chainlink_limit = 100           # When got more than this number of deals, than bulk insert them to db
 bulk_insert_interval_milli_sec = 300000     # When deals in buffer exist(s), and time interval from last insert time to now is not less than this number, than bulk insert them to db
-deal_id_interval_max = 5000                 # Max interval between neighbour interval id

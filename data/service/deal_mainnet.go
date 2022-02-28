@@ -61,7 +61,7 @@ func GetDealsFromMainnet(network *models.Network, maxDealIdOnFilScan int64) erro
 	for i := maxDealId + 1; i <= maxDealIdOnFilScan; i++ {
 		chainLinkDeal, err := GetDealFromFilScanMainNet(*network, i)
 		if err != nil {
-			logs.GetLogger().Error(err)
+			logs.GetLogger().Error("deal id:", i, " ", err)
 		} else {
 			chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
 		}
@@ -123,7 +123,10 @@ type FilScanDealResult struct {
 
 type FilScanDealsResult struct {
 	JsonRpcResult
-	Deals []*FilscanDeal `json:"deals"`
+	Result struct {
+		Total int64          `json:"total"`
+		Deals []*FilscanDeal `json:"deals"`
+	} `json:"result"`
 }
 
 type JsonRpcError struct {
@@ -174,7 +177,7 @@ func GetMaxDealIdFromFilScanMainNet(network *models.Network) (*int64, error) {
 		return nil, err
 	}
 
-	return &filScanDealsResult.Deals[0].DealId, nil
+	return &filScanDealsResult.Result.Deals[0].DealId, nil
 }
 
 func GetDealFromFilScanMainNet(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
