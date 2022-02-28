@@ -34,7 +34,8 @@ func main() {
 	defer database.CloseDB(db)
 
 	if subCmd == constants.PARAM_CALIBRATION {
-		go service.GetDealsFromCalibrationLoop()
+		//go service.GetDealsFromCalibrationLoop()
+		logs.GetLogger().Fatal("currently not support calibration network")
 	} else {
 		go service.GetDealsFromMainnetLoop()
 	}

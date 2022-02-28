@@ -8,17 +8,14 @@ create table network
 (
   id                bigint       not null auto_increment,
   name              varchar(255) not null,
-  api_url_prefix    varchar(128) not null,
-  api_url_height    varchar(128) not null,
+  api_url           varchar(128) not null,
   description       varchar(2000),
   primary key pk_network (id),
   unique key un_network_name (name),
   unique key un_network_api_url_prefix (api_url_prefix)
 ) engine=InnoDB;
 
-insert into network(name,api_url_prefix,api_url_height) values("filecoin_calibration", "https://calibration-api.filscout.com/api/v1/storagedeal", "https://calibration-api.filscout.com/api/v1/network/overview/height");
-
-insert into network(name,api_url_prefix,api_url_height) values("filecoin_mainnet", "https://api2.filscout.com/api/v1/storagedeal/", "https://api2.filscout.com/api/v2/network/latest");
+insert into network(name,api_url) values("filecoin_calibration", "https://api.filscan.io:8700/rpc/v1");
 
 
 create table chain_link_deal(
