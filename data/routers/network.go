@@ -25,9 +25,6 @@ func GetNetwork(c *gin.Context) {
 			c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 			return
 		}
-		network.ApiUrlHeight = ""
-		network.ApiUrlPrefix = ""
-		network.ApiUrlStorage = ""
 		c.JSON(http.StatusOK, common.CreateSuccessResponse(network))
 	} else {
 		err := fmt.Errorf("invalid network name:%s", networkName)

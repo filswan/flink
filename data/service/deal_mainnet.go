@@ -6,7 +6,6 @@ import (
 	"flink-data/config"
 	"flink-data/models"
 	"fmt"
-	"strconv"
 	"time"
 
 	"github.com/filswan/go-swan-lib/client/web"
@@ -15,16 +14,28 @@ import (
 	"github.com/shopspring/decimal"
 )
 
+const JSON_RPC_VERSION = "2.0"
+const JSON_RPC_ID = 1
+
 func GetDealsFromMainnetLoop() {
 	for {
 		logs.GetLogger().Info("start")
 
-		if ContinueScanningMainnet() {
-			maxDealIdChainLink := GetCurrentMaxDealFromChainLinkMainnet()
-			err := GetDealsFromMainnet(maxDealIdChainLink)
-			if err != nil {
-				logs.GetLogger().Error()
-			}
+		network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+		if err != nil {
+			logs.GetLogger().Error()
+			return
+		}
+
+		maxDealIdOnFilScan, err := GetMaxDealIdFromFilScanMainNet(network)
+		if err != nil {
+			logs.GetLogger().Error()
+			return
+		}
+
+		err = GetDealsFromMainnet(network, *maxDealIdOnFilScan)
+		if err != nil {
+			logs.GetLogger().Error()
 		}
 
 		logs.GetLogger().Info("sleep")
@@ -32,13 +43,7 @@ func GetDealsFromMainnetLoop() {
 	}
 }
 
-func GetDealsFromMainnet(chainlinkMax int64) error {
-	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
-	if err != nil {
-		logs.GetLogger().Error()
-		return err
-	}
-
+func GetDealsFromMainnet(network *models.Network, maxDealIdOnFilScan int64) error {
 	maxDealId, err := models.GetMaxDealId(network.Id)
 	if err != nil {
 		logs.GetLogger().Error()
@@ -47,39 +52,25 @@ func GetDealsFromMainnet(chainlinkMax int64) error {
 
 	chainLinkDeals := []*models.ChainLinkDeal{}
 
-	logs.GetLogger().Info("max deal id last scanned:", maxDealId)
-
-	lastInsertAt := time.Now().UnixNano() / 1e6
-
-	startDealId := maxDealId + 1
-	lastDealId := maxDealId
-
-	//logs.GetLogger().Info(network.ApiUrlPrefix)
+	logs.GetLogger().Info("max deal id last scanned:", maxDealId, " scanned from:", maxDealId+1)
 
 	bulkInsertChainLinkLimit := config.GetConfig().ChainLink.BulkInsertChainlinkLimit
 	bulkInsertIntervalMilliSec := config.GetConfig().ChainLink.BulkInsertIntervalMilliSec
-	dealIdMaxInterval := config.GetConfig().ChainLink.DealIdIntervalMax
+	lastInsertAt := time.Now().UnixNano() / 1e6
 
-	logs.GetLogger().Info("scanned from:", startDealId)
-	for i := startDealId; i <= chainlinkMax; i++ {
-		foundDeal := false
-		chainLinkDeal, err := GetDealFromMainnet(*network, i)
+	for i := maxDealId + 1; i <= maxDealIdOnFilScan; i++ {
+		chainLinkDeal, err := GetDealFromFilScanMainNet(*network, i)
 		if err != nil {
 			logs.GetLogger().Error(err)
 		} else {
 			chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
-			lastDealId = chainLinkDeal.DealId
-			foundDeal = true
 		}
 
-		dealIdInterval := i - lastDealId
 		//logs.GetLogger().Info(dealIdInterval)
 		currentMilliSec := time.Now().UnixNano() / 1e6
-		if len(chainLinkDeals) >= bulkInsertChainLinkLimit || i == chainlinkMax ||
-			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) ||
-			(dealIdInterval > dealIdMaxInterval && len(chainLinkDeals) >= 1) ||
-			(!foundDeal && len(chainLinkDeals) >= 1) {
-			logs.GetLogger().Info("insert into db, deals count:", len(chainLinkDeals), ",deal id interval:", dealIdInterval, ",last insert at:", lastInsertAt, ",current milliseconds:", currentMilliSec)
+		if len(chainLinkDeals) >= bulkInsertChainLinkLimit || i == maxDealIdOnFilScan ||
+			(currentMilliSec-lastInsertAt >= bulkInsertIntervalMilliSec && len(chainLinkDeals) >= 1) {
+			logs.GetLogger().Info("insert into db, deals count:", len(chainLinkDeals), ",last insert at:", lastInsertAt, ",current milliseconds:", currentMilliSec)
 			err := models.AddChainLinkDeals(chainLinkDeals)
 			if err != nil {
 				logs.GetLogger().Error(err)
@@ -87,92 +78,140 @@ func GetDealsFromMainnet(chainlinkMax int64) error {
 			chainLinkDeals = []*models.ChainLinkDeal{}
 			lastInsertAt = currentMilliSec
 		}
-
-		if dealIdInterval >= dealIdMaxInterval {
-			logs.GetLogger().Info("last deal id scanned:", i, ",scanned from:", startDealId)
-			return nil
-		}
 	}
 	return nil
 }
 
-func GetDealsOnDemandFromMainnet(dealId int64) (*models.ChainLinkDeal, error) {
-	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+type JsonRpcParams struct {
+	JsonRpc string        `json:"jsonrpc"`
+	Method  string        `json:"method"`
+	Params  []interface{} `json:"params"`
+	Id      int           `json:"id"`
+}
+
+type FilscanDeal struct {
+	Epoch                int64  `json:"epoch"`
+	Label                string `json:"label"`
+	Cid                  string `json:"cid"`
+	DealId               int64  `json:"dealid"`
+	Client               string `json:"client"`
+	StartEpoch           int64  `json:"start_epoch"`
+	EndEpoch             int64  `json:"end_epoch"`
+	PieceCid             string `json:"piece_cid"`
+	Provider             string `json:"provider"`
+	PieceSize            string `json:"piece_size"`
+	VerifiedDeal         bool   `json:"verified_deal"`
+	ClientCollateral     string `json:"client_collateral"`
+	ProviderCollateral   string `json:"provider_collateral"`
+	StoragePricePerEpoch string `json:"storage_price_per_epoch"`
+	BlockTime            int64  `json:"block_time"`
+	ServiceStartTime     int64  `json:"service_start_time"`
+	ServiceEndTime       int64  `json:"service_end_time"`
+}
+
+type JsonRpcResult struct {
+	Id      int           `json:"id"`
+	JsonRpc string        `json:"jsonrpc"`
+	Error   *JsonRpcError `json:"error"`
+	Result  interface{}   `json:"result"`
+}
+
+type FilScanDealResult struct {
+	JsonRpcResult
+	Deal FilscanDeal `json:"result"`
+}
+
+type FilScanDealsResult struct {
+	JsonRpcResult
+	Deals []*FilscanDeal `json:"deals"`
+}
+
+type JsonRpcError struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}
+
+func GetFromJsonRpcApi(apiUrl, method string, params []interface{}, result interface{}) error {
+	jsonRpcParams := JsonRpcParams{
+		JsonRpc: JSON_RPC_VERSION,
+		Method:  method,
+		Params:  params,
+		Id:      JSON_RPC_ID,
+	}
+
+	response, err := web.HttpGetNoToken(apiUrl, jsonRpcParams)
 	if err != nil {
-		logs.GetLogger().Error()
+		logs.GetLogger().Error(err)
+		return err
+	}
+
+	err = json.Unmarshal(response, result)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		return err
+	}
+
+	logs.GetLogger().Info(result)
+	return nil
+}
+
+func GetMaxDealIdFromFilScanMainNet(network *models.Network) (*int64, error) {
+	var params []interface{}
+	params = append(params, "")
+	params = append(params, 0)
+	params = append(params, 1)
+
+	filScanDealsResult := &FilScanDealsResult{}
+	err := GetFromJsonRpcApi(network.ApiUrl, "filscan.GetMarketDeal", params, filScanDealsResult)
+	if err != nil {
+		logs.GetLogger().Error(err)
 		return nil, err
 	}
 
-	chainLinkDeals := []*models.ChainLinkDeal{}
+	if filScanDealsResult.Error != nil {
+		err := fmt.Errorf("error code:%d message:%s", filScanDealsResult.Error.Code, filScanDealsResult.Error.Message)
+		logs.GetLogger().Error(err)
+		return nil, err
+	}
 
-	logs.GetLogger().Info("on demand requesting for:", dealId)
+	return &filScanDealsResult.Deals[0].DealId, nil
+}
 
-	foundDeal := false
-	chainLinkDeal, err := GetDealFromCalibration(*network, dealId)
+func GetDealFromFilScanMainNet(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
+	var params []interface{}
+	params = append(params, dealId)
+
+	filScanDealResult := &FilScanDealResult{}
+	err := GetFromJsonRpcApi(network.ApiUrl, "filscan.GetMarketDealById", params, filScanDealResult)
 	if err != nil {
 		logs.GetLogger().Error(err)
-	} else {
-		chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
-		foundDeal = true
+		return nil, err
 	}
 
-	if foundDeal && len(chainLinkDeals) >= 1 {
-		logs.GetLogger().Info("inserting on demain into db, deals count:", len(chainLinkDeals), " ,dealid:", dealId, ",current milliseconds:")
-		err := models.AddChainLinkDeals(chainLinkDeals)
-		if err != nil {
-			logs.GetLogger().Error(err)
-		}
-		logs.GetLogger().Info("inserted successfully on demain into db, deals count:", len(chainLinkDeals), " ,dealid:", dealId, ",current milliseconds:")
+	if filScanDealResult.Error != nil {
+		err := fmt.Errorf("error code:%d message:%s", filScanDealResult.Error.Code, filScanDealResult.Error.Message)
+		logs.GetLogger().Error(err)
+		return nil, err
 	}
+
+	chainLinkDeal := ConvertDeal2ChainLinkDeal(network, &filScanDealResult.Deal)
+
 	return chainLinkDeal, nil
 }
 
-type MainnetHeightResult struct {
-	Code    int               `json:"code"`
-	Message string            `json:"message"`
-	Data    CalibrationHeight `json:"data"`
-}
-
-type MainnetHeight struct {
-	TipSetHeight int64 `json:"tipSetHeight"`
-	CountDown    int   `json:"countDown"`
-}
-
-func GetDealFromMainnet(network models.Network, dealId int64) (*models.ChainLinkDeal, error) {
-	apiUrlDeal := libutils.UrlJoin(network.ApiUrlPrefix, strconv.FormatInt(dealId, 10))
-	response, err := web.HttpGetNoToken(apiUrlDeal, nil)
-	if err != nil {
-		logs.GetLogger().Error(err)
-		return nil, err
-	}
-
-	chainLinkDealMainnetResult := &models.ChainLinkDealMainnetResult{}
-	err = json.Unmarshal(response, chainLinkDealMainnetResult)
-	if err != nil {
-		err := fmt.Errorf("deal_id:%d,%s", dealId, err.Error())
-		//logs.GetLogger().Error(err)
-		return nil, err
-	}
-
-	if chainLinkDealMainnetResult.Code == constants.CALIBRATION_DEAL_NOT_FOUND {
-		err := fmt.Errorf("deal_id:%d,code:%d,message:%s", dealId, chainLinkDealMainnetResult.Code, chainLinkDealMainnetResult.Message)
-		return nil, err
-	}
-	//logs.GetLogger().Info(apiUrlDeal, ",", chainLinkDeal.Code, ",", chainLinkDeal.Message, ",", chainLinkDeal.Message)
-
-	deal := chainLinkDealMainnetResult.Data
+func ConvertDeal2ChainLinkDeal(network models.Network, filscanDeal *FilscanDeal) *models.ChainLinkDeal {
 	chainLinkDeal := models.ChainLinkDeal{
 		NetworkId: network.Id,
 	}
 
-	chainLinkDeal.DealId = deal.DealId
-	chainLinkDeal.DealCid = deal.DealCid
-	chainLinkDeal.MessageCid = deal.MessageCid
-	chainLinkDeal.Height = deal.Height
-	chainLinkDeal.PieceCid = deal.PieceCid
-	chainLinkDeal.VerifiedDeal = deal.VerifiedDeal
+	chainLinkDeal.DealId = filscanDeal.DealId
+	chainLinkDeal.DealCid = filscanDeal.Cid
+	//chainLinkDeal.MessageCid = deal.MessageCid
+	chainLinkDeal.Height = filscanDeal.Epoch
+	chainLinkDeal.PieceCid = filscanDeal.PieceCid
+	chainLinkDeal.VerifiedDeal = filscanDeal.VerifiedDeal
 
-	storagePricePerEpoch, err := decimal.NewFromString(libutils.ConvertPrice2AttoFil(deal.StoragePricePerEpoch))
+	storagePricePerEpoch, err := decimal.NewFromString(libutils.ConvertPrice2AttoFil(filscanDeal.StoragePricePerEpoch))
 	if err != nil {
 		logs.GetLogger().Error(err)
 		chainLinkDeal.StoragePricePerEpoch = -1
@@ -180,59 +219,50 @@ func GetDealFromMainnet(network models.Network, dealId int64) (*models.ChainLink
 		chainLinkDeal.StoragePricePerEpoch = storagePricePerEpoch.BigInt().Int64()
 	}
 
-	chainLinkDeal.Signature = deal.Signature
-	chainLinkDeal.SignatureType = deal.SignatureType
-	chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
-	chainLinkDeal.StartHeight = deal.StartHeight
-	chainLinkDeal.EndHeight = deal.EndHeight
-	chainLinkDeal.Client = deal.Client
+	//chainLinkDeal.Signature = deal.Signature
+	//chainLinkDeal.SignatureType = deal.SignatureType
+	//chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
+	chainLinkDeal.StartHeight = filscanDeal.StartEpoch
+	chainLinkDeal.EndHeight = filscanDeal.EndEpoch
+	//chainLinkDeal.Client = deal.Client
 	chainLinkDeal.ClientCollateralFormat = libutils.GetPriceFormat("0 FIL")
-	chainLinkDeal.Provider = deal.Provider
-	chainLinkDeal.ProviderTag = deal.ProviderTag
-	chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
+	chainLinkDeal.Provider = filscanDeal.Provider
+	//chainLinkDeal.ProviderTag = deal.ProviderTag
+	//chainLinkDeal.VerifiedProvider = deal.VerifiedProvider
 	chainLinkDeal.ProviderCollateralFormat = libutils.GetPriceFormat("0 FIL")
-	chainLinkDeal.Status = deal.Status
+	//chainLinkDeal.Status = deal.Status
 
 	duration := chainLinkDeal.EndHeight - chainLinkDeal.StartHeight
 	chainLinkDeal.StoragePrice = chainLinkDeal.StoragePricePerEpoch * duration
 
-	timeT, err := time.Parse("2006-01-02 15:04:05", deal.CreatedAt)
-	if err != nil {
-		logs.GetLogger().Error(err)
-	} else {
-		chainLinkDeal.CreatedAt = timeT.UnixNano() / 1e9
-	}
+	chainLinkDeal.CreatedAt = filscanDeal.BlockTime
 	logs.GetLogger().Info(chainLinkDeal)
 
-	return &chainLinkDeal, nil
+	return &chainLinkDeal
 }
 
-func GetCurrentMaxDealFromChainLinkMainnet() int64 {
-	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+func GetDealsOnDemandFromMainnet(dealId int64) (*models.ChainLinkDeal, error) {
+	network, err := models.GetNetworkByName(constants.NETWORK_CALIBRATION)
 	if err != nil {
 		logs.GetLogger().Error()
-		return -1
+		return nil, err
 	}
 
-	maxDealId, err := GetCurrentMaxDealFromChainLink(*network)
-	if err != nil {
-		logs.GetLogger().Error()
-		return -1
-	}
-	return maxDealId
-}
+	logs.GetLogger().Info("on demand requesting for:", dealId)
 
-func ContinueScanningMainnet() bool {
-	network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+	chainLinkDeal, err := GetDealFromFilScanMainNet(*network, dealId)
 	if err != nil {
-		logs.GetLogger().Error()
-		return false
+		logs.GetLogger().Error(err)
+		return nil, err
 	}
-	lastDeal, err := models.GetLastDeal(network.Id)
+
+	err = models.AddChainLinkDeal(chainLinkDeal)
 	if err != nil {
-		logs.GetLogger().Error()
-		return false
+		logs.GetLogger().Error(err)
+		return nil, err
 	}
-	maxDeal := GetCurrentMaxDealFromChainLinkMainnet()
-	return (lastDeal.DealId < maxDeal)
+
+	logs.GetLogger().Info("inserted successfully on demain into db ,deal id:", dealId)
+
+	return chainLinkDeal, nil
 }
