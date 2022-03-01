@@ -39,7 +39,7 @@ func main() {
 		//go service.GetDealsFromCalibrationLoop()
 		logs.GetLogger().Fatal("currently not support calibration network")
 	} else {
-		go service.GetDealsFromMainnetLoop()
+		service.GetDealsFromMainnetLoop()
 	}
 
 	createGinServer()
