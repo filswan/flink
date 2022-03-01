@@ -33,6 +33,8 @@ func main() {
 	db := database.Init()
 	defer database.CloseDB(db)
 
+	logs.GetLogger().Info("test")
+
 	if subCmd == constants.PARAM_CALIBRATION {
 		//go service.GetDealsFromCalibrationLoop()
 		logs.GetLogger().Fatal("currently not support calibration network")
@@ -40,7 +42,34 @@ func main() {
 		go service.GetDealsFromMainnetLoop()
 	}
 
-	createGinServer()
+	logs.GetLogger().Info("test1")
+	if config.GetConfig().Release {
+		logs.GetLogger().Info("test2")
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	logs.GetLogger().Info("test3")
+	ginEngine := gin.Default()
+	ginEngine.Use(cors.Middleware(cors.Config{
+		Origins:         "*",
+		Methods:         "GET, PUT, POST, DELETE",
+		RequestHeaders:  "Origin, Authorization, Content-Type",
+		ExposedHeaders:  "",
+		MaxAge:          50 * time.Second,
+		Credentials:     true,
+		ValidateHeaders: false,
+	}))
+
+	logs.GetLogger().Info("test4")
+	routers.Common(ginEngine.Group("/common"))
+	routers.Deal(ginEngine.Group("/deal"))
+	routers.Network(ginEngine.Group("/network"))
+	err := ginEngine.Run(":" + strconv.Itoa(config.GetConfig().Port))
+
+	logs.GetLogger().Info("test5")
+	if err != nil {
+		logs.GetLogger().Fatal(err)
+	}
 }
 
 func setConfigFilepath(subCmdName string) error {
