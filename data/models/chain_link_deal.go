@@ -19,7 +19,7 @@ type ChainLinkDealBase struct {
 	Signature                string `json:"signature"`
 	SignatureType            string `json:"signature_type"`
 	CreatedAt                int64  `json:"created_at"`
-	PieceSizeFormat          string `json:"piece_size_format"`
+	PieceSize                string `json:"piece_size"`
 	StartHeight              int64  `json:"start_height"`
 	EndHeight                int64  `json:"end_height"`
 	Client                   string `json:"client"`
@@ -50,7 +50,7 @@ func GetChainLinkDealBase(dealInternal ChainLinkDeal) ChainLinkDealBase {
 		Signature:                dealInternal.Signature,
 		SignatureType:            dealInternal.SignatureType,
 		CreatedAt:                dealInternal.CreatedAt,
-		PieceSizeFormat:          dealInternal.PieceSizeFormat,
+		PieceSize:                dealInternal.PieceSize,
 		StartHeight:              dealInternal.StartHeight,
 		EndHeight:                dealInternal.EndHeight,
 		Client:                   dealInternal.Client,
@@ -102,7 +102,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 		valueArgs = append(valueArgs, deal.Signature)
 		valueArgs = append(valueArgs, deal.SignatureType)
 		valueArgs = append(valueArgs, deal.CreatedAt)
-		valueArgs = append(valueArgs, deal.PieceSizeFormat)
+		valueArgs = append(valueArgs, deal.PieceSize)
 		valueArgs = append(valueArgs, deal.StartHeight)
 		valueArgs = append(valueArgs, deal.EndHeight)
 		valueArgs = append(valueArgs, deal.Client)
