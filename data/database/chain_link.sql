@@ -31,7 +31,7 @@ create table chain_link_deal(
     signature                  varchar(1000) , #--not null,
     signature_type             varchar(60)   , #--not null,
     created_at                 bigint        , #--not null, #--precision:second
-    piece_size_format          varchar(60)   , #--not null,
+    piece_size                 varchar(60)   , #--not null,
     start_height               bigint        , #--not null,
     end_height                 bigint        , #--not null,
     client                     varchar(200)  , #--not null, #--wallet
