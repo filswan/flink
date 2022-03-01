@@ -42,13 +42,13 @@ func main() {
 		go service.GetDealsFromMainnetLoop()
 	}
 
-	logs.GetLogger().Info("test1")
+	//logs.GetLogger().Info("test1")
 	if config.GetConfig().Release {
-		logs.GetLogger().Info("test2")
+		//logs.GetLogger().Info("test2")
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	logs.GetLogger().Info("test3")
+	//logs.GetLogger().Info("test3")
 	ginEngine := gin.Default()
 	ginEngine.Use(cors.Middleware(cors.Config{
 		Origins:         "*",
@@ -60,13 +60,13 @@ func main() {
 		ValidateHeaders: false,
 	}))
 
-	logs.GetLogger().Info("test4")
+	//logs.GetLogger().Info("test4")
 	routers.Common(ginEngine.Group("/common"))
 	routers.Deal(ginEngine.Group("/deal"))
 	routers.Network(ginEngine.Group("/network"))
 	err := ginEngine.Run(":" + strconv.Itoa(config.GetConfig().Port))
 
-	logs.GetLogger().Info("test5")
+	//logs.GetLogger().Info("test5")
 	if err != nil {
 		logs.GetLogger().Fatal(err)
 	}
