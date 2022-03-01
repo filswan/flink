@@ -229,10 +229,10 @@ func ConvertDeal2ChainLinkDeal(network models.Network, filscanDeal *FilscanDeal)
 
 	//chainLinkDeal.Signature = deal.Signature
 	//chainLinkDeal.SignatureType = deal.SignatureType
-	//chainLinkDeal.PieceSizeFormat = deal.PieceSizeFormat
+	chainLinkDeal.PieceSize = filscanDeal.PieceSize
 	chainLinkDeal.StartHeight = filscanDeal.StartEpoch
 	chainLinkDeal.EndHeight = filscanDeal.EndEpoch
-	//chainLinkDeal.Client = deal.Client
+	chainLinkDeal.Client = filscanDeal.Client
 	chainLinkDeal.ClientCollateralFormat = libutils.GetPriceFormat("0 FIL")
 	chainLinkDeal.Provider = filscanDeal.Provider
 	//chainLinkDeal.ProviderTag = deal.ProviderTag
