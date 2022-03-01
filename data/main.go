@@ -20,20 +20,22 @@ import (
 func main() {
 	//service.GetDealsFromMainnetLoop()
 
-	if len(os.Args) < 2 {
-		logs.GetLogger().Fatal("Flink network must be specified")
-	}
+	//if len(os.Args) < 2 {
+	//	logs.GetLogger().Fatal("Flink network must be specified")
+	//}
 
-	subCmd := os.Args[1]
+	subCmd := constants.PARAM_MAINNET // os.Args[1]
 	if subCmd != constants.PARAM_CALIBRATION && subCmd != constants.PARAM_MAINNET {
 		logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
 	}
 
 	logs.GetLogger().Info("starting for ", subCmd, " network")
-	setConfigFilepath(subCmd)
+	//setConfigFilepath(subCmd)
 
 	db := database.Init()
 	defer database.CloseDB(db)
+
+	createGinServer()
 
 	if subCmd == constants.PARAM_CALIBRATION {
 		//go service.GetDealsFromCalibrationLoop()
@@ -41,8 +43,6 @@ func main() {
 	} else {
 		go service.GetDealsFromMainnetLoop()
 	}
-
-	createGinServer()
 }
 
 func setConfigFilepath(subCmdName string) error {

@@ -85,7 +85,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 	}
 
 	sql := "insert into chain_link_deal (deal_id,network_id,deal_cid,message_cid,height,piece_cid,verified_deal,storage_price_per_epoch,signature,signature_type,created_at,"
-	sql = sql + "piece_size_format,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status,storage_price) values"
+	sql = sql + "piece_size,start_height,end_height,client,client_collateral_format,provider,provider_tag,verified_provider,provider_collateral_format,status,storage_price) values"
 	valueStrings := []string{}
 
 	valueArgs := []interface{}{}
@@ -119,7 +119,7 @@ func AddChainLinkDeals(chainLinkDeals []*ChainLinkDeal) error {
 
 	onDuplicateKey := "network_id=values(network_id),deal_cid=values(deal_cid),message_cid=values(message_cid),height=values(height),piece_cid=values(piece_cid),"
 	onDuplicateKey = onDuplicateKey + "verified_deal=values(verified_deal),storage_price_per_epoch=values(storage_price_per_epoch),signature=values(signature),signature_type=values(signature_type),"
-	onDuplicateKey = onDuplicateKey + "created_at=values(created_at),piece_size_format=values(piece_size_format),start_height=values(start_height),end_height=values(end_height),"
+	onDuplicateKey = onDuplicateKey + "created_at=values(created_at),piece_size=values(piece_size),start_height=values(start_height),end_height=values(end_height),"
 	onDuplicateKey = onDuplicateKey + "client=values(client),client_collateral_format=values(client_collateral_format),provider=values(provider),provider_tag=values(provider_tag),"
 	onDuplicateKey = onDuplicateKey + "verified_provider=values(verified_provider),provider_collateral_format=values(provider_collateral_format),status=values(status),storage_price=values(storage_price)"
 	sql = sql + " on duplicate key update " + onDuplicateKey
