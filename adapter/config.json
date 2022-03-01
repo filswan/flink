@@ -1,3 +1,4 @@
 {
-    "url" : "http://localhost:8886/deal/"
+    "url" : "http://localhost:8886/deal/",
+    "port": 8081
 }

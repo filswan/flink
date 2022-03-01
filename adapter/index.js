@@ -18,7 +18,7 @@ const customParams = {
   // quote: ['quote', 'data', 'dealCid']
 }
 
-const createRequest = (input, callback) => {
+const createRequest = (method, input, callback) => {
   // The Validator helps you validate the Chainlink request data
   const validator = new Validator(callback, input, customParams)
   const jobRunID = validator.validated.id
@@ -42,6 +42,7 @@ const createRequest = (input, callback) => {
 
   // The Requester allows API calls be retry in case of timeout
   // or connection failure
+  if (method === "post") {
   Requester.request(config, customError)
       .then(response => {
         // It's common practice to store the desired value at the top-level
@@ -54,6 +55,18 @@ const createRequest = (input, callback) => {
       .catch(error => {
         callback(500, Requester.errored(jobRunID, error))
       })
+    } else {
+      Requester.request(config, customError)
+      .then(response => {
+        // It's common practice to store the desired value at the top-level
+        // result key. This allows different adapters to be compatible with
+        // one another.
+        callback(response.status, response.data)
+      })
+      .catch(error => {
+        callback(500, Requester.errored(jobRunID, error))
+      })
+    }    
 }
 
 // This is a wrapper to allow the function to work with

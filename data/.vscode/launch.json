@@ -12,7 +12,7 @@
             "remotePath": "",
             "program": "${workspaceRoot}",
             "env": {},
-            "args": ["calibration"],
+            "args": ["mainnet"],
             "showLog": true
         }
     ]
