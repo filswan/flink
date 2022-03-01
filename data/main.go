@@ -18,8 +18,6 @@ import (
 )
 
 func main() {
-	//service.GetDealsFromMainnetLoop()
-
 	if len(os.Args) < 2 {
 		logs.GetLogger().Fatal("Flink network must be specified")
 	}

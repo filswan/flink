@@ -1,7 +1,6 @@
 package service
 
 import (
-	"flink-data/common/constants"
 	"flink-data/models"
 
 	"github.com/filswan/go-swan-lib/logs"
@@ -21,16 +20,10 @@ func GetDealById(dealId int64, networkName string) (*models.ChainLinkDealBase, e
 	}
 
 	if dealInternal == nil {
-		if network.Name == constants.NETWORK_CALIBRATION {
-			logs.GetLogger().Fatal("currently not support:", network.Name)
-		}
-
-		if network.Name == constants.NETWORK_MAINNET {
-			dealInternal, err = GetDealsOnDemandFromMainnet(dealId)
-			if err != nil {
-				logs.GetLogger().Error(err)
-				return nil, err
-			}
+		dealInternal, err = GetDealsOnDemand(dealId, network.Name)
+		if err != nil {
+			logs.GetLogger().Error(err)
+			return nil, err
 		}
 	}
 

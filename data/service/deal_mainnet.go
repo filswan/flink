@@ -249,8 +249,8 @@ func ConvertDeal2ChainLinkDeal(network models.Network, filscanDeal *FilscanDeal)
 	return &chainLinkDeal
 }
 
-func GetDealsOnDemandFromMainnet(dealId int64) (*models.ChainLinkDeal, error) {
-	network, err := models.GetNetworkByName(constants.NETWORK_CALIBRATION)
+func GetDealsOnDemand(dealId int64, networkName string) (*models.ChainLinkDeal, error) {
+	network, err := models.GetNetworkByName(networkName)
 	if err != nil {
 		logs.GetLogger().Error()
 		return nil, err
@@ -264,7 +264,10 @@ func GetDealsOnDemandFromMainnet(dealId int64) (*models.ChainLinkDeal, error) {
 		return nil, err
 	}
 
-	err = models.AddChainLinkDeal(chainLinkDeal)
+	chainLinkDeals := []*models.ChainLinkDeal{}
+	chainLinkDeals = append(chainLinkDeals, chainLinkDeal)
+
+	err = models.AddChainLinkDeals(chainLinkDeals)
 	if err != nil {
 		logs.GetLogger().Error(err)
 		return nil, err
