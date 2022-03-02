@@ -114,7 +114,7 @@ curl -X POST -H "content-type:application/json" "http://localhost:<port>/deal" -
 ```
 GET /deal/{deal_id}?network=filecoin_mainnet
 ```bash
-curl -X GET "http://localhost:8080/deal/58160?network=filecoin_mainnet"
+curl -X GET "http://localhost:<port>/deal/58160?network=filecoin_mainnet"
 ```
 
 ## Docker
