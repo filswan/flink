@@ -80,10 +80,13 @@ Install dependencies:
 ```bash
 yarn
 ```
+Default running port is 8080. By changing "port", you may set the new running port
 Update hostname and port pointing to flink back-end in file adapter/config.json:
+
 ```bash
 {
     "url" : "http://<host>:<port>/deal/"
+    "port": <port>
 }
 
 ```
@@ -96,13 +99,6 @@ Run the local tests:
 yarn test
 ```
 
-Natively run the application (defaults to port 8080):
-
-To change the default port
-```bash
-export EA_PORT=<port>
-```
-
 ### Run
 
 ```bash
@@ -110,12 +106,15 @@ yarn start
 ```
 
 ## Call the external adapter/API server
+Flink is supporting both GET and POST api calls
 
+POST /deal
 ```bash
-curl -X POST -H "content-type:application/json" "http://localhost:8080/" --data '{ "id": 0, "data": { "deal":"58160", "network":"filecoin_mainnet"} }'
+curl -X POST -H "content-type:application/json" "http://localhost:<port>/deal" --data '{ "id": 0, "data": { "deal":"58160", "network":"filecoin_mainnet"} }'
 ```
+GET /deal/{deal_id}?network=filecoin_mainnet
 ```bash
-curl -X GET "http://localhost:8080?deal=58160&network=filecoin_mainnet"
+curl -X GET "http://localhost:8080/deal/58160?network=filecoin_mainnet"
 ```
 
 ## Docker
