@@ -11,7 +11,7 @@ const port = portConfig || 8080
 
 app.use(bodyParser.json())
 
-app.post('/', (req, res) => {
+app.post('/deal', (req, res) => {
   console.log('POST Data: ', req.body)
   createRequest('post', req.body, (status, result) => {
     console.log('Result: ', result)
