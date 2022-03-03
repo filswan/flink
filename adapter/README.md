@@ -112,7 +112,10 @@ sudo yarn global add pm2
 ```bash
 pm2 start app.js
 ```
-
+4. Step 4: Verify if adapter is running
+```bash
+pm2 list
+```
 
 ## Call the external adapter/API server
 Flink is supporting both GET and POST api calls
