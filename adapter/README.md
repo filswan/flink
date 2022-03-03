@@ -98,12 +98,21 @@ Run the local tests:
 ```bash
 yarn test
 ```
-
-### Run
-
+### Run Adapter in Production
+We need pm2 to run and monitor node application 
+1. Step 1: Check if pm2 has been installed. If not, continue step 2; else continue step 3
 ```bash
-yarn start
+pm2 --version
 ```
+2. Step 2: In order to install pm2, run below command
+```bash
+sudo yarn global add pm2 
+```
+3. Step 3: Start the adapter with below command
+```bash
+pm2 start app.js
+```
+
 
 ## Call the external adapter/API server
 Flink is supporting both GET and POST api calls
