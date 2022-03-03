@@ -273,7 +273,7 @@ func GetDealsOnDemand(dealId int64, networkName string) (*models.ChainLinkDeal, 
 		return nil, err
 	}
 
-	logs.GetLogger().Info("inserted successfully on demain into db ,deal id:", dealId)
+	logs.GetLogger().Info("inserted successfully on demand into db ,deal id:", dealId)
 
 	return chainLinkDeal, nil
 }
