@@ -16,6 +16,7 @@ create table network
 ) engine=InnoDB;
 
 insert into network(name,api_url) values("filecoin_mainnet", "https://api.filscan.io:8700/rpc/v1");
+insert into network(name,api_url) values("filecoin_calibration", "https://calibration.filscan.io:8700/rpc/v1");
 
 
 create table chain_link_deal(
