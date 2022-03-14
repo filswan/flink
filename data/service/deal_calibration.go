@@ -9,11 +9,11 @@ import (
 	"github.com/filswan/go-swan-lib/logs"
 )
 
-func GetDealsFromMainnetLoop() {
+func GetDealsFromCalibrationLoop() {
 	for {
 		logs.GetLogger().Info("start")
 
-		network, err := models.GetNetworkByName(constants.NETWORK_MAINNET)
+		network, err := models.GetNetworkByName(constants.NETWORK_CALIBRATION)
 		if err != nil {
 			logs.GetLogger().Error()
 			return
@@ -25,7 +25,7 @@ func GetDealsFromMainnetLoop() {
 			return
 		}
 
-		err = GetDealsFromMainnet(network, *maxDealIdOnFilScan)
+		err = GetDealsFromCalibration(network, *maxDealIdOnFilScan)
 		if err != nil {
 			logs.GetLogger().Error()
 		}
@@ -35,7 +35,7 @@ func GetDealsFromMainnetLoop() {
 	}
 }
 
-func GetDealsFromMainnet(network *models.Network, maxDealIdOnFilScan int64) error {
+func GetDealsFromCalibration(network *models.Network, maxDealIdOnFilScan int64) error {
 	maxDealId, err := models.GetMaxDealId(network.Id)
 	if err != nil {
 		logs.GetLogger().Error()

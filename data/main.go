@@ -36,8 +36,7 @@ func main() {
 	logs.GetLogger().Info("test")
 
 	if subCmd == constants.PARAM_CALIBRATION {
-		//go service.GetDealsFromCalibrationLoop()
-		logs.GetLogger().Fatal("currently not support calibration network")
+		go service.GetDealsFromCalibrationLoop()
 	} else {
 		go service.GetDealsFromMainnetLoop()
 	}
