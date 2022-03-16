@@ -153,8 +153,8 @@ func ConvertDeal2ChainLinkDeal(network models.Network, filscanDeal *FilscanDeal)
 	}
 
 	chainLinkDeal.DealId = filscanDeal.DealId
-	chainLinkDeal.DealCid = filscanDeal.Cid
-	//chainLinkDeal.MessageCid = deal.MessageCid
+	//chainLinkDeal.DealCid = filscanDeal.Cid
+	chainLinkDeal.MessageCid = filscanDeal.Cid
 	chainLinkDeal.Height = filscanDeal.Epoch
 	chainLinkDeal.PieceCid = filscanDeal.PieceCid
 	chainLinkDeal.VerifiedDeal = filscanDeal.VerifiedDeal
