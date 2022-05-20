@@ -6,6 +6,8 @@
 - Join us on our [public Slack channel](https://filswan.slack.com) for news, discussions, and status updates. 
 - [Check out our medium](https://filswan.medium.com) for the latest posts and announcements.
 
+Filnk data scans the data from Filecoin network and add important message to the database fro globle access.
+
 ## Table of Contents
 
 - [Features](#Features)
