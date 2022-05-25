@@ -48,6 +48,3 @@ create table chain_link_deal(
     constraint fk_chain_link_deal_network_id foreign key (network_id) references network (id)
 );
 
-ALTER TABLE flink.chain_link_deal drop column  piece_size_format;
-ALTER TABLE flink.chain_link_deal add column  piece_size varchar(30);
-
