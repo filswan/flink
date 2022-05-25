@@ -55,13 +55,14 @@ const createRequest = (method, input, callback) => {
       .catch(error => {
         callback(500, Requester.errored(jobRunID, error))
       })
-    } else {
+    } 
+    else {
       Requester.request(config, customError)
       .then(response => {
         // It's common practice to store the desired value at the top-level
         // result key. This allows different adapters to be compatible with
         // one another.
-        callback(response.status, response.data)
+        callback(response.status, Requester.success(jobRunID, response))
       })
       .catch(error => {
         callback(500, Requester.errored(jobRunID, error))
