@@ -56,7 +56,7 @@ filecoin network. The data aggregator will scan the filecoin deal information fr
 information as an API interface. check the [data](data) directory for the scan related code. A typical deal info is in
 this format:
 
-http://35.168.51.2:7886/deal/5210178?network=filecoin_mainnet
+http://35.168.51.2:8886/deal/5210178?network=filecoin_mainnet
 
 ```json
 {
@@ -95,6 +95,9 @@ http://35.168.51.2:7886/deal/5210178?network=filecoin_mainnet
 
 After the data aggregator get the deal information, a External adapter is needed for offering API access for data DAO
 notaries in next step.
+A typical deal info is in this format:
+
+http://35.168.51.2:7886/deal/5210178?network=filecoin_mainnet
 
 For detailed information about how to build and deployed External Adapter, please check the code in [adapter](adapter)
 
