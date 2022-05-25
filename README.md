@@ -56,7 +56,7 @@ filecoin network. The data aggregator will scan the filecoin deal information fr
 information as an API interface. check the [data](data) directory for the scan related code. A typical deal info is in
 this format:
 
-http://35.168.51.2:8886/deal/5210178?network=filecoin_mainnet
+curl -X POST -H "content-type:application/json" "http://35.168.51.2:8886/deal" --data '{ "deal_id":"87000", "network_name":"filecoin_mainnet"}'
 
 ```json
 {
