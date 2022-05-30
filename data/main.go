@@ -33,8 +33,6 @@ func main() {
 	db := database.Init()
 	defer database.CloseDB(db)
 
-	logs.GetLogger().Info("test")
-
 	if subCmd == constants.PARAM_CALIBRATION {
 		go service.GetDealsFromCalibrationLoop()
 	} else {
