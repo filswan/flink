@@ -29,7 +29,6 @@ func GetDeal(c *gin.Context) {
 			c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 			return
 		} else {
-			dealNetworkRequest.DealId = dealNetworkRequest.DealId
 			dealNetworkRequest.NetworkName = dealNetworkRequest_v1.NetworkName
 		}
 	} else {
