@@ -41,6 +41,12 @@ func main() {
 }
 
 func setConfigFilepath(subCmdName string) error {
+	if len(os.Args) < 3 {
+		logs.GetLogger().Info("config file path not set in command, use default config file")
+		config.InitConfig(nil)
+		return nil
+	}
+
 	cmd := flag.NewFlagSet(subCmdName, flag.ExitOnError)
 
 	configFilepath := cmd.String("c", "", "config file path")
