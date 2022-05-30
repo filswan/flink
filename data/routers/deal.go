@@ -39,7 +39,7 @@ func GetDeal(c *gin.Context) {
 	dealIdStr := dealNetworkRequest.DealId
 	dealId, err := strconv.ParseInt(dealIdStr, 10, 64)
 	if err != nil {
-		err := fmt.Errorf("deal id must be numeric")
+		err := fmt.Errorf("%s,deal id must be numeric", err.Error())
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 		return
@@ -47,7 +47,7 @@ func GetDeal(c *gin.Context) {
 
 	networkName := dealNetworkRequest.NetworkName
 	if networkName == "" {
-		err := fmt.Errorf("network id must be provided")
+		err := fmt.Errorf("network name must be provided")
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
 		return
