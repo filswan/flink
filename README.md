@@ -56,7 +56,7 @@ filecoin network. The data aggregator will scan the filecoin deal information fr
 information as an API interface. check the [data](data) directory for the scan related code. A typical deal info is in
 this format:
 
-curl -X POST -H "content-type:application/json" "http://35.168.51.2:8886/deal" --data '{ "deal_id":"87000", "network_name":"filecoin_mainnet"}'
+curl -X POST -H "content-type:application/json" "https://flink-data.filswan.com/deal" --data '{ "deal_id":"87000", "network_name":"filecoin_mainnet"}'
 
 ```json
 {
@@ -97,7 +97,7 @@ After the data aggregator get the deal information, a External adapter is needed
 notaries in next step.
 A typical deal info is in this format:
 
-http://35.168.51.2:7886/deal/5210178?network=filecoin_mainnet
+https://flink-adapter.filswan.com/deal/5210178?network=filecoin_mainnet
 
 For detailed information about how to build and deployed External Adapter, please check the code in [adapter](adapter)
 
