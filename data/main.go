@@ -22,20 +22,19 @@ func main() {
 		logs.GetLogger().Fatal("Flink network must be specified")
 	}
 
-	subCmd := os.Args[1]
-	if subCmd != constants.PARAM_CALIBRATION && subCmd != constants.PARAM_MAINNET {
-		logs.GetLogger().Fatal("sub command should be: calibration|mainnet")
+	network := os.Args[1]
+	if network != constants.PARAM_CALIBRATION && network != constants.PARAM_MAINNET {
+		err := fmt.Errorf("network should be: %s|%s", constants.PARAM_CALIBRATION, constants.PARAM_MAINNET)
+		logs.GetLogger().Fatal(err)
 	}
 
-	logs.GetLogger().Info("starting for ", subCmd, " network")
-	setConfigFilepath(subCmd)
+	logs.GetLogger().Info("starting for ", network, " network")
+	setConfigFilepath(network)
 
 	db := database.Init()
 	defer database.CloseDB(db)
 
-	logs.GetLogger().Info("test")
-
-	if subCmd == constants.PARAM_CALIBRATION {
+	if network == constants.PARAM_CALIBRATION {
 		go service.GetDealsFromCalibrationLoop()
 	} else {
 		go service.GetDealsFromMainnetLoop()
@@ -59,6 +58,12 @@ func setConfigFilepath(subCmdName string) error {
 		err := fmt.Errorf("sub command parse failed")
 		logs.GetLogger().Error(err)
 		return err
+	}
+
+	if configFilepath == nil || *configFilepath == "" {
+		logs.GetLogger().Info("you do not provide config file, use default")
+	} else {
+		logs.GetLogger().Info("config file you provided is:", *configFilepath)
 	}
 
 	config.InitConfig(configFilepath)
