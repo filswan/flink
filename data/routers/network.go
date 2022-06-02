@@ -18,18 +18,18 @@ func Network(router *gin.RouterGroup) {
 func GetNetwork(c *gin.Context) {
 	networkName := c.Param("network")
 
-	if networkName == constants.NETWORK_CALIBRATION || networkName == constants.NETWORK_MAINNET {
-		network, err := models.GetNetworkByName(networkName)
-		if err != nil {
-			logs.GetLogger().Error(err)
-			c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
-			return
-		}
-		c.JSON(http.StatusOK, common.CreateSuccessResponse(network))
-	} else {
-		err := fmt.Errorf("invalid network name:%s", networkName)
+	if networkName != constants.NETWORK_CALIBRATION && networkName != constants.NETWORK_MAINNET {
+		err := fmt.Errorf("network name should be %s or %s", constants.NETWORK_MAINNET, constants.NETWORK_CALIBRATION)
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
 	}
+
+	network, err := models.GetNetworkByName(networkName)
+	if err != nil {
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, common.CreateSuccessResponse(network))
 }

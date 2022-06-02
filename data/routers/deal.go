@@ -29,7 +29,7 @@ func GetDeal(c *gin.Context) {
 	}
 
 	if dealNetworkRequest.DealId < 0 {
-		err := fmt.Errorf("deal id:%d must be not less than 0", dealNetworkRequest.DealId)
+		err := fmt.Errorf("deal id:%d should be not less than 0", dealNetworkRequest.DealId)
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
@@ -37,7 +37,7 @@ func GetDeal(c *gin.Context) {
 
 	networkName := dealNetworkRequest.NetworkName
 	if networkName == "" {
-		err := fmt.Errorf("network name must be provided")
+		err := fmt.Errorf("network name should be provided")
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
