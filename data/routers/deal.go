@@ -7,6 +7,7 @@ import (
 	"flink-data/service"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/filswan/go-swan-lib/logs"
@@ -23,9 +24,20 @@ func GetDeal(c *gin.Context) {
 	var dealNetworkRequest DealNetworkRequest
 	err := c.ShouldBindBodyWith(&dealNetworkRequest, binding.JSON)
 	if err != nil {
-		logs.GetLogger().Error(err)
-		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
-		return
+		var dealNetworkRequest1 DealNetworkRequest1
+		err := c.ShouldBindBodyWith(&dealNetworkRequest1, binding.JSON)
+		if err != nil {
+			logs.GetLogger().Error(err)
+			c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
+			return
+		}
+
+		dealNetworkRequest.DealId, err = strconv.ParseInt(dealNetworkRequest1.DealId, 10, 32)
+		if err != nil {
+			logs.GetLogger().Error(err)
+			c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
+			return
+		}
 	}
 
 	if dealNetworkRequest.DealId < 0 {
@@ -137,4 +149,8 @@ func GetLatestDeal(c *gin.Context) {
 type DealNetworkRequest struct {
 	NetworkName string `json:"network_name"`
 	DealId      int64  `json:"deal_id"`
+}
+type DealNetworkRequest1 struct {
+	NetworkName string `json:"network_name"`
+	DealId      string `json:"deal_id"`
 }
