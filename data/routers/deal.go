@@ -7,6 +7,7 @@ import (
 	"flink-data/service"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/filswan/go-swan-lib/logs"
 	"github.com/gin-gonic/gin"
@@ -51,6 +52,12 @@ func GetDeal(c *gin.Context) {
 
 	deal, err := service.GetDealById(dealNetworkRequest.DealId, networkName)
 	if err != nil {
+		if strings.Contains(err.Error(), "error code:-32603 message:pg: no rows in result set") {
+			err := fmt.Errorf("deal not found")
+			logs.GetLogger().Error(err)
+			c.JSON(http.StatusNotFound, common.CreateErrorResponse(http.StatusNotFound, err.Error()))
+			return
+		}
 		logs.GetLogger().Error(err)
 		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
 		return
