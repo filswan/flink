@@ -21,7 +21,7 @@ const customParams = {
 const createRequest = (method, input, callback) => {
   // The Validator helps you validate the Chainlink request data
   const validator = new Validator(callback, input, customParams)
-  const jobRunID = "2bb15c3f9cfc4336b95012872ff05092" // validator.validated.id
+  const jobRunID = validator.validated.id
   const deal = validator.validated.data.deal
   const network = validator.validated.data.network
   const url = configfile.url
@@ -62,7 +62,7 @@ const createRequest = (method, input, callback) => {
         // It's common practice to store the desired value at the top-level
         // result key. This allows different adapters to be compatible with
         // one another.
-        callback(response.status, Requester.success(jobRunID, response.data))
+        callback(response.status, Requester.success(jobRunID, response))
       })
       .catch(error => {
         callback(500, Requester.errored(jobRunID, error))
