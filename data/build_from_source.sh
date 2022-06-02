@@ -16,6 +16,5 @@ fi
 BINARY_NAME=flink-data
 make
 chmod +x ./build/${BINARY_NAME}
-./build/${BINARY_NAME}                         # Run swan provider
 
 
