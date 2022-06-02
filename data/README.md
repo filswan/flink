@@ -38,6 +38,7 @@ git clone https://github.com/filswan/flink.git
 cd flink
 git checkout <release_branch>
 # create tables using scripts `./data/database/chain_link.sql` manually
+cd data
 ./build_from_source.sh
 ```
 
