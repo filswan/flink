@@ -11,13 +11,13 @@ const port = portConfig || 8080
 
 app.use(bodyParser.json())
 
-app.post('/deal', (req, res) => {
-  console.log('POST Data: ', req.body)
-  createRequest('post', req.body, (status, result) => {
-    console.log('Result: ', result)
-    res.status(status).json(result)
-  })
-})
+// app.post('/deal', (req, res) => {
+//   console.log('POST Data: ', req.body)
+//   createRequest('post', req.body, (status, result) => {
+//     console.log('Result: ', result)
+//     res.status(status).json(result)
+//   })
+// })
 
 app.get('/deal/:deal_id', (req, res) => {
   const deal = req.params.deal_id

@@ -62,7 +62,7 @@ const createRequest = (method, input, callback) => {
         // It's common practice to store the desired value at the top-level
         // result key. This allows different adapters to be compatible with
         // one another.
-        callback(response.status, Requester.success(jobRunID, response))
+        callback(response.status, Requester.success(jobRunID, response.data))
       })
       .catch(error => {
         callback(500, Requester.errored(jobRunID, error))
