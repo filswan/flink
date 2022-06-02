@@ -64,7 +64,8 @@ func GetDeal(c *gin.Context) {
 	}
 
 	mapObject := map[string]interface{}{
-		"deal": *deal,
+		"deal":   *deal,
+		"result": deal.StoragePrice,
 	}
 
 	c.JSON(http.StatusOK, common.CreateSuccessResponse(mapObject))
