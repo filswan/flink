@@ -1,11 +1,11 @@
 package common
 
 import (
-	"github.com/filswan/go-swan-lib/constants"
+	"net/http"
 )
 
 type BasicResponse struct {
-	Status   string      `json:"status"`
+	Status   int         `json:"status"`
 	Data     interface{} `json:"data,omitempty"`
 	Message  string      `json:"message,omitempty"`
 	PageInfo *PageInfo   `json:"page_info,omitempty"`
@@ -19,14 +19,14 @@ type PageInfo struct {
 
 func CreateSuccessResponse(data interface{}) BasicResponse {
 	return BasicResponse{
-		Status: constants.SWAN_API_STATUS_SUCCESS,
+		Status: http.StatusOK,
 		Data:   data,
 	}
 }
 
-func CreateErrorResponse(errMsg string) BasicResponse {
+func CreateErrorResponse(status int, errMsg string) BasicResponse {
 	return BasicResponse{
-		Status:  constants.SWAN_API_STATUS_FAIL,
+		Status:  status,
 		Message: errMsg,
 	}
 }

@@ -22,14 +22,14 @@ func GetNetwork(c *gin.Context) {
 		network, err := models.GetNetworkByName(networkName)
 		if err != nil {
 			logs.GetLogger().Error(err)
-			c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+			c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
 			return
 		}
 		c.JSON(http.StatusOK, common.CreateSuccessResponse(network))
 	} else {
 		err := fmt.Errorf("invalid network name:%s", networkName)
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
 	}
 }

@@ -2,11 +2,11 @@ package routers
 
 import (
 	"flink-data/common"
+	"flink-data/common/constants"
 	"flink-data/models"
 	"flink-data/service"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/filswan/go-swan-lib/logs"
 	"github.com/gin-gonic/gin"
@@ -19,29 +19,18 @@ func Deal(router *gin.RouterGroup) {
 }
 
 func GetDeal(c *gin.Context) {
-	var dealNetworkRequest_v1 DealNetworkRequest_v1
-	var dealNetworkRequest = new(DealNetworkRequest)
-	err := c.ShouldBindBodyWith(&dealNetworkRequest_v1, binding.JSON)
+	var dealNetworkRequest DealNetworkRequest
+	err := c.ShouldBindBodyWith(&dealNetworkRequest, binding.JSON)
 	if err != nil {
-		err := c.ShouldBindBodyWith(&dealNetworkRequest, binding.JSON)
-		if err != nil {
-			logs.GetLogger().Error(err)
-			c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
-			return
-		} else {
-			dealNetworkRequest.NetworkName = dealNetworkRequest_v1.NetworkName
-		}
-	} else {
-		dealNetworkRequest.DealId = strconv.Itoa(dealNetworkRequest_v1.DealId)
-		dealNetworkRequest.NetworkName = dealNetworkRequest_v1.NetworkName
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
+		return
 	}
 
-	dealIdStr := dealNetworkRequest.DealId
-	dealId, err := strconv.ParseInt(dealIdStr, 10, 64)
-	if err != nil {
-		err := fmt.Errorf("%s,deal id must be numeric", err.Error())
+	if dealNetworkRequest.DealId < 0 {
+		err := fmt.Errorf("deal id:%d must be not less than 0", dealNetworkRequest.DealId)
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
 	}
 
@@ -49,21 +38,28 @@ func GetDeal(c *gin.Context) {
 	if networkName == "" {
 		err := fmt.Errorf("network name must be provided")
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
 	}
 
-	deal, err := service.GetDealById(dealId, networkName)
+	if networkName != constants.NETWORK_CALIBRATION && networkName != constants.NETWORK_MAINNET {
+		err := fmt.Errorf("network name should be %s or %s", constants.NETWORK_MAINNET, constants.NETWORK_CALIBRATION)
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
+		return
+	}
+
+	deal, err := service.GetDealById(dealNetworkRequest.DealId, networkName)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
 		return
 	}
 
 	if deal == nil {
 		err := fmt.Errorf("deal not found")
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusNotFound, common.CreateErrorResponse(http.StatusNotFound, err.Error()))
 		return
 	}
 
@@ -82,7 +78,7 @@ func GetLatestDeal(c *gin.Context) {
 	err := c.BindJSON(&dealNetworkRequest)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
 	}
 
@@ -90,28 +86,35 @@ func GetLatestDeal(c *gin.Context) {
 	if networkName == "" {
 		err := fmt.Errorf("network id must be provided")
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
+		return
+	}
+
+	if networkName != constants.NETWORK_CALIBRATION && networkName != constants.NETWORK_MAINNET {
+		err := fmt.Errorf("network name should be %s or %s", constants.NETWORK_MAINNET, constants.NETWORK_CALIBRATION)
+		logs.GetLogger().Error(err)
+		c.JSON(http.StatusBadRequest, common.CreateErrorResponse(http.StatusBadRequest, err.Error()))
 		return
 	}
 
 	network, err := models.GetNetworkByName(networkName)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
 		return
 	}
 
 	if network == nil {
-		err := fmt.Errorf("network is not valid")
+		err := fmt.Errorf("internal error, network:%s cannot be found", networkName)
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
 		return
 	}
 
 	deal, err := service.GetLatestDealByNetwork(network.Id)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		c.JSON(http.StatusOK, common.CreateErrorResponse(err.Error()))
+		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse(http.StatusInternalServerError, err.Error()))
 		return
 	}
 
@@ -124,10 +127,5 @@ func GetLatestDeal(c *gin.Context) {
 
 type DealNetworkRequest struct {
 	NetworkName string `json:"network_name"`
-	DealId      string `json:"deal_id"`
-}
-
-type DealNetworkRequest_v1 struct {
-	NetworkName string `json:"network_name"`
-	DealId      int    `json:"deal_id"`
+	DealId      int64  `json:"deal_id"`
 }
