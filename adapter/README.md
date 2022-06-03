@@ -127,39 +127,36 @@ curl -X POST -H "content-type:application/json" "http://localhost:<port>/deal" -
 Response format for POST
 ```bash
 {
-    "jobRunID": 0,
-    "data": {
-        "status": "success",
-        "data": {
-            "deal": {
-                "deal_id": 58160,
-                "deal_cid": "bafy2bzacedqgkcc6helnjwk267fmfjjvvldhhypseskixrtxkfok5rzowev7o",
-                "message_cid": "",
-                "height": 23211,
-                "piece_cid": "baga6ea4seaqjvvaedq7tj2c6t4c3a5mknjvzfnnuil6yh7u7n6nrg22moggr6gy",
-                "verified_deal": false,
-                "storage_price_per_epoch": 1,
-                "signature": "",
-                "signature_type": "",
-                "created_at": 1599002730,
-                "piece_size": "",
-                "start_height": 28969,
-                "end_height": 733548,
-                "client": "",
-                "client_collateral_format": "000000000000000000",
-                "provider": "f01278",
-                "provider_tag": "",
-                "verified_provider": 0,
-                "provider_collateral_format": "000000000000000000",
-                "status": 0,
-                "network_name": "filecoin_mainnet",
-                "storage_price": 704579
-            }
-        },
-        "result": {}
-    },
-    "result": {},
-    "statusCode": 200
+   "jobRunID":"2bb15c3f9cfc4336b95012872ff05092",
+   "data":{
+      "deal":{
+         "deal_id":5210178,
+         "deal_cid":"",
+         "message_cid":"bafy2bzaceaotial6pogwzvm7woh5pf37sivrzm3fmp5teao365jl22z5q4pfc",
+         "height":1697382,
+         "piece_cid":"baga6ea4seaqjffbc2mmed2piulix5qfppyuhbqumnppme5ngj3q2ol4udijjqbq",
+         "verified_deal":true,
+         "storage_price_per_epoch":0,
+         "signature":"",
+         "signature_type":"",
+         "created_at":1649227860,
+         "piece_size":"1073741824",
+         "start_height":1701360,
+         "end_height":3234661,
+         "client":"f1g463yb4ok3lq3tffkvvfmfyngcagpx4kg7c7rei",
+         "client_collateral_format":"000000000000000000",
+         "provider":"f067375",
+         "provider_tag":"",
+         "verified_provider":0,
+         "provider_collateral_format":"000000000000000000",
+         "status":0,
+         "network_name":"filecoin_mainnet",
+         "storage_price":0
+      },
+      "result":0
+   },
+   "result":0,
+   "statusCode":200
 }
 ```
 GET /deal/{deal_id}?network=filecoin_mainnet
@@ -169,33 +166,36 @@ curl -X GET "http://localhost:<port>/deal/58160?network=filecoin_mainnet"
 Response format for GET
 ```bash
 {
-    "status": "success",
-    "data": {
-        "deal": {
-            "deal_id": 58160,
-            "deal_cid": "bafy2bzacedqgkcc6helnjwk267fmfjjvvldhhypseskixrtxkfok5rzowev7o",
-            "message_cid": "",
-            "height": 23211,
-            "piece_cid": "baga6ea4seaqjvvaedq7tj2c6t4c3a5mknjvzfnnuil6yh7u7n6nrg22moggr6gy",
-            "verified_deal": false,
-            "storage_price_per_epoch": 1,
-            "signature": "",
-            "signature_type": "",
-            "created_at": 1599002730,
-            "piece_size": "",
-            "start_height": 28969,
-            "end_height": 733548,
-            "client": "",
-            "client_collateral_format": "000000000000000000",
-            "provider": "f01278",
-            "provider_tag": "",
-            "verified_provider": 0,
-            "provider_collateral_format": "000000000000000000",
-            "status": 0,
-            "network_name": "filecoin_mainnet",
-            "storage_price": 704579
-        }
-    }
+   "jobRunID":"2bb15c3f9cfc4336b95012872ff05092",
+   "data":{
+      "deal":{
+         "deal_id":5210178,
+         "deal_cid":"",
+         "message_cid":"bafy2bzaceaotial6pogwzvm7woh5pf37sivrzm3fmp5teao365jl22z5q4pfc",
+         "height":1697382,
+         "piece_cid":"baga6ea4seaqjffbc2mmed2piulix5qfppyuhbqumnppme5ngj3q2ol4udijjqbq",
+         "verified_deal":true,
+         "storage_price_per_epoch":0,
+         "signature":"",
+         "signature_type":"",
+         "created_at":1649227860,
+         "piece_size":"1073741824",
+         "start_height":1701360,
+         "end_height":3234661,
+         "client":"f1g463yb4ok3lq3tffkvvfmfyngcagpx4kg7c7rei",
+         "client_collateral_format":"000000000000000000",
+         "provider":"f067375",
+         "provider_tag":"",
+         "verified_provider":0,
+         "provider_collateral_format":"000000000000000000",
+         "status":0,
+         "network_name":"filecoin_mainnet",
+         "storage_price":0
+      },
+      "result":0
+   },
+   "result":0,
+   "statusCode":200
 }
 ```
 ## Docker
