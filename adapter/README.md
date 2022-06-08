@@ -118,7 +118,7 @@ POST /deal
 curl -X POST -H "content-type:application/json" "http://localhost:<port>/deal" --data '{ "id": 0, "data": { "deal":"58160", "network":"filecoin_mainnet"} }'
 ```
 Response format for POST
-```bash
+```json
 {
    "jobRunID":"2bb15c3f9cfc4336b95012872ff05092",
    "data":{
@@ -157,7 +157,7 @@ GET /deal/{deal_id}?network=filecoin_mainnet
 curl -X GET "http://localhost:<port>/deal/58160?network=filecoin_mainnet"
 ```
 Response format for GET
-```bash
+```json
 {
    "jobRunID":"2bb15c3f9cfc4336b95012872ff05092",
    "data":{
