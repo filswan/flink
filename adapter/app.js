@@ -13,7 +13,7 @@ app.use(bodyParser.json())
 app.post('/deal', (req, res) => {
   console.log('POST Data: ', req.body)
   createRequest('post', req.body, (status, result) => {
-    console.log('Result: ', result)
+    console.log('Deal ID: ', result?.data?.deal?.deal_id)
     res.status(status).json(result)
   })
 })
