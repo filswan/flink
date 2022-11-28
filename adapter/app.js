@@ -1,7 +1,6 @@
 const createRequest = require('./index').createRequest
 const configfile = require('./config.json')
 
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
@@ -23,9 +22,9 @@ app.get('/deal/:deal_id', (req, res) => {
   const deal = req.params.deal_id
   const network = req.query.network
   console.log('GET Data: deal=', deal, ' and network=', network)
-  const req_body = { id:0, data: {deal: deal, network: network}}
+  const req_body = { id: 0, data: { deal: deal, network: network } }
   createRequest('get', req_body, (status, result) => {
-    console.log('Result: ', result)
+    console.log('Deal ID: ', result.data.deal.deal_id)
     res.status(status).json(result)
   })
 })
