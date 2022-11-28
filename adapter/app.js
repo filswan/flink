@@ -24,7 +24,7 @@ app.get('/deal/:deal_id', (req, res) => {
   console.log('GET Data: deal=', deal, ' and network=', network)
   const req_body = { id: 0, data: { deal: deal, network: network } }
   createRequest('get', req_body, (status, result) => {
-    console.log('Deal ID: ', result.data.deal.deal_id)
+    console.log('Deal ID: ', result?.data?.deal?.deal_id)
     res.status(status).json(result)
   })
 })
