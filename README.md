@@ -6,7 +6,7 @@
 - Join us on our [public discord channel](https://discord.com/invite/KKGhy8ZqzK) for news, discussions, and status updates. 
 - [Check out our medium](https://filswan.medium.com) for the latest posts and announcements.
 
-Flink is a data provider DAO aiming at offer Chainlink Oracle service for Filecoin Network. The implementation
+Flink is a Data Orcle aming at offering Chainlink Oracle service for Filecoin Network. The implementation
 offered deal information on multi chains for users who want to store their data on Filecoin network.
 
 Our v1 release provides the Filecoin data info available on Polygon network.
